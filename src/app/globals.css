@@ -14,3 +14,15 @@
   --ink-3: oklch(0.6 0.01 265);
   --line: oklch(0.915 0.004 265);
   --line-2: oklch(0.87 0.006 265);
+
+  --accent: oklch(0.57 0.2 258);
+  --accent-soft: oklch(0.955 0.025 258);
+
+  --danger: oklch(0.6 0.215 25);
+  --danger-soft: oklch(0.965 0.022 25);
+  --warn: oklch(0.72 0.165 58);
+  --warn-ink: oklch(0.52 0.13 55);
+  --warn-soft: oklch(0.972 0.035 75);
+  --ok: oklch(0.63 0.15 155);
+  --ok-ink: oklch(0.46 0.11 155);
+  --ok-soft: oklch(0.965 0.03 155);
