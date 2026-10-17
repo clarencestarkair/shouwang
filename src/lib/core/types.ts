@@ -22,3 +22,10 @@ export const FRAUD_TYPES = {
   collectibles: "收藏品回购",
   phishing_link: "钓鱼链接",
 } as const;
+
+export type FraudType = keyof typeof FRAUD_TYPES;
+
+export const FRAUD_TYPE_KEYS = Object.keys(FRAUD_TYPES) as [FraudType, ...FraudType[]];
+
+/** 风险等级：safe 安全 / low 低 / medium 中 / high 高 / critical 极高（正在被骗） */
+export type RiskLevel = "safe" | "low" | "medium" | "high" | "critical";
