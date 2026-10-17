@@ -29,3 +29,13 @@ export const FRAUD_TYPE_KEYS = Object.keys(FRAUD_TYPES) as [FraudType, ...FraudT
 
 /** 风险等级：safe 安全 / low 低 / medium 中 / high 高 / critical 极高（正在被骗） */
 export type RiskLevel = "safe" | "low" | "medium" | "high" | "critical";
+
+export const RISK_LEVELS: RiskLevel[] = ["safe", "low", "medium", "high", "critical"];
+
+export const RISK_LABEL: Record<RiskLevel, string> = {
+  safe: "安全",
+  low: "低风险",
+  medium: "需警惕",
+  high: "高风险",
+  critical: "极高风险",
+};
