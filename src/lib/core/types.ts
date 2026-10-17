@@ -39,3 +39,12 @@ export const RISK_LABEL: Record<RiskLevel, string> = {
   high: "高风险",
   critical: "极高风险",
 };
+
+/** 风险分数（0-100）到等级的映射，规则引擎和模型输出统一使用 */
+export function scoreToLevel(score: number): RiskLevel {
+  if (score >= 85) return "critical";
+  if (score >= 65) return "high";
+  if (score >= 40) return "medium";
+  if (score >= 20) return "low";
+  return "safe";
+}
