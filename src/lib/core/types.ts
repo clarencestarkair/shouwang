@@ -67,3 +67,17 @@ export interface FraudCase {
   keywords: string[];
   lossLevel: "low" | "medium" | "high";
 }
+
+/** 检索结果（统一案例与知识两种文档） */
+export interface RetrievedDoc {
+  id: string;
+  kind: "case" | "knowledge";
+  title: string;
+  /** 用于注入上下文的正文摘要 */
+  snippet: string;
+  fraudType?: FraudType;
+  /** 融合后得分（RRF） */
+  score: number;
+  /** 命中通道，用于可解释性展示 */
+  matchedBy: ("bm25" | "vector")[];
+}
