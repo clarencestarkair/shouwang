@@ -4,3 +4,21 @@
  * 本文件被 Web 端 Agent、MCP Server、前端组件共同引用，
  * 只包含纯类型与常量，不依赖任何运行时环境。
  */
+
+/** 诈骗类型枚举（与 data/cases.json 的 type 字段一致） */
+export const FRAUD_TYPES = {
+  impersonate_police: "冒充公检法",
+  impersonate_service: "冒充客服",
+  impersonate_relative: "冒充亲友",
+  deepfake: "AI换脸拟声",
+  fake_investment: "虚假投资理财",
+  pension_scam: "养老诈骗",
+  health_product: "保健品/假医疗",
+  rebate_task: "刷单返利",
+  romance: "网络交友",
+  fake_loan: "虚假贷款/征信",
+  fake_subsidy: "冒充政府补贴",
+  prize_lottery: "中奖领奖",
+  collectibles: "收藏品回购",
+  phishing_link: "钓鱼链接",
+} as const;
