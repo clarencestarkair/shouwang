@@ -48,3 +48,22 @@ export function scoreToLevel(score: number): RiskLevel {
   if (score >= 20) return "low";
   return "safe";
 }
+
+export function levelRank(level: RiskLevel): number {
+  return RISK_LEVELS.indexOf(level);
+}
+
+/** 案例库条目 */
+export interface FraudCase {
+  id: string;
+  type: FraudType;
+  title: string;
+  channels: string[];
+  targetGroup: string;
+  script: string;
+  process: string;
+  redFlags: string[];
+  advice: string[];
+  keywords: string[];
+  lossLevel: "low" | "medium" | "high";
+}
