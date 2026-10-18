@@ -59,3 +59,9 @@ function registrable(host: string): string {
   if (twoLevel.includes(lastTwo) && parts.length >= 3) return parts.slice(-3).join(".");
   return lastTwo;
 }
+
+export function checkUrl(input: string): UrlCheckResult {
+  const hostname = parseHost(input.trim());
+  if (!hostname) {
+    return { input, hostname: null, riskScore: 30, tags: ["无法解析"], explanation: "这不是一个正常的网址格式，不要点击。" };
+  }
