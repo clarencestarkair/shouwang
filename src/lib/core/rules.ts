@@ -56,3 +56,9 @@ const RULES: Rule[] = [
   { id: "collect", label: "收藏品高价回购", category: "lure", weight: 26, pattern: /纪念币|邮票|字画|古董|藏品|回购|拍卖/, hints: ["collectibles"] },
   { id: "loan", label: "无抵押秒批贷款/征信修复", category: "lure", weight: 24, pattern: /无抵押|秒批|低息贷款|征信修复|洗白征信|注销.{0,4}校园贷/, hints: ["fake_loan"] },
   { id: "romance", label: "网恋对象谈钱", category: "lure", weight: 20, pattern: /(宝贝|亲爱的|老公|老婆).{0,20}(投资|平台|借|转)|带你(赚|投资)/, hints: ["romance"] },
+
+  // —— 渠道 ——
+  { id: "foreign_number", label: "境外或伪装号码", category: "channel", weight: 20, pattern: /\+00|\+\d{3,}|00\d{2,}/ },
+  { id: "risky_tld", label: "链接后缀可疑", category: "channel", weight: 20, pattern: /\.(top|xyz|cc|vip|icu|club|shop|work|buzz)\b/i },
+  { id: "suspicious_link", label: "含有链接", category: "channel", weight: 10, pattern: /https?:\/\/|www\.|\.(cn|com|top|xyz|cc|vip|net)\b/i },
+];
