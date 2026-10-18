@@ -27,3 +27,10 @@ const RULES: Rule[] = [
   { id: "high_return", label: "承诺高额回报", category: "lure", weight: 28, pattern: /稳赚|保本|高回报|高收益|日赚|翻倍|内幕|稳赚不赔|躺赚|零风险|分红/, hints: ["fake_investment", "pension_scam"] },
   { id: "borrow_urgent", label: "以急事为由借钱", category: "money", weight: 28, pattern: /(借|急用|周转|垫).{0,8}(钱|万|千|块)|(住院|手术|出事|被抓|撞).{0,20}(借|要钱|转|赔)/, hints: ["impersonate_relative"] },
   { id: "rebate", label: "刷单/做任务返利", category: "lure", weight: 30, pattern: /刷单|点赞.{0,4}(返|佣金)|做任务|垫付|返佣|返利/, hints: ["rebate_task"] },
+
+  // —— 凭证类 ——
+  { id: "verify_code", label: "索要验证码", category: "credential", weight: 40, pattern: /验证码|校验码|动态码/ },
+  { id: "verify_redirect", label: "以“失效/异常”为由让您登录认证", category: "tech", weight: 25, pattern: /(失效|异常|过期|冻结|停用|清零).{0,20}(认证|登录|激活|解冻|兑换)/, hints: ["phishing_link", "fake_subsidy"] },
+  { id: "screen_share", label: "要求屏幕共享", category: "tech", weight: 42, pattern: /屏幕共享|共享屏幕|会议.{0,4}(号|软件)|远程控制|向日葵|腾讯会议|ToDesk/i },
+  { id: "bank_info", label: "索要银行卡/密码", category: "credential", weight: 32, pattern: /银行卡号|卡号|密码|身份证.{0,3}(照片|正反面)|CVV|有效期/i },
+  { id: "download_app", label: "诱导下载陌生App", category: "tech", weight: 25, pattern: /下载.{0,8}(app|App|APP|软件|客户端)|安装.{0,6}(软件|插件)|扫码下载/ },
