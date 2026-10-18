@@ -62,3 +62,13 @@ const RULES: Rule[] = [
   { id: "risky_tld", label: "链接后缀可疑", category: "channel", weight: 20, pattern: /\.(top|xyz|cc|vip|icu|club|shop|work|buzz)\b/i },
   { id: "suspicious_link", label: "含有链接", category: "channel", weight: 10, pattern: /https?:\/\/|www\.|\.(cn|com|top|xyz|cc|vip|net)\b/i },
 ];
+
+/** 取命中位置所在的分句作为证据（以标点为界，最长 40 字），便于老人对照原话 */
+function clauseAround(text: string, idx: number, len: number): string {
+  const BOUND = /[，。！？；,.!?;\n]/;
+  let s = idx;
+  while (s > 0 && !BOUND.test(text[s - 1]) && idx - s < 20) s--;
+  let e = idx + len;
+  while (e < text.length && !BOUND.test(text[e]) && e - idx < 30) e++;
+  return text.slice(s, e).replace(/\s+/g, " ").trim();
+}
