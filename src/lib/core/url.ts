@@ -65,3 +65,8 @@ export function checkUrl(input: string): UrlCheckResult {
   if (!hostname) {
     return { input, hostname: null, riskScore: 30, tags: ["无法解析"], explanation: "这不是一个正常的网址格式，不要点击。" };
   }
+
+  const tags: string[] = [];
+  let score = 0;
+  let imitating: string | undefined;
+  const reg = registrable(hostname);
