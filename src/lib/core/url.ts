@@ -82,3 +82,21 @@ export function checkUrl(input: string): UrlCheckResult {
       explanation: `这是${OFFICIAL_DOMAINS[officialHit]}的官方域名。但仍然不要在任何网页里输入验证码给别人看。`,
     };
   }
+
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)) {
+    score += 45;
+    tags.push("IP 地址直连");
+  }
+  if (hostname.includes("xn--")) {
+    score += 50;
+    tags.push("同形字伪装域名");
+  }
+  if (SHORTENERS.includes(hostname)) {
+    score += 25;
+    tags.push("短链接（隐藏真实地址）");
+  }
+  const tld = hostname.split(".").pop() ?? "";
+  if (RISKY_TLDS.includes(tld)) {
+    score += 25;
+    tags.push(`高风险后缀 .${tld}`);
+  }
