@@ -86,3 +86,6 @@ export function checkPhone(input: string): PhoneCheckResult {
       : riskScore >= 20
         ? `这个号码有可疑特征（${tags.join("、")}），请不要按对方说的操作，挂断后打官方电话核实。`
         : "号码本身没有明显异常，但是否诈骗主要看对方说了什么、要你做什么。";
+
+  return { input, normalized, riskScore, tags, explanation };
+}
