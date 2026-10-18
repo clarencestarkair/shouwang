@@ -25,6 +25,15 @@ const OFFICIAL_NUMBERS: Record<string, string> = {
   "10000": "中国电信",
 };
 
+/** 虚拟运营商号段（诈骗高发但并非全部是诈骗） */
+const VIRTUAL_PREFIX = ["170", "171", "162", "165", "167"];
+
+export function checkPhone(input: string): PhoneCheckResult {
+  const normalized = input.replace(/[\s\-()（）]/g, "");
+  const digits = normalized.replace(/^\+/, "");
+  const tags: string[] = [];
+  let score = 0;
+
   if (OFFICIAL_NUMBERS[digits]) {
     return {
       input,
