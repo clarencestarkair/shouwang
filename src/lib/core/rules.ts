@@ -8,3 +8,13 @@
  */
 import type { FraudType, RiskSignal } from "./types";
 import { scoreToLevel } from "./types";
+
+interface Rule {
+  id: string;
+  label: string;
+  category: RiskSignal["category"];
+  weight: number;
+  pattern: RegExp;
+  /** 该信号强关联的诈骗类型，用于类型推断 */
+  hints?: FraudType[];
+}
