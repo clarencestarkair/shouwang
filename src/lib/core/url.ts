@@ -100,3 +100,11 @@ export function checkUrl(input: string): UrlCheckResult {
     score += 25;
     tags.push(`高风险后缀 .${tld}`);
   }
+
+  const riskScore = Math.min(100, score);
+  const explanation =
+    riskScore >= 50
+      ? `这个链接很危险（${tags.join("、")}），千万不要点开，更不要在里面填写银行卡、密码或验证码。`
+      : riskScore >= 20
+        ? `这个链接有可疑之处（${tags.join("、")}），建议不要点击，有疑问请到官方 App 里办理。`
+        : "链接没有发现明显仿冒特征，但正规机构不会通过短信链接让你填写银行卡和验证码。";
