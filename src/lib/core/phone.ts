@@ -43,3 +43,38 @@ export function checkPhone(input: string): PhoneCheckResult {
       explanation: `${digits} 是${OFFICIAL_NUMBERS[digits]}的官方号码。但注意：来电显示可以被伪造，涉及转账请挂断后自己回拨官方号码核实。`,
     };
   }
+
+  if (/^\+?00/.test(normalized) || /^\+(?!86)\d+/.test(normalized)) {
+    score += 55;
+    tags.push("境外/异常前缀");
+  }
+  if (/^\+86/.test(normalized) && normalized.length > 14) {
+    score += 20;
+    tags.push("号码长度异常");
+  }
+  const local = digits.replace(/^86/, "");
+  if (VIRTUAL_PREFIX.some((p) => local.startsWith(p))) {
+    score += 30;
+    tags.push("虚拟运营商号段");
+  }
+  // 冒充银行客服：95/96 开头但不是官方号码，或者带后缀的 95 号
+  if (/^9[56]\d{3,}/.test(local) && !OFFICIAL_NUMBERS[local]) {
+    score += local.length > 5 ? 35 : 20;
+    tags.push("仿冒客服短号");
+  }
+  if (/^106\d{5,17}$/.test(local)) {
+    score += 10;
+    tags.push("106 企业短信号（谁都能申请，签名可伪造）");
+  }
+  if (/^400\d{7}$/.test(local)) {
+    score += 15;
+    tags.push("400 企业号码（需核实归属）");
+  }
+  if (/^1[3-9]\d{9}$/.test(local) && tags.length === 0) {
+    score += 5;
+    tags.push("普通手机号");
+  }
+  if (local.length < 5 || local.length > 13) {
+    score += 15;
+    tags.push("位数异常");
+  }
