@@ -70,3 +70,15 @@ export function checkUrl(input: string): UrlCheckResult {
   let score = 0;
   let imitating: string | undefined;
   const reg = registrable(hostname);
+
+  // 官方域名或其子域：低风险
+  const officialHit = Object.keys(OFFICIAL_DOMAINS).find((d) => hostname === d || hostname.endsWith(`.${d}`));
+  if (officialHit) {
+    return {
+      input,
+      hostname,
+      riskScore: 5,
+      tags: ["官方域名"],
+      explanation: `这是${OFFICIAL_DOMAINS[officialHit]}的官方域名。但仍然不要在任何网页里输入验证码给别人看。`,
+    };
+  }
