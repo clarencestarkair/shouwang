@@ -41,3 +41,8 @@ const RULES: Rule[] = [
   { id: "fake_relative", label: "冒充亲友急需用钱", category: "identity", weight: 28, pattern: /(爸|妈|爷爷|奶奶|姥姥|外婆|外公|老同学|领导).{0,10}(出事|急用|借|住院|被抓|手术)|换(了)?(新)?号码|手机(掉|坏)了/, hints: ["impersonate_relative"] },
   { id: "fake_gov", label: "冒充政府部门发补贴", category: "identity", weight: 26, pattern: /养老金.{0,6}(认证|资格)|医保卡.{0,4}(异常|冻结|停用)|社保卡.{0,4}(升级|异常)|补贴|退税|高龄津贴/, hints: ["fake_subsidy"] },
   { id: "deepfake", label: "视频/语音可能是AI合成", category: "tech", weight: 18, pattern: /视频.{0,6}(借钱|转账)|声音.{0,4}(一样|很像)|AI换脸|换脸/, hints: ["deepfake"] },
+
+  // —— 心理操纵 ——
+  { id: "urgency", label: "制造紧迫感", category: "pressure", weight: 15, pattern: /立即|马上|立刻|尽快|限时|今天之内|\d+\s*(小时|分钟)内|过期|最后一天|逾期/ },
+  { id: "secrecy", label: "要求保密、不让告诉家人", category: "pressure", weight: 35, pattern: /保密|不要告诉|别告诉|不能告诉|不许告诉|泄露.{0,4}(案情|秘密)|单独/ },
+  { id: "threat", label: "恐吓威胁", category: "pressure", weight: 20, pattern: /冻结|拘留|坐牢|起诉|影响征信|影响子女|黑名单|上征信/ },
