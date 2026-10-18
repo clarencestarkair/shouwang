@@ -50,3 +50,12 @@ function parseHost(input: string): string | null {
     return null;
   }
 }
+
+/** 注册域名（粗略取最后两段，对 .com.cn / .gov.cn 等取三段） */
+function registrable(host: string): string {
+  const parts = host.split(".");
+  const twoLevel = ["com.cn", "gov.cn", "org.cn", "net.cn", "edu.cn"];
+  const lastTwo = parts.slice(-2).join(".");
+  if (twoLevel.includes(lastTwo) && parts.length >= 3) return parts.slice(-3).join(".");
+  return lastTwo;
+}
