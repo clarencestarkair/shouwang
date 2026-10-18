@@ -41,3 +41,12 @@ function levenshtein(a: string, b: string): number {
       dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
   return dp[a.length][b.length];
 }
+
+function parseHost(input: string): string | null {
+  try {
+    const withProto = /^[a-z]+:\/\//i.test(input) ? input : `http://${input}`;
+    return new URL(withProto).hostname.toLowerCase();
+  } catch {
+    return null;
+  }
+}
