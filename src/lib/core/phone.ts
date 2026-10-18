@@ -24,3 +24,13 @@ const OFFICIAL_NUMBERS: Record<string, string> = {
   "10010": "中国联通",
   "10000": "中国电信",
 };
+
+  if (OFFICIAL_NUMBERS[digits]) {
+    return {
+      input,
+      normalized,
+      riskScore: 0,
+      tags: ["官方号码"],
+      explanation: `${digits} 是${OFFICIAL_NUMBERS[digits]}的官方号码。但注意：来电显示可以被伪造，涉及转账请挂断后自己回拨官方号码核实。`,
+    };
+  }
