@@ -78,3 +78,11 @@ export function checkPhone(input: string): PhoneCheckResult {
     score += 15;
     tags.push("位数异常");
   }
+
+  const riskScore = Math.min(100, score);
+  const explanation =
+    riskScore >= 50
+      ? `这个号码有明显异常（${tags.join("、")}），诈骗分子常用这类号码伪装身份。`
+      : riskScore >= 20
+        ? `这个号码有可疑特征（${tags.join("、")}），请不要按对方说的操作，挂断后打官方电话核实。`
+        : "号码本身没有明显异常，但是否诈骗主要看对方说了什么、要你做什么。";
