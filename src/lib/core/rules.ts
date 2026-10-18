@@ -34,3 +34,10 @@ const RULES: Rule[] = [
   { id: "screen_share", label: "要求屏幕共享", category: "tech", weight: 42, pattern: /屏幕共享|共享屏幕|会议.{0,4}(号|软件)|远程控制|向日葵|腾讯会议|ToDesk/i },
   { id: "bank_info", label: "索要银行卡/密码", category: "credential", weight: 32, pattern: /银行卡号|卡号|密码|身份证.{0,3}(照片|正反面)|CVV|有效期/i },
   { id: "download_app", label: "诱导下载陌生App", category: "tech", weight: 25, pattern: /下载.{0,8}(app|App|APP|软件|客户端)|安装.{0,6}(软件|插件)|扫码下载/ },
+
+  // —— 身份冒充 ——
+  { id: "fake_police", label: "自称公检法人员", category: "identity", weight: 30, pattern: /公安局|派出所|检察院|法院|警官|民警|通缉|逮捕令|洗钱|涉嫌.{0,6}(案|犯罪)/, hints: ["impersonate_police"] },
+  { id: "fake_service", label: "自称客服/理赔", category: "identity", weight: 22, pattern: /客服|理赔|退款|快递.{0,4}(丢|损)|百万保障|注销.{0,6}(账户|服务)|会员.{0,4}自动扣费/, hints: ["impersonate_service"] },
+  { id: "fake_relative", label: "冒充亲友急需用钱", category: "identity", weight: 28, pattern: /(爸|妈|爷爷|奶奶|姥姥|外婆|外公|老同学|领导).{0,10}(出事|急用|借|住院|被抓|手术)|换(了)?(新)?号码|手机(掉|坏)了/, hints: ["impersonate_relative"] },
+  { id: "fake_gov", label: "冒充政府部门发补贴", category: "identity", weight: 26, pattern: /养老金.{0,6}(认证|资格)|医保卡.{0,4}(异常|冻结|停用)|社保卡.{0,4}(升级|异常)|补贴|退税|高龄津贴/, hints: ["fake_subsidy"] },
+  { id: "deepfake", label: "视频/语音可能是AI合成", category: "tech", weight: 18, pattern: /视频.{0,6}(借钱|转账)|声音.{0,4}(一样|很像)|AI换脸|换脸/, hints: ["deepfake"] },
