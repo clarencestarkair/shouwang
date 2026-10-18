@@ -46,3 +46,13 @@ const RULES: Rule[] = [
   { id: "urgency", label: "制造紧迫感", category: "pressure", weight: 15, pattern: /立即|马上|立刻|尽快|限时|今天之内|\d+\s*(小时|分钟)内|过期|最后一天|逾期/ },
   { id: "secrecy", label: "要求保密、不让告诉家人", category: "pressure", weight: 35, pattern: /保密|不要告诉|别告诉|不能告诉|不许告诉|泄露.{0,4}(案情|秘密)|单独/ },
   { id: "threat", label: "恐吓威胁", category: "pressure", weight: 20, pattern: /冻结|拘留|坐牢|起诉|影响征信|影响子女|黑名单|上征信/ },
+
+  // —— 诱饵 ——
+  { id: "prize", label: "中奖/免费领奖", category: "lure", weight: 22, pattern: /中奖|恭喜您|免费领|领取.{0,4}(奖|礼)|抽中|幸运用户/, hints: ["prize_lottery"] },
+  { id: "health", label: "神药/包治百病", category: "lure", weight: 30, pattern: /包治|根治|神药|特效药|祖传|专家义诊|免费体检|免费讲座|降三高/, hints: ["health_product"] },
+  { id: "free_bait", label: "免费送东西引您过去", category: "lure", weight: 15, pattern: /免费(讲座|体检|领|送|旅游)|送(鸡蛋|礼品|大米)|限前\d+名/, hints: ["health_product"] },
+  { id: "group_teacher", label: "拉进群、跟“老师”炒股", category: "lure", weight: 22, pattern: /(加入|拉你进|进).{0,6}群|老师带|带单|荐股/, hints: ["fake_investment"] },
+  { id: "pension", label: "养老项目/以房养老", category: "lure", weight: 28, pattern: /以房养老|养老公寓|养老基地|养老项目|床位.{0,4}(预订|认购)|候鸟养老/, hints: ["pension_scam"] },
+  { id: "collect", label: "收藏品高价回购", category: "lure", weight: 26, pattern: /纪念币|邮票|字画|古董|藏品|回购|拍卖/, hints: ["collectibles"] },
+  { id: "loan", label: "无抵押秒批贷款/征信修复", category: "lure", weight: 24, pattern: /无抵押|秒批|低息贷款|征信修复|洗白征信|注销.{0,4}校园贷/, hints: ["fake_loan"] },
+  { id: "romance", label: "网恋对象谈钱", category: "lure", weight: 20, pattern: /(宝贝|亲爱的|老公|老婆).{0,20}(投资|平台|借|转)|带你(赚|投资)/, hints: ["romance"] },
