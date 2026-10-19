@@ -101,6 +101,12 @@ export function scanText(text: string): RuleScanResult {
     for (const t of rule.hints ?? []) typeVotes.set(t, (typeVotes.get(t) ?? 0) + rule.weight);
   }
 
+  const raw = signals.reduce((s, x) => s + x.weight, 0);
+  const cats = new Set(signals.map((s) => s.category));
+  const combo = (cats.has("money") || cats.has("credential")) && (cats.has("pressure") || cats.has("identity")) ? 15 : 0;
+  // 软饱和：100 * (1 - e^(-x/60))
+  const score = Math.round(100 * (1 - Math.exp(-(raw + combo) / 60)));
+
   const likelyTypes = [...typeVotes.entries()].sort((a, b) => b[1] - a[1]).map(([t]) => t).slice(0, 3);
 
   return { score, level: scoreToLevel(score), signals, likelyTypes };
