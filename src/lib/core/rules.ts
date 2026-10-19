@@ -83,3 +83,12 @@ export interface RuleScanResult {
   /** 根据信号推断的最可能诈骗类型 */
   likelyTypes: FraudType[];
 }
+
+/**
+ * 扫描文本中的风险信号。
+ * 分数计算：信号权重相加后做软饱和（避免多个弱信号线性叠加到满分），
+ * 同时“资金 + 心理操纵”组合额外加分——这是诈骗最典型的结构。
+ */
+export function scanText(text: string): RuleScanResult {
+  const signals: RiskSignal[] = [];
+  const typeVotes = new Map<FraudType, number>();
