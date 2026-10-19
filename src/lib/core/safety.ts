@@ -37,3 +37,12 @@ export function maskPII(text: string): MaskResult {
   }
   return { text: out, masked };
 }
+
+export function detectInjection(text: string): { suspicious: boolean; hits: string[] } {
+  const hits: string[] = [];
+  for (const re of INJECTION_PATTERNS) {
+    const m = text.match(re);
+    if (m) hits.push(m[0]);
+  }
+  return { suspicious: hits.length > 0, hits };
+}
