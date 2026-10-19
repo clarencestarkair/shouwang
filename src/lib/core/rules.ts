@@ -115,3 +115,21 @@ export function detectChannel(text: string, hasImage: boolean): "电话" | "短�
   if (/传单|讲座|上门|门口|会馆|现场/.test(text)) return "线下";
   return "其他";
 }
+
+/** 从文本中抽取号码与链接，供 Agent 工具和前端使用 */
+export function extractEntities(text: string): { phones: string[]; urls: string[] } {
+  const phones = new Set<string>();
+  const urls = new Set<string>();
+  const phoneRe = /(\+?\d[\d\s-]{4,18}\d)/g;
+  for (const m of text.matchAll(phoneRe)) {
+    const digits = m[1].replace(/[\s-]/g, "");
+    if (digits.replace("+", "").length >= 5 && digits.replace("+", "").length <= 16) phones.add(digits);
+  }
+  const urlRe = /((?:https?:\/\/)?(?:[a-z0-9-]+\.)+[a-z]{2,}(?:\/[^\s，。、“”"'<>）)]*)?)/gi;
+  for (const m of text.matchAll(urlRe)) {
+    const u = m[1];
+    // 过滤掉纯数字或形如 1.5 的误判
+    if (/[a-z]/i.test(u) && u.includes(".")) urls.add(u);
+  }
+  return { phones: [...phones].slice(0, 5), urls: [...urls].slice(0, 5) };
+}
