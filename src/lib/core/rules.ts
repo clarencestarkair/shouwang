@@ -72,3 +72,14 @@ function clauseAround(text: string, idx: number, len: number): string {
   while (e < text.length && !BOUND.test(text[e]) && e - idx < 30) e++;
   return text.slice(s, e).replace(/\s+/g, " ").trim();
 }
+
+/** 规则数量（用于展示） */
+export const RULE_COUNT = RULES.length;
+
+export interface RuleScanResult {
+  score: number;
+  level: ReturnType<typeof scoreToLevel>;
+  signals: RiskSignal[];
+  /** 根据信号推断的最可能诈骗类型 */
+  likelyTypes: FraudType[];
+}
