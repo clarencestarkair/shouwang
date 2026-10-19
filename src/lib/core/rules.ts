@@ -92,3 +92,11 @@ export interface RuleScanResult {
 export function scanText(text: string): RuleScanResult {
   const signals: RiskSignal[] = [];
   const typeVotes = new Map<FraudType, number>();
+
+  for (const rule of RULES) {
+    const m = text.match(rule.pattern);
+    if (!m) continue;
+    const evidence = clauseAround(text, m.index ?? 0, m[0].length);
+    signals.push({ id: rule.id, label: rule.label, evidence, weight: rule.weight, category: rule.category });
+    for (const t of rule.hints ?? []) typeVotes.set(t, (typeVotes.get(t) ?? 0) + rule.weight);
+  }
