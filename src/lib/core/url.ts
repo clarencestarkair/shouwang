@@ -108,3 +108,6 @@ export function checkUrl(input: string): UrlCheckResult {
       : riskScore >= 20
         ? `这个链接有可疑之处（${tags.join("、")}），建议不要点击，有疑问请到官方 App 里办理。`
         : "链接没有发现明显仿冒特征，但正规机构不会通过短信链接让你填写银行卡和验证码。";
+
+  return { input, hostname, riskScore, tags: tags.length ? tags : ["未发现明显异常"], imitating, explanation };
+}
