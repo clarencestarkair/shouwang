@@ -17,3 +17,23 @@ const PII_PATTERNS: { label: string; re: RegExp; keep: (m: string) => string }[]
   // 密码语境
   { label: "密码", re: /(密码)[是为:：\s]{0,3}(\S{4,16})/g, keep: (m) => m.replace(/(密码[是为:：\s]{0,3})\S+/, "$1******") },
 ];
+
+export interface MaskResult {
+  text: string;
+  masked: { label: string; count: number }[];
+}
+
+/** 脱敏：保留诈骗识别所需的特征（如出现了验证码），但去掉真实值 */
+export function maskPII(text: string): MaskResult {
+  let out = text;
+  const masked: MaskResult["masked"] = [];
+  for (const p of PII_PATTERNS) {
+    let count = 0;
+    out = out.replace(p.re, (m) => {
+      count++;
+      return p.keep(m);
+    });
+    if (count) masked.push({ label: p.label, count });
+  }
+  return { text: out, masked };
+}
