@@ -100,3 +100,18 @@ export function scanText(text: string): RuleScanResult {
     signals.push({ id: rule.id, label: rule.label, evidence, weight: rule.weight, category: rule.category });
     for (const t of rule.hints ?? []) typeVotes.set(t, (typeVotes.get(t) ?? 0) + rule.weight);
   }
+
+  const likelyTypes = [...typeVotes.entries()].sort((a, b) => b[1] - a[1]).map(([t]) => t).slice(0, 3);
+
+  return { score, level: scoreToLevel(score), signals, likelyTypes };
+}
+
+/** 粗略判断信息来源渠道（用于家属端渠道分布） */
+export function detectChannel(text: string, hasImage: boolean): "电话" | "短信" | "微信" | "截图" | "线下" | "其他" {
+  if (hasImage) return "截图";
+  if (/打电话|来电|电话里|接到.{0,4}电话|视频通话|打给我/.test(text)) return "电话";
+  if (/微信|朋友圈|群里|加我/.test(text)) return "微信";
+  if (/^【|短信|退订/.test(text)) return "短信";
+  if (/传单|讲座|上门|门口|会馆|现场/.test(text)) return "线下";
+  return "其他";
+}
