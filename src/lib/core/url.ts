@@ -101,6 +101,35 @@ export function checkUrl(input: string): UrlCheckResult {
     tags.push(`高风险后缀 .${tld}`);
   }
 
+  // 仿冒检测 1：与官方注册域名编辑距离很小
+  for (const official of Object.keys(OFFICIAL_DOMAINS)) {
+    const d = levenshtein(reg, official);
+    if (d > 0 && d <= 2 && official.length > 5) {
+      score += 50;
+      imitating = official;
+      tags.push(`疑似仿冒 ${OFFICIAL_DOMAINS[official]}`);
+      break;
+    }
+  }
+  // 仿冒检测 2：域名里嵌入了官方关键词但并非官方域名（如 gov-cn-etc.top）
+  const lureHits = LURE_WORDS.filter((w) => hostname.includes(w));
+  if (lureHits.length > 0 && !imitating) {
+    score += 30 + Math.min(20, lureHits.length * 5);
+    tags.push(`冒用官方字样：${lureHits.join("/")}`);
+  }
+  if ((hostname.match(/-/g) ?? []).length >= 2) {
+    score += 10;
+    tags.push("多段连字符");
+  }
+  if (hostname.split(".").length >= 5) {
+    score += 10;
+    tags.push("层级过深");
+  }
+  if (input.startsWith("http://")) {
+    score += 5;
+    tags.push("未加密 http");
+  }
+
   const riskScore = Math.min(100, score);
   const explanation =
     riskScore >= 50
