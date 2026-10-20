@@ -123,3 +123,8 @@ export function guardReport(report: RiskReport, ctx: GuardContext): RiskReport {
     const hasHotline = r.actions.some((a) => a.includes("96110") || a.includes("110"));
     if (!hasHotline) r.actions.push("拿不准就拨打 96110 反诈专线咨询，已经转账请立刻拨打 110");
   }
+
+  if (r.actions.length === 0) r.actions.push("先不要做任何操作，和家里人商量后再决定");
+  r.guardNotes = [...(report.guardNotes ?? []), ...notes];
+  return r;
+}
