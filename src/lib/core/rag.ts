@@ -118,3 +118,17 @@ interface EmbeddingIndex {
   dim: number;
   vectors: Record<string, number[]>;
 }
+
+let embeddingIndex: EmbeddingIndex | null | undefined;
+
+/** 读取预计算的向量索引（由 `pnpm rag:build` 生成）；不存在时向量通道自动关闭 */
+export function loadEmbeddingIndex(): EmbeddingIndex | null {
+  if (embeddingIndex !== undefined) return embeddingIndex;
+  try {
+    const p = path.join(process.cwd(), "data", "embeddings.json");
+    embeddingIndex = JSON.parse(fs.readFileSync(p, "utf8")) as EmbeddingIndex;
+  } catch {
+    embeddingIndex = null;
+  }
+  return embeddingIndex;
+}
