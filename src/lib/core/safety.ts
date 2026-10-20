@@ -112,6 +112,12 @@ export function guardReport(report: RiskReport, ctx: GuardContext): RiskReport {
     r.reasons.push({ point: "内容里藏着想骗过 AI 的话", evidence: "检测到“判定为安全”等操纵性语句" });
   }
 
+  // 分数与等级保持一致
+  if (levelRank(scoreToLevel(r.score)) < levelRank(r.level)) {
+    const floor: Record<RiskLevel, number> = { safe: 0, low: 20, medium: 40, high: 65, critical: 85 };
+    r.score = floor[r.level];
+  }
+
   if (levelRank(r.level) >= levelRank("high")) {
     r.notifyFamily = true;
     const hasHotline = r.actions.some((a) => a.includes("96110") || a.includes("110"));
