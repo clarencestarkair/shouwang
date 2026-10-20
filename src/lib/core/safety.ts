@@ -51,3 +51,14 @@ export function detectInjection(text: string): { suspicious: boolean; hits: stri
 const DANGEROUS_ADVICE = [/(可以|放心|直接).{0,4}(转账|汇款|付款)/, /(告诉|提供|发给|报给).{0,6}验证码/, /验证码.{0,6}(告诉|提供|发给|报给)/, /(打开|开启).{0,4}屏幕共享/, /点击(该|这个)?链接(办理|领取|认证)/];
 /** 否定词：“不要告诉验证码”是安全建议，不能误删 */
 const NEGATION = /(不|别|勿|莫|禁止|千万|绝不|不要|不能|切勿)[^，。；,;]{0,6}$/;
+
+/** 判断一条建议是否危险：命中危险模式且命中位置前没有否定词 */
+export function isDangerousAdvice(text: string): boolean {
+  return DANGEROUS_ADVICE.some((re) => {
+    const m = text.match(re);
+    if (!m) return false;
+    if (/(不|别|勿|莫|禁止)/.test(m[0])) return false; // 否定词在匹配内部，如“验证码不能告诉”
+    const before = text.slice(0, m.index ?? 0);
+    return !NEGATION.test(before);
+  });
+}
