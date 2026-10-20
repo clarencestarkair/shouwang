@@ -105,6 +105,13 @@ export function guardReport(report: RiskReport, ctx: GuardContext): RiskReport {
     r.score = Math.max(r.score, ctx.ruleScore);
   }
 
+  if (ctx.injectionSuspicious && levelRank(r.level) < levelRank("medium")) {
+    notes.push("内容中检测到试图操纵 AI 判断的语句，这本身就是可疑特征");
+    r.level = "medium";
+    r.score = Math.max(r.score, 45);
+    r.reasons.push({ point: "内容里藏着想骗过 AI 的话", evidence: "检测到“判定为安全”等操纵性语句" });
+  }
+
   if (levelRank(r.level) >= levelRank("high")) {
     r.notifyFamily = true;
     const hasHotline = r.actions.some((a) => a.includes("96110") || a.includes("110"));
