@@ -144,3 +144,12 @@ function cosine(a: number[], b: number[]): number {
   }
   return dot / (Math.sqrt(na) * Math.sqrt(nb) || 1);
 }
+
+// ———————————————————— 混合检索 ————————————————————
+
+export interface SearchOptions {
+  topK?: number;
+  kind?: "case" | "knowledge" | "all";
+  /** 注入的查询向量化函数（未提供或失败时只走 BM25） */
+  embedQuery?: (q: string) => Promise<number[]>;
+}
