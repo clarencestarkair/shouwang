@@ -45,3 +45,25 @@ export const DOCS: IndexedDoc[] = [
     snippet: `【${k.title}】${k.content}`,
   })),
 ];
+
+// ———————————————————— 中文分词（无词典） ————————————————————
+
+const STOP = new Set("的了是在我你他她它们这那就也都和与及或吗呢吧啊呀哦嗯".split(""));
+
+/**
+ * 中文用字级 bigram + unigram，英文/数字按词切分。
+ * 对短文本反诈场景（短信、话术）效果稳定，且零依赖、浏览器可用。
+ */
+export function tokenize(text: string): string[] {
+  const tokens: string[] = [];
+  const lower = text.toLowerCase();
+  for (const w of lower.match(/[a-z0-9]+/g) ?? []) tokens.push(w);
+  const han = lower.replace(/[^一-龥]+/g, " ").split(" ").filter(Boolean);
+  for (const seg of han) {
+    for (let i = 0; i < seg.length; i++) {
+      if (!STOP.has(seg[i])) tokens.push(seg[i]);
+      if (i + 1 < seg.length) tokens.push(seg.slice(i, i + 2));
+    }
+  }
+  return tokens;
+}
