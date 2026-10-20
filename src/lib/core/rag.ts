@@ -108,3 +108,13 @@ class BM25 {
     return out.sort((a, b) => b.score - a.score);
   }
 }
+
+const bm25 = new BM25(DOCS.map((d) => d.text));
+
+// ———————————————————— 向量索引 ————————————————————
+
+interface EmbeddingIndex {
+  model: string;
+  dim: number;
+  vectors: Record<string, number[]>;
+}
