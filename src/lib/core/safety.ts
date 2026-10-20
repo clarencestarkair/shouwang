@@ -71,3 +71,8 @@ export function isDangerousAdvice(text: string): boolean {
     return !NEGATION.test(before);
   });
 }
+
+export interface GuardContext {
+  ruleScore: number;
+  injectionSuspicious: boolean;
+}
