@@ -46,3 +46,8 @@ export function detectInjection(text: string): { suspicious: boolean; hits: stri
   }
   return { suspicious: hits.length > 0, hits };
 }
+
+/** 报告中禁止出现的危险建议（大模型偶发幻觉时兜底） */
+const DANGEROUS_ADVICE = [/(可以|放心|直接).{0,4}(转账|汇款|付款)/, /(告诉|提供|发给|报给).{0,6}验证码/, /验证码.{0,6}(告诉|提供|发给|报给)/, /(打开|开启).{0,4}屏幕共享/, /点击(该|这个)?链接(办理|领取|认证)/];
+/** 否定词：“不要告诉验证码”是安全建议，不能误删 */
+const NEGATION = /(不|别|勿|莫|禁止|千万|绝不|不要|不能|切勿)[^，。；,;]{0,6}$/;
