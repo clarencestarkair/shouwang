@@ -26,3 +26,22 @@ interface IndexedDoc {
   snippet: string;
   fraudType?: FraudCase["type"];
 }
+
+/** 构造检索文档；关键词重复两次以提升其 BM25 权重 */
+export const DOCS: IndexedDoc[] = [
+  ...CASES.map((c) => ({
+    id: c.id,
+    kind: "case" as const,
+    title: c.title,
+    fraudType: c.type,
+    text: [c.title, c.script, c.process, c.redFlags.join("；"), c.keywords.join(" "), c.keywords.join(" ")].join("\n"),
+    snippet: `【${c.title}】典型话术：${c.script}\n识别要点：${c.redFlags.join("；")}\n防范：${c.advice.join("；")}`,
+  })),
+  ...KNOWLEDGE.map((k) => ({
+    id: k.id,
+    kind: "knowledge" as const,
+    title: k.title,
+    text: [k.title, k.content, k.keywords.join(" "), k.keywords.join(" ")].join("\n"),
+    snippet: `【${k.title}】${k.content}`,
+  })),
+];
