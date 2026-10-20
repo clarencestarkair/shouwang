@@ -153,3 +153,8 @@ export interface SearchOptions {
   /** 注入的查询向量化函数（未提供或失败时只走 BM25） */
   embedQuery?: (q: string) => Promise<number[]>;
 }
+
+export interface SearchResult {
+  docs: RetrievedDoc[];
+  channels: { bm25: boolean; vector: boolean };
+}
