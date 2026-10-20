@@ -87,3 +87,14 @@ export interface GuardContext {
 export function guardReport(report: RiskReport, ctx: GuardContext): RiskReport {
   const notes: string[] = [];
   const r: RiskReport = { ...report, reasons: [...report.reasons], actions: [...report.actions] };
+
+  const before = r.actions.length;
+  r.actions = r.actions.filter((a) => !isDangerousAdvice(a));
+  if (r.actions.length < before) notes.push("已移除 1 条不安全的建议");
+
+  const ruleLevel = scoreToLevel(ctx.ruleScore);
+  if (levelRank(ruleLevel) - levelRank(r.level) >= 2) {
+    notes.push(`规则引擎判定为「${ruleLevel}」，高于模型判断，按“就高不就低”原则上调`);
+    r.level = ruleLevel;
+    r.score = Math.max(r.score, ctx.ruleScore);
+  }
