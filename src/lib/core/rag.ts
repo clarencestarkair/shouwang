@@ -67,3 +67,44 @@ export function tokenize(text: string): string[] {
   }
   return tokens;
 }
+
+// ———————————————————— BM25 ————————————————————
+
+class BM25 {
+  private tf: Map<string, number>[] = [];
+  private df = new Map<string, number>();
+  private len: number[] = [];
+  private avgLen = 0;
+  constructor(
+    docs: string[],
+    private k1 = 1.4,
+    private b = 0.75,
+  ) {
+    for (const d of docs) {
+      const toks = tokenize(d);
+      const m = new Map<string, number>();
+      for (const t of toks) m.set(t, (m.get(t) ?? 0) + 1);
+      this.tf.push(m);
+      this.len.push(toks.length);
+      for (const t of m.keys()) this.df.set(t, (this.df.get(t) ?? 0) + 1);
+    }
+    this.avgLen = this.len.reduce((a, b) => a + b, 0) / Math.max(1, this.len.length);
+  }
+  search(query: string): { idx: number; score: number }[] {
+    const q = [...new Set(tokenize(query))];
+    const N = this.tf.length;
+    const out: { idx: number; score: number }[] = [];
+    for (let i = 0; i < N; i++) {
+      let s = 0;
+      for (const t of q) {
+        const f = this.tf[i].get(t);
+        if (!f) continue;
+        const df = this.df.get(t) ?? 0;
+        const idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
+        s += (idf * f * (this.k1 + 1)) / (f + this.k1 * (1 - this.b + (this.b * this.len[i]) / this.avgLen));
+      }
+      if (s > 0) out.push({ idx: i, score: s });
+    }
+    return out.sort((a, b) => b.score - a.score);
+  }
+}
