@@ -104,3 +104,9 @@ export function guardReport(report: RiskReport, ctx: GuardContext): RiskReport {
     r.level = ruleLevel;
     r.score = Math.max(r.score, ctx.ruleScore);
   }
+
+  if (levelRank(r.level) >= levelRank("high")) {
+    r.notifyFamily = true;
+    const hasHotline = r.actions.some((a) => a.includes("96110") || a.includes("110"));
+    if (!hasHotline) r.actions.push("拿不准就拨打 96110 反诈专线咨询，已经转账请立刻拨打 110");
+  }
