@@ -38,6 +38,15 @@ export function maskPII(text: string): MaskResult {
   return { text: out, masked };
 }
 
+const INJECTION_PATTERNS = [
+  /忽略(之前|以上|前面|上述)?(所有|全部)?(的)?(指令|提示|规则|设定)/,
+  /ignore (all |the )?(previous|above|prior) (instructions|prompts?)/i,
+  /你(现在)?是.{0,10}(助手|AI).{0,10}(必须|应该)?(回答|判定|认为).{0,6}(安全|无风险|正规)/,
+  /(判定|评估|认定)(为|成)?(安全|无风险|正规|官方)/,
+  /system prompt|系统提示词|开发者模式|developer mode/i,
+  /<\/?(system|assistant|instruction)>/i,
+];
+
 export function detectInjection(text: string): { suspicious: boolean; hits: string[] } {
   const hits: string[] = [];
   for (const re of INJECTION_PATTERNS) {
