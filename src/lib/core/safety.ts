@@ -76,3 +76,14 @@ export interface GuardContext {
   ruleScore: number;
   injectionSuspicious: boolean;
 }
+
+/**
+ * 安全审查：
+ * 1. 删除危险建议；
+ * 2. 双通道校验——模型等级远低于规则引擎时，取较高者并注明原因；
+ * 3. 发现提示词注入时，强制至少“需警惕”；
+ * 4. 高风险及以上必须给出“打 96110 / 联系家人”等兜底动作并通知家属。
+ */
+export function guardReport(report: RiskReport, ctx: GuardContext): RiskReport {
+  const notes: string[] = [];
+  const r: RiskReport = { ...report, reasons: [...report.reasons], actions: [...report.actions] };
