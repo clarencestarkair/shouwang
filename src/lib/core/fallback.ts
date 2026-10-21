@@ -20,3 +20,12 @@ export function buildFallbackReport(scan: RuleScanResult, docs: RetrievedDoc[]):
     .slice(0, 3)
     .map((s) => ({ point: s.label, evidence: s.evidence }));
   if (reasons.length === 0) reasons.push({ point: "内容中没有出现要钱、要验证码等常见诈骗特征", evidence: "—" });
+
+  const actions =
+    level === "safe" || level === "low"
+      ? ["如果对方后面提到转账、验证码，请再拿来问我"]
+      : [
+          "不要转账，不要说出验证码，不要点链接",
+          ...(caseData?.advice.slice(0, 1) ?? []),
+          "拨打 96110 反诈专线核实，或先给家里人打个电话",
+        ];
