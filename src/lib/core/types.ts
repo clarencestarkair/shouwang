@@ -68,6 +68,15 @@ export interface FraudCase {
   lossLevel: "low" | "medium" | "high";
 }
 
+/** 反诈知识条目 */
+export interface KnowledgeItem {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  keywords: string[];
+}
+
 /** 检索结果（统一案例与知识两种文档） */
 export interface RetrievedDoc {
   id: string;
