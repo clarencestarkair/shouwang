@@ -5,3 +5,9 @@
 import type { RetrievedDoc, RiskReport } from "./types";
 import { CASES } from "./rag";
 import type { RuleScanResult } from "./rules";
+
+export function buildFallbackReport(scan: RuleScanResult, docs: RetrievedDoc[]): RiskReport {
+  const topCase = docs.find((d) => d.kind === "case");
+  const caseData = topCase ? CASES.find((c) => c.id === topCase.id) : undefined;
+  const fraudType = scan.likelyTypes[0] ?? (scan.score >= 40 ? "unknown" : "none");
+  const level = scan.level;
