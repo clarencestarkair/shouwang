@@ -11,3 +11,12 @@ export function buildFallbackReport(scan: RuleScanResult, docs: RetrievedDoc[]):
   const caseData = topCase ? CASES.find((c) => c.id === topCase.id) : undefined;
   const fraudType = scan.likelyTypes[0] ?? (scan.score >= 40 ? "unknown" : "none");
   const level = scan.level;
+
+  // 同一句原话命中多条规则时只保留权重最高的一条，避免重复
+  const seen = new Set<string>();
+  const reasons = [...scan.signals]
+    .sort((a, b) => b.weight - a.weight)
+    .filter((s) => (seen.has(s.evidence) ? false : (seen.add(s.evidence), true)))
+    .slice(0, 3)
+    .map((s) => ({ point: s.label, evidence: s.evidence }));
+  if (reasons.length === 0) reasons.push({ point: "内容中没有出现要钱、要验证码等常见诈骗特征", evidence: "—" });
