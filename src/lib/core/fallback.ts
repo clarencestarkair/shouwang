@@ -12,6 +12,15 @@ export function buildFallbackReport(scan: RuleScanResult, docs: RetrievedDoc[]):
   const fraudType = scan.likelyTypes[0] ?? (scan.score >= 40 ? "unknown" : "none");
   const level = scan.level;
 
+  const headline =
+    level === "critical" || level === "high"
+      ? "很可能是诈骗，先别照做"
+      : level === "medium"
+        ? "有可疑的地方，要小心"
+        : level === "low"
+          ? "暂未发现明显问题，仍需留心"
+          : "没有发现诈骗特征";
+
   // 同一句原话命中多条规则时只保留权重最高的一条，避免重复
   const seen = new Set<string>();
   const reasons = [...scan.signals]
