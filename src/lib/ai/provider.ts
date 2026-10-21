@@ -10,3 +10,11 @@ function env(name: string, fallback?: string): string | undefined {
   const v = process.env[name];
   return v && v.trim() !== "" ? v.trim() : fallback;
 }
+
+function makeProvider(name: string, baseURL: string, apiKey?: string) {
+  return createOpenAICompatible({ name, baseURL, apiKey, includeUsage: true });
+}
+
+const textProvider = makeProvider("llm", base.baseURL, base.apiKey);
+const visionProvider = makeProvider("vision", env("VISION_BASE_URL", base.baseURL)!, env("VISION_API_KEY", base.apiKey));
+const embeddingProvider = makeProvider("embedding", env("EMBEDDING_BASE_URL", base.baseURL)!, env("EMBEDDING_API_KEY", base.apiKey));
