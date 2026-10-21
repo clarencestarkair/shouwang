@@ -81,3 +81,13 @@ export interface RetrievedDoc {
   /** 命中通道，用于可解释性展示 */
   matchedBy: ("bm25" | "vector")[];
 }
+
+/** 规则引擎命中的单个信号 */
+export interface RiskSignal {
+  id: string;
+  label: string;
+  /** 命中的原文片段 */
+  evidence: string;
+  weight: number;
+  category: "pressure" | "money" | "credential" | "identity" | "channel" | "lure" | "tech";
+}
