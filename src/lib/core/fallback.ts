@@ -29,3 +29,8 @@ export function buildFallbackReport(scan: RuleScanResult, docs: RetrievedDoc[]):
           ...(caseData?.advice.slice(0, 1) ?? []),
           "拨打 96110 反诈专线核实，或先给家里人打个电话",
         ];
+
+  // 由命中信号推断骗局阶段：身份→1，施压/诱饵→2，保密/技术隔离→3，钱/凭证→4
+  const cats = new Set(scan.signals.map((s) => s.category));
+  const scamStage = level === "safe" || level === "low" ? 0 : cats.has("money") || cats.has("credential") ? 4 : scan.signals.some((s) => s.id === "secrecy" || s.category === "tech") ? 3 : cats.has("pressure") || cats.has("lure") ? 2 : cats.has("identity") ? 1 : 0;
+  const shortVerdict = level === "critical" || level === "high" ? (cats.has("money") ? "别转钱" : "先别信") : level === "medium" ? "先别信" : "放心";
