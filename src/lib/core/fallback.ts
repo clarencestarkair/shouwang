@@ -34,3 +34,20 @@ export function buildFallbackReport(scan: RuleScanResult, docs: RetrievedDoc[]):
   const cats = new Set(scan.signals.map((s) => s.category));
   const scamStage = level === "safe" || level === "low" ? 0 : cats.has("money") || cats.has("credential") ? 4 : scan.signals.some((s) => s.id === "secrecy" || s.category === "tech") ? 3 : cats.has("pressure") || cats.has("lure") ? 2 : cats.has("identity") ? 1 : 0;
   const shortVerdict = level === "critical" || level === "high" ? (cats.has("money") ? "别转钱" : "先别信") : level === "medium" ? "先别信" : "放心";
+
+  return {
+    shortVerdict,
+    scamStage,
+    nextMove: scamStage > 0 && scamStage < 4 ? "对方接下来很可能让您转账或者说出验证码" : undefined,
+    level,
+    score: scan.score,
+    fraudType,
+    headline,
+    reasons,
+    actions,
+    citedCases: topCase ? [topCase.id] : [],
+    notifyFamily: level === "high" || level === "critical",
+    familyAdvice: level === "high" || level === "critical" ? "请尽快给老人打个电话，先肯定他第一时间来求证，再确认没有转账或泄露验证码。" : undefined,
+    guardNotes: ["AI 大模型暂不可用，本报告由规则引擎与案例库生成"],
+  };
+}
