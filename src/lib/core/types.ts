@@ -100,3 +100,12 @@ export interface RiskSignal {
   weight: number;
   category: "pressure" | "money" | "credential" | "identity" | "channel" | "lure" | "tech";
 }
+
+/** 号码核验结果 */
+export interface PhoneCheckResult {
+  input: string;
+  normalized: string;
+  riskScore: number;
+  tags: string[];
+  explanation: string;
+}
