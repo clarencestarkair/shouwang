@@ -5,3 +5,8 @@
 import "server-only";
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { embed } from "ai";
+
+function env(name: string, fallback?: string): string | undefined {
+  const v = process.env[name];
+  return v && v.trim() !== "" ? v.trim() : fallback;
+}
