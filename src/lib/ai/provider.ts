@@ -18,3 +18,9 @@ function makeProvider(name: string, baseURL: string, apiKey?: string) {
 const textProvider = makeProvider("llm", base.baseURL, base.apiKey);
 const visionProvider = makeProvider("vision", env("VISION_BASE_URL", base.baseURL)!, env("VISION_API_KEY", base.apiKey));
 const embeddingProvider = makeProvider("embedding", env("EMBEDDING_BASE_URL", base.baseURL)!, env("EMBEDDING_API_KEY", base.apiKey));
+
+export const modelConfig = {
+  text: env("LLM_MODEL", "qwen-plus")!,
+  vision: env("VISION_MODEL", "qwen-vl-max")!,
+  embedding: env("EMBEDDING_MODEL", "text-embedding-v3")!,
+};
