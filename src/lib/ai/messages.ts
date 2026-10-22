@@ -5,3 +5,14 @@
 import type { InferUITools, UIMessage } from "ai";
 import type { RiskReport, RiskSignal } from "@/lib/core/types";
 import type { GuardianTools } from "./tools";
+
+export type TraceStepId = "privacy" | "perception" | "rules" | "agent" | "guard";
+
+export interface TraceData {
+  step: TraceStepId;
+  status: "running" | "done" | "skipped" | "error";
+  title: string;
+  detail?: string;
+  /** 距请求开始的毫秒数（服务端计时） */
+  at?: number;
+}
