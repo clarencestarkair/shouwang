@@ -29,3 +29,10 @@ export const modelConfig = {
   vision: env("VISION_MODEL", "qwen-vl-max")!,
   embedding: env("EMBEDDING_MODEL", "text-embedding-v3")!,
 };
+
+/** 主推理模型（Agent 规划、工具调用、报告生成） */
+export const textModel = () => textProvider.chatModel(modelConfig.text);
+/** 视觉理解模型（截图 / 照片感知） */
+export const visionModel = () => visionProvider.chatModel(modelConfig.vision);
+/** 向量模型（RAG 语义通道） */
+export const embeddingModel = () => embeddingProvider.embeddingModel(modelConfig.embedding);
