@@ -45,3 +45,8 @@ export interface RulesData {
   entities: { phones: string[]; urls: string[] };
   injection: string[];
 }
+
+export interface FallbackData {
+  reason: string;
+  report: RiskReport;
+}
