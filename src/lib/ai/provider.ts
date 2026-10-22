@@ -44,3 +44,9 @@ export const embeddingModel = () => embeddingProvider.embeddingModel(modelConfig
 export function sampling(temperature: number): { temperature?: number } {
   return env("LLM_SUPPORTS_TEMPERATURE", "true") === "false" ? {} : { temperature };
 }
+
+/** RAG 检索时注入的查询向量化函数 */
+export async function embedQuery(q: string): Promise<number[]> {
+  const { embedding } = await embed({ model: embeddingModel(), value: q, maxRetries: 1 });
+  return embedding;
+}
