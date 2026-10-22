@@ -37,6 +37,12 @@ export const visionModel = () => visionProvider.chatModel(modelConfig.vision);
 /** 向量模型（RAG 语义通道） */
 export const embeddingModel = () => embeddingProvider.embeddingModel(modelConfig.embedding);
 
+export const aiStatus = () => ({
+  text: Boolean(base.apiKey),
+  vision: Boolean(env("VISION_API_KEY", base.apiKey)) && env("VISION_MODEL") !== "none",
+  embedding: Boolean(env("EMBEDDING_API_KEY", base.apiKey)) && env("EMBEDDING_MODEL") !== "none",
+});
+
 /**
  * 采样参数：部分新模型（如 Claude Opus 5.x）已不接受 temperature，
  * 通过 LLM_SUPPORTS_TEMPERATURE=false 关闭，代码其余部分无需感知差异。
