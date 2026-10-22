@@ -38,3 +38,10 @@ export interface PerceptionData {
   text: string;
   qr: string[];
 }
+
+export interface RulesData {
+  score: number;
+  signals: RiskSignal[];
+  entities: { phones: string[]; urls: string[] };
+  injection: string[];
+}
