@@ -36,3 +36,11 @@ export const textModel = () => textProvider.chatModel(modelConfig.text);
 export const visionModel = () => visionProvider.chatModel(modelConfig.vision);
 /** 向量模型（RAG 语义通道） */
 export const embeddingModel = () => embeddingProvider.embeddingModel(modelConfig.embedding);
+
+/**
+ * 采样参数：部分新模型（如 Claude Opus 5.x）已不接受 temperature，
+ * 通过 LLM_SUPPORTS_TEMPERATURE=false 关闭，代码其余部分无需感知差异。
+ */
+export function sampling(temperature: number): { temperature?: number } {
+  return env("LLM_SUPPORTS_TEMPERATURE", "true") === "false" ? {} : { temperature };
+}
