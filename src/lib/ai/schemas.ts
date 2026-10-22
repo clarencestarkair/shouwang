@@ -8,3 +8,5 @@ export const drillReviewSchema = z.object({
   mistakes: z.array(z.string()),
   keyLessons: z.array(z.string()),
 });
+
+export type DrillReview = z.infer<typeof drillReviewSchema>;
