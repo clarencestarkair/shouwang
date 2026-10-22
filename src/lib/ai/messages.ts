@@ -16,3 +16,12 @@ export interface TraceData {
   /** 距请求开始的毫秒数（服务端计时） */
   at?: number;
 }
+
+/** 工具调用的服务端计时 */
+export interface ToolTimeData {
+  toolCallId: string;
+  toolName: string;
+  startAt: number;
+  endAt?: number;
+  durationMs?: number;
+}
