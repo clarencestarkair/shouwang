@@ -32,3 +32,9 @@ export interface GuardianMetadata {
   usage?: { inputTokens?: number; outputTokens?: number; totalTokens?: number };
   totalMs?: number;
 }
+
+export interface PerceptionData {
+  images: number;
+  text: string;
+  qr: string[];
+}
