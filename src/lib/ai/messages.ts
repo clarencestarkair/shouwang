@@ -50,3 +50,11 @@ export interface FallbackData {
   reason: string;
   report: RiskReport;
 }
+
+export type GuardianDataParts = {
+  trace: TraceData;
+  perception: PerceptionData;
+  rules: RulesData;
+  fallback: FallbackData;
+  tooltime: ToolTimeData;
+};
