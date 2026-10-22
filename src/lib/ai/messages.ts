@@ -58,3 +58,12 @@ export type GuardianDataParts = {
   fallback: FallbackData;
   tooltime: ToolTimeData;
 };
+
+export type GuardianUIMessage = UIMessage<GuardianMetadata, GuardianDataParts, InferUITools<GuardianTools>>;
+
+/** 客户端随请求发送的元信息 */
+export interface GuardianRequestBody {
+  profile?: { elderName?: string };
+  /** 端侧预处理结果：二维码解析出的内容、脱敏统计 */
+  clientSide?: { qr?: string[]; masked?: { label: string; count: number }[] };
+}
