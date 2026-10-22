@@ -11,6 +11,11 @@ function env(name: string, fallback?: string): string | undefined {
   return v && v.trim() !== "" ? v.trim() : fallback;
 }
 
+const base = {
+  baseURL: env("LLM_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")!,
+  apiKey: env("LLM_API_KEY"),
+};
+
 function makeProvider(name: string, baseURL: string, apiKey?: string) {
   return createOpenAICompatible({ name, baseURL, apiKey, includeUsage: true });
 }
