@@ -25,3 +25,10 @@ export interface ToolTimeData {
   endAt?: number;
   durationMs?: number;
 }
+
+/** 助手消息元数据：模型与 token 用量（指挥台展示） */
+export interface GuardianMetadata {
+  model?: string;
+  usage?: { inputTokens?: number; outputTokens?: number; totalTokens?: number };
+  totalMs?: number;
+}
