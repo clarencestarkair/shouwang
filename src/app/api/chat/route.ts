@@ -56,3 +56,16 @@ export async function POST(req: Request) {
 
   const last = messages[messages.length - 1];
   if (!last || last.role !== "user") return new Response("bad request", { status: 400 });
+
+  const userText = last.parts
+    .filter((p) => p.type === "text")
+    .map((p) => p.text)
+    .join("\n")
+    .slice(0, 4000);
+  const images = last.parts
+    .filter((p) => p.type === "file" && p.mediaType.startsWith("image/"))
+    .slice(0, MAX_IMAGES)
+    .map((p) => (p.type === "file" ? parseDataUrl(p.url) : null))
+    .filter((x): x is NonNullable<typeof x> => x !== null);
+  const qr = (clientSide?.qr ?? []).slice(0, 5);
+  const status = aiStatus();
