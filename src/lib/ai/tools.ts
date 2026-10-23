@@ -33,3 +33,12 @@ export const riskReportSchema = z.object({
   scamStage: z.number().int().min(0).max(4).describe("骗局进行到第几步：0 非诈骗；1 冒充身份建立信任；2 制造恐慌或诱惑；3 要求保密、隔离（不让告诉家人/屏幕共享/下载App）；4 要钱或要验证码"),
   nextMove: z.string().optional().describe("预判骗子下一步很可能让老人做什么（一句话，用于提前预警）；非诈骗可省略"),
 });
+
+export interface ToolContext {
+  elderName: string;
+  ruleScore: number;
+  injectionSuspicious: boolean;
+  /** 本轮被分析内容（已脱敏），用于家属端预览 */
+  contentPreview: string;
+  channel: import("@/lib/core/types").Channel;
+}
