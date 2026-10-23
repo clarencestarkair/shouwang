@@ -79,6 +79,40 @@ export async function POST(req: Request) {
         detail: masked.length ? `已在本机隐藏 ${masked.map((m) => `${m.label}×${m.count}`).join("、")}` : "本机检查：未发现需要隐藏的敏感信息",
       });
 
+      // ② 多模态感知
+      let perceived = "";
+      if (images.length > 0) {
+        if (status.vision) {
+          trace({ step: "perception", status: "running", title: "看图识字", detail: `正在识别 ${images.length} 张图片…` });
+          try {
+            const results = await Promise.all(
+              images.map((img) =>
+                generateText({
+                  model: visionModel(),
+                  maxRetries: 1,
+                  messages: [
+                    {
+                      role: "user",
+                      content: [
+                        { type: "text", text: PERCEPTION_PROMPT },
+                        { type: "image", image: img.data, mediaType: img.mediaType },
+                      ],
+                    },
+                  ],
+                }),
+              ),
+            );
+            perceived = results.map((r, i) => `（图${i + 1}）\n${r.text}`).join("\n\n");
+            writer.write({ type: "data-perception", id: "perception", data: { images: images.length, text: perceived, qr } });
+            trace({ step: "perception", status: "done", title: "看图识字", detail: `识别完成，提取约 ${perceived.length} 字` });
+          } catch (e) {
+            trace({ step: "perception", status: "error", title: "看图识字", detail: `图片识别失败：${(e as Error).message.slice(0, 60)}` });
+          }
+        } else {
+          trace({ step: "perception", status: "skipped", title: "看图识字", detail: "未配置视觉模型" });
+        }
+      }
+
       // 大模型不可用 → 兜底
       const fallback = async (reason: string) => {
         const { docs } = await hybridSearch(analysisText || userText, { topK: 3, embedQuery: status.embedding ? embedQuery : undefined });
