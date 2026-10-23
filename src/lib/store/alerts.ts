@@ -58,3 +58,10 @@ export function addAlert(input: Omit<FamilyAlert, "id" | "createdAt" | "status">
   s.bus.emit("alert", alert);
   return alert;
 }
+
+export function resetAlerts() {
+  const s = store();
+  s.alerts = seedAlerts();
+  persist(s.alerts);
+  s.bus.emit("reset");
+}
