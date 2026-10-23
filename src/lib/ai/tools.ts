@@ -63,3 +63,9 @@ export function createGuardianTools(ctx: ToolContext) {
         };
       },
     }),
+
+    checkUrl: tool({
+      description: "核验网址风险：仿冒官方域名、高风险后缀、IP直连、短链接、同形字域名。",
+      inputSchema: z.object({ url: z.string().describe("网址原文") }),
+      execute: async ({ url }) => checkUrl(url),
+    }),
