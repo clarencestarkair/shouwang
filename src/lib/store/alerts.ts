@@ -37,6 +37,15 @@ function persist(alerts: FamilyAlert[]) {
   }
 }
 
+function store(): AlertStore {
+  if (!g.__shouwangAlerts) {
+    const bus = new EventEmitter();
+    bus.setMaxListeners(100);
+    g.__shouwangAlerts = { alerts: load(), bus };
+  }
+  return g.__shouwangAlerts;
+}
+
 export function listAlerts(): FamilyAlert[] {
   return store().alerts;
 }
