@@ -36,3 +36,16 @@ function persist(alerts: FamilyAlert[]) {
     // 只读文件系统（如 Serverless）下静默忽略，仍保留内存数据
   }
 }
+
+export function listAlerts(): FamilyAlert[] {
+  return store().alerts;
+}
+
+export function addAlert(input: Omit<FamilyAlert, "id" | "createdAt" | "status">): FamilyAlert {
+  const s = store();
+  const alert: FamilyAlert = { ...input, id: crypto.randomUUID(), createdAt: Date.now(), status: "new" };
+  s.alerts.unshift(alert);
+  persist(s.alerts);
+  s.bus.emit("alert", alert);
+  return alert;
+}
