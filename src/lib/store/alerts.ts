@@ -17,3 +17,13 @@ interface AlertStore {
   alerts: FamilyAlert[];
   bus: EventEmitter;
 }
+
+const g = globalThis as unknown as { __shouwangAlerts?: AlertStore };
+
+function load(): FamilyAlert[] {
+  try {
+    return JSON.parse(fs.readFileSync(FILE, "utf8")) as FamilyAlert[];
+  } catch {
+    return seedAlerts();
+  }
+}
