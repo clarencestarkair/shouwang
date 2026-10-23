@@ -42,3 +42,24 @@ export interface ToolContext {
   contentPreview: string;
   channel: import("@/lib/core/types").Channel;
 }
+
+export function createGuardianTools(ctx: ToolContext) {
+  return {
+    searchFraudCases: tool({
+      description: "在反诈案例库和知识库中做混合检索（关键词+语义），返回最相似的诈骗案例与反诈常识。",
+      inputSchema: z.object({
+        query: z.string().describe("检索语句，用内容中的关键说法，如“自称警察 安全账户 保密”"),
+        kind: z.enum(["all", "case", "knowledge"]).default("all"),
+      }),
+      execute: async ({ query, kind }) => {
+        const res = await hybridSearch(query, {
+          topK: 4,
+          kind,
+          embedQuery: aiStatus().embedding ? embedQuery : undefined,
+        });
+        return {
+          channels: res.channels,
+          results: res.docs.map((d) => ({ ...d, snippet: d.snippet.slice(0, 360) })),
+        };
+      },
+    }),
