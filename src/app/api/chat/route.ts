@@ -69,3 +69,12 @@ export async function POST(req: Request) {
     .filter((x): x is NonNullable<typeof x> => x !== null);
   const qr = (clientSide?.qr ?? []).slice(0, 5);
   const status = aiStatus();
+
+      // ① 端侧预处理结果回显
+      const masked = clientSide?.masked ?? [];
+      trace({
+        step: "privacy",
+        status: "done",
+        title: "隐私保护",
+        detail: masked.length ? `已在本机隐藏 ${masked.map((m) => `${m.label}×${m.count}`).join("、")}` : "本机检查：未发现需要隐藏的敏感信息",
+      });
