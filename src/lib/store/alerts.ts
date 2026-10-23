@@ -27,3 +27,12 @@ function load(): FamilyAlert[] {
     return seedAlerts();
   }
 }
+
+function persist(alerts: FamilyAlert[]) {
+  try {
+    fs.mkdirSync(path.dirname(FILE), { recursive: true });
+    fs.writeFileSync(FILE, JSON.stringify(alerts.slice(0, 200), null, 2));
+  } catch {
+    // 只读文件系统（如 Serverless）下静默忽略，仍保留内存数据
+  }
+}
