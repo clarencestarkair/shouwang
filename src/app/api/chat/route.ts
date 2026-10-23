@@ -113,6 +113,29 @@ export async function POST(req: Request) {
         }
       }
 
+      // ③ 规则引擎初筛（对文字 + 图片识别结果 + 二维码内容统一扫描）
+      // 家属端预览：用户原话 + 图片中的文字（去掉感知模块的格式标签）
+      const preview = maskPII(
+        [userText, perceptionToPlainText(perceived) && `图片文字：${perceptionToPlainText(perceived)}`, qr.length ? `二维码：${qr.join(" ")}` : ""]
+          .filter(Boolean)
+          .join(" ｜ "),
+      ).text.slice(0, 180);
+      const analysisText = maskPII([userText, perceived, qr.length ? `二维码内容：${qr.join(" ")}` : ""].filter(Boolean).join("\n")).text;
+      const scan = scanText(analysisText);
+      const entities = extractEntities(analysisText);
+      const injection = detectInjection(analysisText);
+      writer.write({
+        type: "data-rules",
+        id: "rules",
+        data: { score: scan.score, signals: scan.signals, entities, injection: injection.hits },
+      });
+      trace({
+        step: "rules",
+        status: "done",
+        title: "规则初筛",
+        detail: scan.signals.length ? `发现 ${scan.signals.length} 个可疑信号，初步风险分 ${scan.score}` : "未命中可疑规则",
+      });
+
       // 大模型不可用 → 兜底
       const fallback = async (reason: string) => {
         const { docs } = await hybridSearch(analysisText || userText, { topK: 3, embedQuery: status.embedding ? embedQuery : undefined });
