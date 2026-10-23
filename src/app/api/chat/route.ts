@@ -27,3 +27,13 @@ import { detectInjection, maskPII, wrapUntrusted } from "@/lib/core/safety";
 import { hybridSearch } from "@/lib/core/rag";
 import { buildFallbackReport } from "@/lib/core/fallback";
 import { addAlert } from "@/lib/store/alerts";
+
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
+const MAX_IMAGES = 3;
+
+function parseDataUrl(url: string): { mediaType: string; data: string } | null {
+  const m = url.match(/^data:([^;]+);base64,(.+)$/);
+  return m ? { mediaType: m[1], data: m[2] } : null;
+}
