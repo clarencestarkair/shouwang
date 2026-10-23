@@ -155,3 +155,8 @@ export async function POST(req: Request) {
         trace({ step: "agent", status: "skipped", title: "AI 研判", detail: reason });
         trace({ step: "guard", status: "done", title: "安全兜底", detail: "已用规则引擎和案例库生成保守建议" });
       };
+
+      if (!status.text) {
+        await fallback("未配置大模型，已启用规则引擎兜底");
+        return;
+      }
