@@ -37,3 +37,10 @@ function parseDataUrl(url: string): { mediaType: string; data: string } | null {
   const m = url.match(/^data:([^;]+);base64,(.+)$/);
   return m ? { mediaType: m[1], data: m[2] } : null;
 }
+
+/** 从感知结果中取出【完整文字】段落，作为人可读的预览 */
+function perceptionToPlainText(perceived: string): string {
+  if (!perceived) return "";
+  const blocks = [...perceived.matchAll(/【完整文字】([\s\S]*?)(?=【|$)/g)].map((m) => m[1]);
+  return (blocks.length ? blocks.join(" ") : perceived).replace(/\s+/g, " ").trim();
+}
