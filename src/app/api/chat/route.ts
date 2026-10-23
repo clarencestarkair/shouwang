@@ -44,3 +44,8 @@ function perceptionToPlainText(perceived: string): string {
   const blocks = [...perceived.matchAll(/【完整文字】([\s\S]*?)(?=【|$)/g)].map((m) => m[1]);
   return (blocks.length ? blocks.join(" ") : perceived).replace(/\s+/g, " ").trim();
 }
+
+/** 历史消息去掉图片（已在当轮转成文字），节省 token 并避免重复感知 */
+function stripFiles(messages: GuardianUIMessage[]): GuardianUIMessage[] {
+  return messages.map((m) => ({ ...m, parts: m.parts.filter((p) => p.type !== "file") }));
+}
