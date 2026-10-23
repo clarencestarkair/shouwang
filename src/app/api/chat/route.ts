@@ -49,3 +49,10 @@ function perceptionToPlainText(perceived: string): string {
 function stripFiles(messages: GuardianUIMessage[]): GuardianUIMessage[] {
   return messages.map((m) => ({ ...m, parts: m.parts.filter((p) => p.type !== "file") }));
 }
+
+export async function POST(req: Request) {
+  const { messages, profile, clientSide }: { messages: GuardianUIMessage[] } & GuardianRequestBody = await req.json();
+  const elderName = profile?.elderName?.slice(0, 10) || "长辈";
+
+  const last = messages[messages.length - 1];
+  if (!last || last.role !== "user") return new Response("bad request", { status: 400 });
