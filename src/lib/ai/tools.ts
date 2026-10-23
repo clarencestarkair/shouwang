@@ -69,3 +69,25 @@ export function createGuardianTools(ctx: ToolContext) {
       inputSchema: z.object({ url: z.string().describe("网址原文") }),
       execute: async ({ url }) => checkUrl(url),
     }),
+
+    notifyFamily: tool({
+      description: "当老人明确要求“告诉我儿子/女儿”或情况紧急时，主动给家属发送一条消息。",
+      inputSchema: z.object({
+        message: z.string().describe("发给家属的话，说明发生了什么、需要家属做什么"),
+        urgent: z.boolean(),
+      }),
+      execute: async ({ message, urgent }) => {
+        const alert = addAlert({
+          elderName: ctx.elderName,
+          level: urgent ? "high" : "medium",
+          score: urgent ? 70 : 45,
+          fraudType: "unknown",
+          headline: maskPII(message).text.slice(0, 40),
+          contentPreview: ctx.contentPreview,
+          reasons: [{ point: maskPII(message).text, evidence: "老人主动求助" }],
+        });
+        return { sent: true, alertId: alert.id };
+      },
+    }),
+  };
+}
