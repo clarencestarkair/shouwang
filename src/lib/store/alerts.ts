@@ -10,3 +10,10 @@ import fs from "node:fs";
 import path from "node:path";
 import type { FamilyAlert } from "@/lib/core/types";
 import { seedAlerts } from "./seed";
+
+const FILE = path.join(process.cwd(), "data", "runtime", "alerts.json");
+
+interface AlertStore {
+  alerts: FamilyAlert[];
+  bus: EventEmitter;
+}
