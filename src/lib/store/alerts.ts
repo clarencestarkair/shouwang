@@ -65,3 +65,19 @@ export function resetAlerts() {
   persist(s.alerts);
   s.bus.emit("reset");
 }
+
+export function subscribe(
+  onAlert: (a: FamilyAlert) => void,
+  onUpdate: (a: FamilyAlert) => void,
+  onReset: () => void,
+): () => void {
+  const { bus } = store();
+  bus.on("alert", onAlert);
+  bus.on("update", onUpdate);
+  bus.on("reset", onReset);
+  return () => {
+    bus.off("alert", onAlert);
+    bus.off("update", onUpdate);
+    bus.off("reset", onReset);
+  };
+}
