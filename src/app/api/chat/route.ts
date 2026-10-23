@@ -78,3 +78,23 @@ export async function POST(req: Request) {
         title: "隐私保护",
         detail: masked.length ? `已在本机隐藏 ${masked.map((m) => `${m.label}×${m.count}`).join("、")}` : "本机检查：未发现需要隐藏的敏感信息",
       });
+
+      // 大模型不可用 → 兜底
+      const fallback = async (reason: string) => {
+        const { docs } = await hybridSearch(analysisText || userText, { topK: 3, embedQuery: status.embedding ? embedQuery : undefined });
+        const report = buildFallbackReport(scan, docs);
+        writer.write({ type: "data-fallback", id: "fallback", data: { reason, report } });
+        addAlert({
+          elderName,
+          level: report.level,
+          score: report.score,
+          channel: detectChannel(userText, images.length > 0),
+          fraudType: report.fraudType,
+          headline: report.headline,
+          contentPreview: preview,
+          reasons: report.reasons,
+          familyAdvice: report.familyAdvice,
+        });
+        trace({ step: "agent", status: "skipped", title: "AI 研判", detail: reason });
+        trace({ step: "guard", status: "done", title: "安全兜底", detail: "已用规则引擎和案例库生成保守建议" });
+      };
