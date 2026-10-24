@@ -159,6 +159,12 @@ export interface SearchResult {
   channels: { bm25: boolean; vector: boolean };
 }
 
+const RRF_K = 60;
+
+export async function hybridSearch(query: string, opts: SearchOptions = {}): Promise<SearchResult> {
+  const { topK = 4, kind = "all", embedQuery } = opts;
+  const allow = (i: number) => kind === "all" || DOCS[i].kind === kind;
+
   const fused = new Map<number, { score: number; by: Set<"bm25" | "vector"> }>();
   const add = (idx: number, rank: number, by: "bm25" | "vector") => {
     const cur = fused.get(idx) ?? { score: 0, by: new Set() };
