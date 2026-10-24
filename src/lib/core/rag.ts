@@ -192,6 +192,22 @@ export async function hybridSearch(query: string, opts: SearchOptions = {}): Pro
     }
   }
 
+  const docs = [...fused.entries()]
+    .sort((a, b) => b[1].score - a[1].score)
+    .slice(0, topK)
+    .map(([idx, v]) => {
+      const d = DOCS[idx];
+      return {
+        id: d.id,
+        kind: d.kind,
+        title: d.title,
+        snippet: d.snippet,
+        fraudType: d.fraudType,
+        score: Number(v.score.toFixed(4)),
+        matchedBy: [...v.by],
+      } satisfies RetrievedDoc;
+    });
+
   return { docs, channels: { bm25: true, vector: vectorUsed } };
 }
 
