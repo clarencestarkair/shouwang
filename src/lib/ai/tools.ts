@@ -64,6 +64,12 @@ export function createGuardianTools(ctx: ToolContext) {
       },
     }),
 
+    checkPhoneNumber: tool({
+      description: "核验电话号码风险：境外号、虚拟号段、仿冒客服号、官方号码识别。",
+      inputSchema: z.object({ phone: z.string().describe("电话号码原文") }),
+      execute: async ({ phone }) => checkPhone(phone),
+    }),
+
     checkUrl: tool({
       description: "核验网址风险：仿冒官方域名、高风险后缀、IP直连、短链接、同形字域名。",
       inputSchema: z.object({ url: z.string().describe("网址原文") }),
