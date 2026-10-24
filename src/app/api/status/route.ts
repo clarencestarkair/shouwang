@@ -4,3 +4,12 @@ import { loadEmbeddingIndex, DOCS } from "@/lib/core/rag";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+export async function GET() {
+  const s = aiStatus();
+  return Response.json({
+    ai: s,
+    models: { text: s.text ? modelConfig.text : null, vision: s.vision ? modelConfig.vision : null, embedding: s.embedding ? modelConfig.embedding : null },
+    rag: { docs: DOCS.length, vectorIndex: Boolean(loadEmbeddingIndex()) },
+  });
+}
