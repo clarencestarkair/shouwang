@@ -173,6 +173,25 @@ export async function hybridSearch(query: string, opts: SearchOptions = {}): Pro
     fused.set(idx, cur);
   };
 
+  const lexical = bm25.search(query).filter((r) => allow(r.idx)).slice(0, 20);
+  lexical.forEach((r, rank) => add(r.idx, rank, "bm25"));
+
+  let vectorUsed = false;
+  const index = loadEmbeddingIndex();
+  if (index && embedQuery) {
+    try {
+      const qv = await embedQuery(query);
+      const sims = DOCS.map((d, idx) => ({ idx, sim: index.vectors[d.id] ? cosine(qv, index.vectors[d.id]) : -1 }))
+        .filter((r) => r.sim > 0.25 && allow(r.idx))
+        .sort((a, b) => b.sim - a.sim)
+        .slice(0, 20);
+      sims.forEach((r, rank) => add(r.idx, rank, "vector"));
+      vectorUsed = true;
+    } catch (e) {
+      console.warn("[rag] 向量检索失败，降级为 BM25：", (e as Error).message);
+    }
+  }
+
   return { docs, channels: { bm25: true, vector: vectorUsed } };
 }
 
