@@ -17,3 +17,9 @@ export async function PATCH(req: Request) {
   const alert = updateAlertStatus(parsed.data.id, parsed.data.status);
   return alert ? Response.json({ alert }) : Response.json({ error: "未找到" }, { status: 404 });
 }
+
+/** 重置为演示数据（录制视频前使用） */
+export async function DELETE() {
+  resetAlerts();
+  return Response.json({ ok: true });
+}
