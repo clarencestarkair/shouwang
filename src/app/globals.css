@@ -75,3 +75,8 @@ html {
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
 }
+
+body {
+  background: var(--bg);
+  min-height: 100dvh;
+}
