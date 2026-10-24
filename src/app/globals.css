@@ -34,3 +34,34 @@
   --shadow-sm: 0 1px 2px oklch(0.2 0.02 265 / 0.06);
   --shadow-md: 0 1px 2px oklch(0.2 0.02 265 / 0.05), 0 8px 24px -10px oklch(0.2 0.02 265 / 0.14);
   --shadow-lg: 0 2px 4px oklch(0.2 0.02 265 / 0.04), 0 24px 60px -20px oklch(0.2 0.03 265 / 0.28);
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-ink: var(--warn-ink);
+  --color-warn-soft: var(--warn-soft);
+  --color-ok: var(--ok);
+  --color-ok-ink: var(--ok-ink);
+  --color-ok-soft: var(--ok-soft);
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-night-line: var(--night-line);
+  --font-sans: var(--font-geist-sans), var(--font-zh);
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --ease-out-expo: var(--ease-out-expo);
+}
