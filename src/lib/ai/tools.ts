@@ -117,3 +117,5 @@ export function createGuardianTools(ctx: ToolContext) {
     }),
   };
 }
+
+export type GuardianTools = ReturnType<typeof createGuardianTools>;
