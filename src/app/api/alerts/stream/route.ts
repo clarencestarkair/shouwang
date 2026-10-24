@@ -9,3 +9,13 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   const encoder = new TextEncoder();
   let cleanup = () => {};
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/event-stream; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
+    },
+  });
+}
