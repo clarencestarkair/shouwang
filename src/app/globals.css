@@ -65,3 +65,13 @@
   --shadow-lg: var(--shadow-lg);
   --ease-out-expo: var(--ease-out-expo);
 }
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), var(--font-zh);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+}
