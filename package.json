@@ -16,12 +16,17 @@
     "ai": "6.0.332",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "geist": "1.9.2",
+    "jsqr": "1.4.0",
+    "lucide-react": "1.74.0",
     "next": "15.5.29",
     "react": "19.2.9",
     "react-dom": "19.2.9",
+    "react-markdown": "10.1.0",
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.7.0",
-    "zod": "4.6.7"
+    "zod": "4.6.7",
+    "zustand": "5.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
