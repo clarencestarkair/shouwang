@@ -59,6 +59,16 @@ export function addAlert(input: Omit<FamilyAlert, "id" | "createdAt" | "status">
   return alert;
 }
 
+export function updateAlertStatus(id: string, status: FamilyAlert["status"]): FamilyAlert | undefined {
+  const s = store();
+  const a = s.alerts.find((x) => x.id === id);
+  if (!a) return undefined;
+  a.status = status;
+  persist(s.alerts);
+  s.bus.emit("update", a);
+  return a;
+}
+
 export function resetAlerts() {
   const s = store();
   s.alerts = seedAlerts();
