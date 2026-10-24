@@ -166,3 +166,10 @@ export interface SearchResult {
     cur.by.add(by);
     fused.set(idx, cur);
   };
+
+  return { docs, channels: { bm25: true, vector: vectorUsed } };
+}
+
+export function getCase(id: string): FraudCase | undefined {
+  return CASES.find((c) => c.id === id);
+}
