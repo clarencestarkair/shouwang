@@ -10,6 +10,39 @@ export async function GET(req: Request) {
   const encoder = new TextEncoder();
   let cleanup = () => {};
 
+  const stream = new ReadableStream({
+    start(controller) {
+      const send = (event: string, data: unknown) => {
+        try {
+          controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));
+        } catch {
+          cleanup();
+        }
+      };
+      send("ready", { ts: Date.now() });
+      const unsubscribe = subscribe(
+        (a) => send("alert", a),
+        (a) => send("update", a),
+        () => send("reset", {}),
+      );
+      // 心跳，防止代理断开空闲连接
+      const heartbeat = setInterval(() => send("ping", Date.now()), 20000);
+      cleanup = () => {
+        clearInterval(heartbeat);
+        unsubscribe();
+      };
+      req.signal.addEventListener("abort", () => {
+        cleanup();
+        try {
+          controller.close();
+        } catch {}
+      });
+    },
+    cancel() {
+      cleanup();
+    },
+  });
+
   return new Response(stream, {
     headers: {
       "Content-Type": "text/event-stream; charset=utf-8",
