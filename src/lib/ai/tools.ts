@@ -70,6 +70,32 @@ export function createGuardianTools(ctx: ToolContext) {
       execute: async ({ url }) => checkUrl(url),
     }),
 
+    submitRiskReport: tool({
+      description: "提交最终的结构化风险报告。完成检索与核验后调用，每轮仅调用一次。报告会经过安全审查后展示给老人，高风险时自动通知家属。",
+      inputSchema: riskReportSchema,
+      execute: async (input) => {
+        const guarded = guardReport(input satisfies RiskReport, {
+          ruleScore: ctx.ruleScore,
+          injectionSuspicious: ctx.injectionSuspicious,
+        });
+        let alertId: string | undefined;
+        // 所有检测记录同步到家属端（内容已脱敏）；是否“强提醒”由 notifyFamily 决定
+        const alert = addAlert({
+          elderName: ctx.elderName,
+          level: guarded.level,
+          score: guarded.score,
+          channel: ctx.channel,
+          fraudType: guarded.fraudType,
+          headline: guarded.headline,
+          contentPreview: ctx.contentPreview,
+          reasons: guarded.reasons,
+          familyAdvice: guarded.familyAdvice,
+        });
+        if (guarded.notifyFamily) alertId = alert.id;
+        return { report: guarded, notified: Boolean(alertId), alertId };
+      },
+    }),
+
     notifyFamily: tool({
       description: "当老人明确要求“告诉我儿子/女儿”或情况紧急时，主动给家属发送一条消息。",
       inputSchema: z.object({
