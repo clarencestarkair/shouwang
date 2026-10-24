@@ -85,3 +85,8 @@ body {
   background: var(--bg);
   min-height: 100dvh;
 }
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
