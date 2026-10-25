@@ -5,3 +5,11 @@
  */
 import { useEffect, useState } from "react";
 import { RISK_LABEL, type RiskLevel } from "@/lib/core/types";
+
+export const LEVEL_COLOR: Record<RiskLevel, string> = {
+  critical: "var(--danger)",
+  high: "var(--danger)",
+  medium: "var(--warn)",
+  low: "var(--ok)",
+  safe: "var(--ok)",
+};
