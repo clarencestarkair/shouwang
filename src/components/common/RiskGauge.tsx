@@ -49,6 +49,11 @@ export function Gauge({ value, color, size = 132, stroke = 10, caption, label, l
     return () => cancelAnimationFrame(id);
   }, [value, animate]);
 
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const arc = c * 0.75; // 270°
+  const pct = Math.max(0, Math.min(100, shown)) / 100;
+
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }} role="img" aria-label={`${caption ?? "分数"} ${value}${label ? `，${label}` : ""}`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rotate-[135deg]">
