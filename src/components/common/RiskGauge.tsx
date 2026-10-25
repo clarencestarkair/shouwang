@@ -13,3 +13,11 @@ export const LEVEL_COLOR: Record<RiskLevel, string> = {
   low: "var(--ok)",
   safe: "var(--ok)",
 };
+
+export const LEVEL_SOFT: Record<RiskLevel, string> = {
+  critical: "var(--danger-soft)",
+  high: "var(--danger-soft)",
+  medium: "var(--warn-soft)",
+  low: "var(--ok-soft)",
+  safe: "var(--ok-soft)",
+};
