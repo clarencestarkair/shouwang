@@ -22,6 +22,14 @@ export const LEVEL_SOFT: Record<RiskLevel, string> = {
   safe: "var(--ok-soft)",
 };
 
+export const LEVEL_INK: Record<RiskLevel, string> = {
+  critical: "var(--danger)",
+  high: "var(--danger)",
+  medium: "var(--warn-ink)",
+  low: "var(--ok-ink)",
+  safe: "var(--ok-ink)",
+};
+
 interface GaugeProps {
   value: number;
   color: string;
