@@ -46,5 +46,14 @@ export async function prepareImage(file: File): Promise<PreparedImage> {
   ctx.fillRect(0, 0, w, h);
   ctx.drawImage(img, 0, 0, w, h);
 
+  let qr: string | null = null;
+  try {
+    const { default: jsQR } = await import("jsqr");
+    const data = ctx.getImageData(0, 0, w, h);
+    qr = jsQR(data.data, w, h, { inversionAttempts: "attemptBoth" })?.data ?? null;
+  } catch {
+    qr = null;
+  }
+
   return { dataUrl: canvas.toDataURL("image/jpeg", 0.85), mediaType: "image/jpeg", name: file.name, qr, width: w, height: h };
 }
