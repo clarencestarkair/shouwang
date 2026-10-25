@@ -5,3 +5,12 @@
  * - speak：用中文语音朗读结论，语速放慢，适合老人
  */
 import { useCallback, useEffect, useRef, useState } from "react";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type Recognition = any;
+
+function getRecognitionCtor(): (new () => Recognition) | null {
+  if (typeof window === "undefined") return null;
+  const w = window as any;
+  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+}
