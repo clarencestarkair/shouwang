@@ -5,6 +5,11 @@
  */
 import dynamic from "next/dynamic";
 
+const ReactMarkdown = dynamic(() => import("react-markdown"), {
+  ssr: false,
+  loading: () => null,
+});
+
 export function Markdown({ children, className }: { children: string; className?: string }) {
   return (
     <div className={className}>
