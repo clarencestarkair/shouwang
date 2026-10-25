@@ -48,3 +48,39 @@ export function Gauge({ value, color, size = 132, stroke = 10, caption, label, l
     const id = requestAnimationFrame(() => setShown(value));
     return () => cancelAnimationFrame(id);
   }, [value, animate]);
+
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }} role="img" aria-label={`${caption ?? "分数"} ${value}${label ? `，${label}` : ""}`}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rotate-[135deg]">
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--surface-3)" strokeWidth={stroke} strokeLinecap="round" strokeDasharray={`${arc} ${c}`} />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={`${arc * pct} ${c}`}
+          style={{ transition: "stroke-dasharray 1100ms var(--ease-out-expo)" }}
+        />
+      </svg>
+      <div className="absolute inset-0 grid place-items-center">
+        <div className="text-center">
+          <div className="tnum font-semibold leading-none tracking-tight" style={{ fontSize: size * 0.3 }}>
+            {Math.round(value)}
+          </div>
+          {caption && <div className="mt-1 text-ink-3" style={{ fontSize: Math.max(11, size * 0.085) }}>{caption}</div>}
+        </div>
+      </div>
+      {label && (
+        <div
+          className="absolute inset-x-0 bottom-0 mx-auto w-fit rounded-full px-2.5 py-0.5 font-semibold"
+          style={{ fontSize: Math.max(11, size * 0.09), color: labelColor ?? color, background: "var(--surface)" }}
+        >
+          {label}
+        </div>
+      )}
+    </div>
+  );
+}
