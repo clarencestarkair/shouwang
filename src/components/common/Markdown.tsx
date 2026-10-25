@@ -4,3 +4,11 @@
  * 减小长辈端首屏 JS 体积。
  */
 import dynamic from "next/dynamic";
+
+export function Markdown({ children, className }: { children: string; className?: string }) {
+  return (
+    <div className={className}>
+      <ReactMarkdown>{children}</ReactMarkdown>
+    </div>
+  );
+}
