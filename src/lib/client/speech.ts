@@ -72,3 +72,7 @@ export function speak(text: string, opts: { rate?: number } = {}): () => void {
   synth.speak(u);
   return () => synth.cancel();
 }
+
+export function stopSpeaking() {
+  if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+}
