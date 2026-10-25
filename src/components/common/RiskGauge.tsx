@@ -40,3 +40,11 @@ interface GaugeProps {
   labelColor?: string;
   animate?: boolean;
 }
+
+export function Gauge({ value, color, size = 132, stroke = 10, caption, label, labelColor, animate = true }: GaugeProps) {
+  const [shown, setShown] = useState(animate ? 0 : value);
+  useEffect(() => {
+    if (!animate) return;
+    const id = requestAnimationFrame(() => setShown(value));
+    return () => cancelAnimationFrame(id);
+  }, [value, animate]);
