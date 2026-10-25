@@ -7,3 +7,9 @@ export const metadata: Metadata = {
   title: "守望 · 银发反诈守护 Agent",
   description: "面向老年人的多模态反诈守护智能体：看截图、听语音、查案例、核号码，一眼看懂是不是骗局，并实时提醒家人。",
 };
+
+export const viewport: Viewport = {
+  themeColor: "#fafbfc",
+  width: "device-width",
+  initialScale: 1,
+};
