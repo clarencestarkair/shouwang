@@ -14,3 +14,12 @@ function getRecognitionCtor(): (new () => Recognition) | null {
   const w = window as any;
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
+
+export function useSpeechInput(onFinal: (text: string) => void) {
+  const [supported, setSupported] = useState(false);
+  const [listening, setListening] = useState(false);
+  const [interim, setInterim] = useState("");
+  const recRef = useRef<Recognition | null>(null);
+  const finalRef = useRef("");
+  const onFinalRef = useRef(onFinal);
+  onFinalRef.current = onFinal;
