@@ -84,3 +84,17 @@ export function Gauge({ value, color, size = 132, stroke = 10, caption, label, l
     </div>
   );
 }
+
+export function RiskGauge({ level, score, size = 132, animate = true }: { level: RiskLevel; score: number; size?: number; animate?: boolean }) {
+  return <Gauge value={score} color={LEVEL_COLOR[level]} size={size} caption="风险指数" label={RISK_LABEL[level]} labelColor={LEVEL_INK[level]} animate={animate} />;
+}
+
+/** 小号等级标签 */
+export function LevelChip({ level, className = "" }: { level: RiskLevel; className?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[0.8rem] font-semibold ${className}`} style={{ background: LEVEL_SOFT[level], color: LEVEL_INK[level] }}>
+      <span className="size-1.5 rounded-full" style={{ background: LEVEL_COLOR[level] }} />
+      {RISK_LABEL[level]}
+    </span>
+  );
+}
