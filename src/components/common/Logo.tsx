@@ -10,3 +10,15 @@ export function LogoMark({ size = 28, inverted = false }: { size?: number; inver
     </svg>
   );
 }
+
+export function Wordmark({ inverted = false }: { inverted?: boolean }) {
+  return (
+    <span className="flex items-center gap-2.5">
+      <LogoMark inverted={inverted} />
+      <span className={inverted ? "text-[17px] font-semibold tracking-tight text-surface" : "text-[17px] font-semibold tracking-tight text-ink"}>
+        守望
+        <span className="ml-1.5 hidden font-normal text-ink-3 sm:inline">Shouwang</span>
+      </span>
+    </span>
+  );
+}
