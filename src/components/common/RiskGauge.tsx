@@ -21,3 +21,14 @@ export const LEVEL_SOFT: Record<RiskLevel, string> = {
   low: "var(--ok-soft)",
   safe: "var(--ok-soft)",
 };
+
+interface GaugeProps {
+  value: number;
+  color: string;
+  size?: number;
+  stroke?: number;
+  caption?: string;
+  label?: string;
+  labelColor?: string;
+  animate?: boolean;
+}
