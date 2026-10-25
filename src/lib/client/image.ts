@@ -5,3 +5,12 @@
  *    视觉大模型无法“扫码”，端侧解码可补上这一环。
  * jsQR 按需动态加载，不计入首屏体积。
  */
+
+export interface PreparedImage {
+  dataUrl: string;
+  mediaType: string;
+  name: string;
+  qr: string | null;
+  width: number;
+  height: number;
+}
