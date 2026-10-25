@@ -45,3 +45,6 @@ export async function prepareImage(file: File): Promise<PreparedImage> {
   ctx.fillStyle = "#fff";
   ctx.fillRect(0, 0, w, h);
   ctx.drawImage(img, 0, 0, w, h);
+
+  return { dataUrl: canvas.toDataURL("image/jpeg", 0.85), mediaType: "image/jpeg", name: file.name, qr, width: w, height: h };
+}
