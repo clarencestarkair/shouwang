@@ -13,3 +13,11 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="zh-CN" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className="min-h-dvh text-ink antialiased">{children}</body>
+    </html>
+  );
+}
