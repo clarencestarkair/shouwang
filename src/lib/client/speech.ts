@@ -23,3 +23,17 @@ export function useSpeechInput(onFinal: (text: string) => void) {
   const finalRef = useRef("");
   const onFinalRef = useRef(onFinal);
   onFinalRef.current = onFinal;
+
+/** 朗读文字；返回停止函数 */
+export function speak(text: string, opts: { rate?: number } = {}): () => void {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return () => {};
+  const synth = window.speechSynthesis;
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(text.replace(/[*#>`]/g, ""));
+  u.lang = "zh-CN";
+  u.rate = opts.rate ?? 0.9;
+  const voice = synth.getVoices().find((v) => v.lang.startsWith("zh-CN") || v.lang.startsWith("zh"));
+  if (voice) u.voice = voice;
+  synth.speak(u);
+  return () => synth.cancel();
+}
