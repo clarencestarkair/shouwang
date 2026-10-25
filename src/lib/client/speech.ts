@@ -24,6 +24,41 @@ export function useSpeechInput(onFinal: (text: string) => void) {
   const onFinalRef = useRef(onFinal);
   onFinalRef.current = onFinal;
 
+  useEffect(() => setSupported(Boolean(getRecognitionCtor())), []);
+
+  const start = useCallback(() => {
+    const Ctor = getRecognitionCtor();
+    if (!Ctor || recRef.current) return;
+    const rec = new Ctor();
+    rec.lang = "zh-CN";
+    rec.interimResults = true;
+    rec.continuous = true;
+    finalRef.current = "";
+    rec.onresult = (e: any) => {
+      let interimText = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal) finalRef.current += r[0].transcript;
+        else interimText += r[0].transcript;
+      }
+      setInterim(finalRef.current + interimText);
+    };
+    rec.onerror = () => {
+      setListening(false);
+      recRef.current = null;
+    };
+    rec.onend = () => {
+      setListening(false);
+      recRef.current = null;
+      const text = finalRef.current.trim();
+      setInterim("");
+      if (text) onFinalRef.current(text);
+    };
+    recRef.current = rec;
+    rec.start();
+    setListening(true);
+  }, []);
+
 /** 朗读文字；返回停止函数 */
 export function speak(text: string, opts: { rate?: number } = {}): () => void {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return () => {};
