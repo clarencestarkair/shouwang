@@ -108,3 +108,17 @@ export function ElderApp() {
             }}
           />
         )}
+
+        {status === "submitted" && messages[messages.length - 1]?.role === "user" && <AgentTrace parts={[]} busy />}
+
+        {error && (
+          <div role="alert" className="rounded-2xl border border-danger/20 bg-danger-soft px-5 py-4 text-[1.02rem] text-ink">
+            网络好像不太好，没能看完。如果事情紧急，请直接拨打{" "}
+            <a className="font-semibold text-danger underline underline-offset-2" href="tel:96110">
+              96110
+            </a>{" "}
+            反诈专线。
+          </div>
+        )}
+        <div ref={bottomRef} />
+      </main>
