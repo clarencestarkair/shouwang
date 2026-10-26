@@ -43,3 +43,30 @@ export function Composer({ onSubmit, busy, onStop }: { onSubmit: (v: ComposerSub
       if (fileRef.current) fileRef.current.value = "";
     }
   };
+
+  const canSend = Boolean(text.trim()) || images.length > 0;
+
+  return (
+    <div className="flex flex-wrap items-end gap-2.5 sm:flex-nowrap sm:gap-3">
+      {speech.supported && (
+        <button
+          type="button"
+          disabled={busy}
+          onPointerDown={(e) => {
+            e.currentTarget.setPointerCapture(e.pointerId);
+            speech.start();
+          }}
+          onPointerUp={speech.stop}
+          onPointerCancel={speech.stop}
+          onContextMenu={(e) => e.preventDefault()}
+          aria-label="按住说话，松开发送"
+          className={cn(
+            "relative order-last flex h-16 w-full shrink-0 select-none items-center justify-center gap-2.5 rounded-2xl px-6 text-[1.08rem] font-semibold text-surface shadow-md transition-[transform,background-color] duration-200 active:scale-[0.98] disabled:opacity-40 sm:order-none sm:w-auto",
+            speech.listening ? "bg-danger" : "bg-ink hover:bg-ink/90",
+          )}
+        >
+          {speech.listening && <span aria-hidden className="animate-pulse-ring absolute inset-0 rounded-2xl bg-danger/40" />}
+          <Mic className="relative size-6" aria-hidden />
+          <span className="relative">{speech.listening ? "松开发送" : "按住说话"}</span>
+        </button>
+      )}
