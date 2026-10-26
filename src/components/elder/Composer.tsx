@@ -70,3 +70,72 @@ export function Composer({ onSubmit, busy, onStop }: { onSubmit: (v: ComposerSub
           <span className="relative">{speech.listening ? "松开发送" : "按住说话"}</span>
         </button>
       )}
+
+      <div className="flex min-h-16 min-w-0 flex-1 flex-col justify-center rounded-2xl border border-line-2 bg-surface px-3 shadow-sm transition-colors focus-within:border-accent focus-within:ring-4 focus-within:ring-accent-soft">
+        {(images.length > 0 || preparing) && (
+          <div className="flex flex-wrap gap-2 pt-3">
+            {images.map((img, i) => (
+              <figure key={i} className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={img.dataUrl} alt={`待分析图片 ${i + 1}`} className="h-20 w-16 rounded-lg object-cover ring-1 ring-line" />
+                {img.qr && <figcaption className="absolute inset-x-1 bottom-1 rounded bg-ink/80 text-center text-[0.65rem] text-surface">二维码</figcaption>}
+                <button type="button" aria-label="移除图片" onClick={() => setImages((p) => p.filter((_, j) => j !== i))} className="absolute -right-2 -top-2 grid size-6 place-items-center rounded-full bg-ink text-surface shadow">
+                  <X className="size-3.5" />
+                </button>
+              </figure>
+            ))}
+            {preparing && (
+              <div className="grid h-20 w-16 place-items-center rounded-lg bg-surface-2 text-ink-3">
+                <Loader2 className="size-5 animate-spin" />
+              </div>
+            )}
+          </div>
+        )}
+        <div className="flex items-end gap-2">
+          <button type="button" onClick={() => fileRef.current?.click()} aria-label="拍照或上传截图" className="mb-2.5 grid size-11 shrink-0 place-items-center rounded-xl text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink">
+            <Camera className="size-6" aria-hidden />
+          </button>
+          <input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={(e) => onFiles(e.target.files)} />
+          <label className="min-w-0 flex-1">
+            <span className="sr-only">输入或粘贴要我看的内容</span>
+            <textarea
+              value={speech.listening ? speech.interim : text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                  e.preventDefault();
+                  submit();
+                }
+              }}
+              onPaste={(e) => {
+                const files = e.clipboardData.files;
+                if (files.length) {
+                  e.preventDefault();
+                  onFiles(files);
+                }
+              }}
+              rows={1}
+              placeholder={speech.listening ? "我在听，您说…" : "粘贴短信，或问我"}
+              className="field-sizing-content block max-h-40 w-full resize-none bg-transparent py-[1.05rem] text-[1.08rem] leading-relaxed outline-none placeholder:text-ink-3"
+            />
+          </label>
+          {busy ? (
+            <button type="button" onClick={onStop} aria-label="停止" className="mb-2.5 grid size-11 shrink-0 place-items-center rounded-xl bg-ink text-surface">
+              <Square className="size-4 fill-current" aria-hidden />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => submit()}
+              disabled={!canSend}
+              aria-label="发送"
+              className={cn("mb-2.5 grid size-11 shrink-0 place-items-center rounded-xl transition-colors", canSend ? "bg-accent text-surface" : "bg-surface-2 text-ink-3")}
+            >
+              <ArrowUp className="size-5" strokeWidth={2.5} aria-hidden />
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
