@@ -10,3 +10,8 @@ import { ArrowUp, Camera, Loader2, Mic, Square, X } from "lucide-react";
 import { useSpeechInput } from "@/lib/client/speech";
 import { prepareImage, type PreparedImage } from "@/lib/client/image";
 import { cn } from "@/lib/utils";
+
+export interface ComposerSubmit {
+  text: string;
+  images: PreparedImage[];
+}
