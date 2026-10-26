@@ -37,3 +37,9 @@ export function ElderApp() {
       el.style.fontSize = prev;
     };
   }, [settings.fontLevel]);
+
+  useEffect(() => setHello(greeting()), []);
+
+  const transport = useMemo(() => new DefaultChatTransport<GuardianUIMessage>({ api: "/api/chat" }), []);
+  const { messages, sendMessage, status, stop, error } = useChat<GuardianUIMessage>({ transport });
+  const busy = status === "submitted" || status === "streaming";
