@@ -15,3 +15,9 @@ export interface ComposerSubmit {
   text: string;
   images: PreparedImage[];
 }
+
+export function Composer({ onSubmit, busy, onStop }: { onSubmit: (v: ComposerSubmit) => void; busy: boolean; onStop: () => void }) {
+  const [text, setText] = useState("");
+  const [images, setImages] = useState<PreparedImage[]>([]);
+  const [preparing, setPreparing] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
