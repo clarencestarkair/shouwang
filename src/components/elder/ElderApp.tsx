@@ -22,6 +22,12 @@ import { deriveAnalysis } from "@/components/analysis/derive";
 import { SettingsPanel } from "./SettingsPanel";
 import { EXAMPLES } from "./examples";
 
+export function ElderApp() {
+  const settings = useSettings();
+  const [showSettings, setShowSettings] = useState(false);
+  const [hello, setHello] = useState("您好");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
   // 字号档位作用于根字号，所有 rem 尺寸随之等比放大
   useEffect(() => {
     const el = document.documentElement;
