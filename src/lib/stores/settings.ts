@@ -10,3 +10,16 @@ interface SettingsState {
   fontLevel: 1 | 2 | 3;
   set: (patch: Partial<Omit<SettingsState, "set">>) => void;
 }
+
+export const useSettings = create<SettingsState>()(
+  persist(
+    (set) => ({
+      elderName: "妈妈",
+      familyPhone: "",
+      autoSpeak: true,
+      fontLevel: 2,
+      set: (patch) => set(patch),
+    }),
+    { name: "shouwang-settings" },
+  ),
+);
