@@ -122,3 +122,10 @@ export function ElderApp() {
         )}
         <div ref={bottomRef} />
       </main>
+
+      <div className="sticky bottom-0 -mx-4 bg-gradient-to-t from-bg via-bg/95 to-bg/0 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 sm:-mx-6 sm:px-6">
+        <Composer onSubmit={submit} busy={busy} onStop={stop} />
+      </div>
+    </div>
+  );
+}
