@@ -29,3 +29,17 @@ export function Composer({ onSubmit, busy, onStop }: { onSubmit: (v: ComposerSub
     setText("");
     setImages([]);
   };
+
+  const speech = useSpeechInput((spoken) => submit(spoken));
+
+  const onFiles = async (files: FileList | null) => {
+    if (!files?.length) return;
+    setPreparing(true);
+    try {
+      const prepared = await Promise.all([...files].slice(0, 3).map(prepareImage));
+      setImages((prev) => [...prev, ...prepared].slice(0, 3));
+    } finally {
+      setPreparing(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
