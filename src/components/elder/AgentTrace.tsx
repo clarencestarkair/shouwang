@@ -111,3 +111,30 @@ export function AgentTrace({ parts, busy }: { parts: Part[]; busy: boolean }) {
     </section>
   );
 }
+
+function StatusDot({ status }: { status: TraceData["status"] }) {
+  const base = "relative z-10 mt-0.5 grid size-[1.375rem] shrink-0 place-items-center rounded-full";
+  if (status === "running")
+    return (
+      <span className={cn(base, "bg-accent-soft")} aria-label="进行中">
+        <span className="size-2 animate-pulse rounded-full bg-accent" />
+      </span>
+    );
+  if (status === "error")
+    return (
+      <span className={cn(base, "bg-danger-soft text-danger")} aria-label="出错">
+        <CircleAlert className="size-3.5" />
+      </span>
+    );
+  if (status === "skipped")
+    return (
+      <span className={cn(base, "bg-surface-2 text-ink-3")} aria-label="跳过">
+        <Minus className="size-3.5" />
+      </span>
+    );
+  return (
+    <span className={cn(base, "bg-ink text-surface")} aria-label="完成">
+      <Check className="size-3" strokeWidth={3} />
+    </span>
+  );
+}
