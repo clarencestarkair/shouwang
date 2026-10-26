@@ -60,3 +60,16 @@ export function ElderApp() {
     if (messages.length === 0) return;
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages, status]);
+
+  useEffect(() => () => stopSpeaking(), []);
+
+  const submit = ({ text, images }: ComposerSubmit) => {
+    // 端侧隐私保护：发送前在浏览器里完成脱敏
+    const masked = maskPII(text);
+    const files: FileUIPart[] = images.map((img) => ({ type: "file", mediaType: img.mediaType, url: img.dataUrl, filename: img.name }));
+    const body: GuardianRequestBody = {
+      profile: { elderName: settings.elderName },
+      clientSide: { qr: images.map((i) => i.qr).filter((x): x is string => Boolean(x)), masked: masked.masked },
+    };
+    sendMessage({ text: masked.text || (images.length ? "帮我看看这张图是不是骗子" : ""), files }, { body });
+  };
