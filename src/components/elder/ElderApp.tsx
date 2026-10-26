@@ -54,3 +54,9 @@ export function ElderApp() {
   const transport = useMemo(() => new DefaultChatTransport<GuardianUIMessage>({ api: "/api/chat" }), []);
   const { messages, sendMessage, status, stop, error } = useChat<GuardianUIMessage>({ transport });
   const busy = status === "submitted" || status === "streaming";
+
+  // 有对话时才跟随到底部；首屏不滚动，保证老人先看到问候与说明
+  useEffect(() => {
+    if (messages.length === 0) return;
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages, status]);
