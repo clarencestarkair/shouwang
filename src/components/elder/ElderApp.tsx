@@ -73,3 +73,38 @@ export function ElderApp() {
     };
     sendMessage({ text: masked.text || (images.length ? "帮我看看这张图是不是骗子" : ""), files }, { body });
   };
+
+  return (
+    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-3xl flex-col px-4 sm:px-6">
+      <div className="flex items-start justify-between gap-4 pb-2 pt-10">
+        <div>
+          <p className="text-[1rem] font-medium text-ink-3">
+            {hello}，{settings.elderName}
+          </p>
+          <h1 className="mt-1.5 text-[1.9rem] font-semibold leading-tight tracking-tight sm:text-[2.5rem]">拿不准的消息，发给我看看</h1>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowSettings((v) => !v)}
+          aria-expanded={showSettings}
+          aria-label="设置"
+          className="mt-1 grid size-12 shrink-0 place-items-center rounded-full border border-line bg-surface text-ink-2 shadow-sm transition-colors hover:text-ink"
+        >
+          <Settings2 className="size-5" />
+        </button>
+      </div>
+
+      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
+
+      <main className="flex-1 space-y-7 py-7" aria-live="polite">
+        {messages.length === 0 && (
+          <EmptyState
+            onPick={(t) => submit({ text: t, images: [] })}
+            onPickImage={async (src, text) => {
+              // 演示截图走与真实上传完全相同的端侧流程：压缩 + 二维码解析
+              const blob = await (await fetch(src)).blob();
+              const img = await prepareImage(new File([blob], src.split("/").pop() ?? "demo.png", { type: blob.type }));
+              submit({ text, images: [img] });
+            }}
+          />
+        )}
