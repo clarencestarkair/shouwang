@@ -59,6 +59,14 @@ export function useSpeechInput(onFinal: (text: string) => void) {
     setListening(true);
   }, []);
 
+  const stop = useCallback(() => {
+    recRef.current?.stop();
+  }, []);
+
+  return { supported, listening, interim, start, stop };
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
 /** 朗读文字；返回停止函数 */
 export function speak(text: string, opts: { rate?: number } = {}): () => void {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return () => {};
