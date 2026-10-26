@@ -145,3 +145,9 @@ function UserBubble({ message }: { message: GuardianUIMessage }) {
     </div>
   );
 }
+
+function AssistantTurn({ message, userMessage, busy }: { message: GuardianUIMessage; userMessage?: GuardianUIMessage; busy: boolean }) {
+  const a = deriveAnalysis(message, userMessage, busy);
+  const [showConsole, setShowConsole] = useState(false);
+  const report = a.report;
+  const writingReport = !report && a.tools.some((t) => t.name === "submitRiskReport");
