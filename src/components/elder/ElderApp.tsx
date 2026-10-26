@@ -129,3 +129,19 @@ export function ElderApp() {
     </div>
   );
 }
+
+function UserBubble({ message }: { message: GuardianUIMessage }) {
+  const text = message.parts.filter((p) => p.type === "text").map((p) => p.text).join("\n");
+  const files = message.parts.filter((p) => p.type === "file");
+  return (
+    <div className="animate-rise ml-auto flex max-w-[85%] flex-col items-end gap-2">
+      {files.map((f, i) =>
+        f.type === "file" ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img key={i} src={f.url} alt="您发来的图片" className="max-h-60 rounded-2xl object-cover shadow-md ring-1 ring-line" />
+        ) : null,
+      )}
+      {text && <p className="whitespace-pre-wrap rounded-[1.4rem] rounded-br-md bg-ink px-5 py-3.5 text-[1.08rem] leading-relaxed text-surface shadow-sm">{text}</p>}
+    </div>
+  );
+}
