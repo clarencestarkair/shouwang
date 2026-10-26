@@ -22,6 +22,17 @@ import { deriveAnalysis } from "@/components/analysis/derive";
 import { SettingsPanel } from "./SettingsPanel";
 import { EXAMPLES } from "./examples";
 
+const FONT_PX = { 1: 18, 2: 20, 3: 23 } as const;
+
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 6) return "夜深了";
+  if (h < 11) return "早上好";
+  if (h < 14) return "中午好";
+  if (h < 18) return "下午好";
+  return "晚上好";
+}
+
 export function ElderApp() {
   const settings = useSettings();
   const [showSettings, setShowSettings] = useState(false);
