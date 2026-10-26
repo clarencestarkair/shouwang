@@ -63,3 +63,11 @@ function stepsFromParts(parts: Part[]): Step[] {
   else traces.push(...tools);
   return traces;
 }
+
+export function AgentTrace({ parts, busy }: { parts: Part[]; busy: boolean }) {
+  const steps = stepsFromParts(parts);
+  const [open, setOpen] = useState<boolean | null>(null);
+  const running = busy || steps.some((s) => s.status === "running");
+  const expanded = open ?? running;
+  const done = steps.filter((s) => s.status === "done").length;
+  const progress = steps.length ? done / Math.max(steps.length, 5) : 0;
