@@ -21,3 +21,11 @@ export function Composer({ onSubmit, busy, onStop }: { onSubmit: (v: ComposerSub
   const [images, setImages] = useState<PreparedImage[]>([]);
   const [preparing, setPreparing] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const submit = (t = text) => {
+    if (busy || preparing) return;
+    if (!t.trim() && images.length === 0) return;
+    onSubmit({ text: t.trim(), images });
+    setText("");
+    setImages([]);
+  };
