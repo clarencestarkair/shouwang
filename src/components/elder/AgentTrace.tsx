@@ -7,3 +7,13 @@ import { useState } from "react";
 import { Check, ChevronDown, CircleAlert, Minus, Sparkles } from "lucide-react";
 import type { GuardianUIMessage, TraceData } from "@/lib/ai/messages";
 import { cn } from "@/lib/utils";
+
+type Part = GuardianUIMessage["parts"][number];
+
+interface Step {
+  key: string;
+  title: string;
+  detail?: string;
+  status: TraceData["status"];
+  tech?: string;
+}
