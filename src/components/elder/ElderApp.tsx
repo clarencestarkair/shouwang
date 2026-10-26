@@ -21,3 +21,13 @@ import { AgentConsole } from "@/components/analysis/AgentConsole";
 import { deriveAnalysis } from "@/components/analysis/derive";
 import { SettingsPanel } from "./SettingsPanel";
 import { EXAMPLES } from "./examples";
+
+  // 字号档位作用于根字号，所有 rem 尺寸随之等比放大
+  useEffect(() => {
+    const el = document.documentElement;
+    const prev = el.style.fontSize;
+    el.style.fontSize = `${FONT_PX[settings.fontLevel]}px`;
+    return () => {
+      el.style.fontSize = prev;
+    };
+  }, [settings.fontLevel]);
