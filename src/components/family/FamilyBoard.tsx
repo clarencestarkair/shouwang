@@ -40,3 +40,29 @@ export function FamilyBoard() {
   const [incoming, setIncoming] = useState<FamilyAlert | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    load();
+    const es = new EventSource("/api/alerts/stream");
+    es.addEventListener("ready", () => setLive(true));
+    es.addEventListener("alert", (e) => {
+      const a = JSON.parse((e as MessageEvent).data) as FamilyAlert;
+      setAlerts((prev) => [a, ...prev.filter((x) => x.id !== a.id)]);
+      if (isRisky(a.level)) {
+        setIncoming(a);
+        setSelected(a.id);
+        beep();
+      }
+    });
+    es.addEventListener("update", (e) => {
+      const a = JSON.parse((e as MessageEvent).data) as FamilyAlert;
+      setAlerts((prev) => prev.map((x) => (x.id === a.id ? a : x)));
+    });
+    es.addEventListener("reset", () => load());
+    es.onerror = () => setLive(false);
+    const t = setInterval(() => setNow(Date.now()), 30e3);
+    return () => {
+      es.close();
+      clearInterval(t);
+    };
+  }, [load]);
