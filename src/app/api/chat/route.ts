@@ -184,3 +184,40 @@ export async function POST(req: Request) {
           part.type === "data-perception" ? { type: "text", text: `（此前图片识别结果：${(part.data as PerceptionData).text.slice(0, 600)}）` } : undefined,
       });
       const modelMessages: ModelMessage[] = [...history, { role: "user", content: contextBlock }];
+
+      let reported = false;
+      let failure: unknown = null;
+      const result = streamText({
+        model: textModel(),
+        system: `${GUARDIAN_SYSTEM}\n\n${FAMILY_ADVICE_HINT}`,
+        messages: modelMessages,
+        tools,
+        ...sampling(0.3),
+        maxRetries: 1,
+        stopWhen: stepCountIs(8),
+        onStepFinish: ({ toolResults }) => {
+          if (toolResults.some((t) => t.toolName === "submitRiskReport")) {
+            reported = true;
+            trace({ step: "agent", status: "done", title: "AI 研判", detail: "已形成结论" });
+            trace({ step: "guard", status: "done", title: "安全审查", detail: "已完成双通道校验与安全过滤" });
+          }
+        },
+        experimental_onToolCallStart: ({ toolCall }) => {
+          writer.write({
+            type: "data-tooltime",
+            id: `tt-${toolCall.toolCallId}`,
+            data: { toolCallId: toolCall.toolCallId, toolName: toolCall.toolName, startAt: Date.now() - t0 },
+          });
+        },
+        experimental_onToolCallFinish: ({ toolCall, durationMs }) => {
+          writer.write({
+            type: "data-tooltime",
+            id: `tt-${toolCall.toolCallId}`,
+            data: { toolCallId: toolCall.toolCallId, toolName: toolCall.toolName, startAt: Date.now() - t0 - durationMs, endAt: Date.now() - t0, durationMs },
+          });
+        },
+        onError: ({ error }) => {
+          failure = error;
+          console.error("[chat] streamText error", error);
+        },
+      });
