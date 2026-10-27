@@ -96,3 +96,16 @@ body {
   outline-offset: 3px;
   border-radius: 8px;
 }
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 细网格背景：只用于首页英雄区，向四周淡出 */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, oklch(0.2 0.01 265 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.2 0.01 265 / 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 75%);
+}
