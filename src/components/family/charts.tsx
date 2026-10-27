@@ -185,3 +185,13 @@ export function HourHeatmap({ alerts }: { alerts: FamilyAlert[] }) {
     </div>
   );
 }
+
+/* ———————————— 渠道环图 ———————————— */
+const CH_COLOR: Record<Channel, string> = {
+  电话: "var(--danger)",
+  短信: "var(--warn)",
+  微信: "var(--ok)",
+  截图: "var(--accent)",
+  线下: "oklch(0.7 0.12 310)",
+  其他: "var(--ink-3)",
+};
