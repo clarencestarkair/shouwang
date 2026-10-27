@@ -160,3 +160,20 @@ export async function POST(req: Request) {
         await fallback("未配置大模型，已启用规则引擎兜底");
         return;
       }
+
+      // ④ 研判 Agent
+      trace({ step: "agent", status: "running", title: "AI 研判", detail: "检索相似案例、核验号码与链接…" });
+
+      const contextBlock = [
+        "以下是本轮需要分析的内容（已脱敏）：",
+        wrapUntrusted([userText, perceived && `【图片识别结果】\n${perceived}`, qr.length ? `【本机解析的二维码内容】${qr.join("；")}` : ""].filter(Boolean).join("\n\n")),
+        "",
+        "【系统预分析，仅供参考】",
+        `- 规则引擎初步风险分：${scan.score}（${scan.level}）`,
+        `- 命中信号：${scan.signals.map((s) => `${s.label}「${s.evidence}」`).join("；") || "无"}`,
+        `- 抽取到的号码：${entities.phones.join("、") || "无"}；链接：${entities.urls.join("、") || "无"}`,
+        injection.suspicious ? `- ⚠️ 检测到疑似操纵 AI 的语句：${injection.hits.join("；")}` : "",
+        `- 用户称呼：${elderName}`,
+      ]
+        .filter(Boolean)
+        .join("\n");
