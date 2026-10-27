@@ -54,3 +54,17 @@ export default function Home() {
             <HeroShowcase />
           </div>
         </section>
+
+        {/* ———————— 叙事：40 秒 ———————— */}
+        <section className="border-t border-line">
+          <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+            <div className="max-w-2xl">
+              <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-accent">How it works</p>
+              <h2 className="mt-3 text-[2.3rem] font-semibold leading-tight tracking-tight sm:text-[2.9rem]">一张诈骗传单的 40 秒</h2>
+              <p className="mt-4 text-[1.05rem] leading-relaxed text-ink-2">下面的数据来自一次真实运行：老人把小区门口发的“领养老补贴”传单拍给守望。</p>
+            </div>
+            <div className="mt-14">
+              <HomeStory />
+            </div>
+          </div>
+        </section>
