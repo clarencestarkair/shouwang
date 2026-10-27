@@ -44,3 +44,43 @@ function rng(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+
+/** 老人收到可疑信息的高发时段：上午 8-11 点、傍晚 18-21 点 */
+const HOURS = [8, 9, 9, 10, 10, 11, 14, 15, 16, 18, 19, 19, 20, 20, 21];
+
+export function seedAlerts(): FamilyAlert[] {
+  const r = rng(20261118);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const rows: FamilyAlert[] = [];
+  const elders: [string, number][] = [
+    ["妈妈", 30],
+    ["爸爸", 18],
+  ];
+  for (const [elderName, count] of elders) {
+    for (let i = 0; i < count; i++) {
+      const tpl = TEMPLATES[Math.floor(r() * TEMPLATES.length)];
+      const dayOffset = Math.floor(r() * 14);
+      const hour = HOURS[Math.floor(r() * HOURS.length)];
+      const createdAt = today.getTime() - dayOffset * DAY + hour * 3600e3 + Math.floor(r() * 60) * 60e3;
+      if (createdAt > Date.now() - 30 * 60e3) continue; // 不生成“未来”或刚刚的记录
+      const score = Math.round(tpl.score[0] + r() * (tpl.score[1] - tpl.score[0]));
+      rows.push({
+        id: `seed-${elderName}-${i}`,
+        createdAt,
+        elderName,
+        level: tpl.level,
+        score,
+        channel: tpl.channel,
+        fraudType: tpl.fraudType,
+        headline: tpl.headline,
+        contentPreview: tpl.preview,
+        reasons: tpl.reasons,
+        familyAdvice: tpl.advice,
+        status: dayOffset === 0 && tpl.level !== "safe" ? "new" : dayOffset < 3 && r() < 0.4 ? "read" : "handled",
+        demo: true,
+      });
+    }
+  }
+  return rows.sort((a, b) => b.createdAt - a.createdAt);
+}
