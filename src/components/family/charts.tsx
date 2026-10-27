@@ -8,3 +8,10 @@
  */
 import { LEVEL_COLOR } from "@/components/common/RiskGauge";
 import { levelRank, scoreToLevel, type Channel, type FamilyAlert, type FraudType } from "@/lib/core/types";
+
+const DAY = 86400e3;
+const startOfDay = (t: number) => {
+  const d = new Date(t);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+};
