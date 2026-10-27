@@ -96,3 +96,13 @@ export function TrendChart({ alerts, now, onPick }: { alerts: FamilyAlert[]; now
     </svg>
   );
 }
+
+/* ———————————— 类型雷达 ———————————— */
+const GROUPS: { label: string; types: FraudType[] }[] = [
+  { label: "冒充公检法", types: ["impersonate_police"] },
+  { label: "冒充客服", types: ["impersonate_service"] },
+  { label: "冒充亲友", types: ["impersonate_relative", "deepfake"] },
+  { label: "投资养老", types: ["fake_investment", "pension_scam", "collectibles"] },
+  { label: "补贴与链接", types: ["fake_subsidy", "phishing_link"] },
+  { label: "保健与中奖", types: ["health_product", "prize_lottery", "rebate_task", "romance", "fake_loan"] },
+];
