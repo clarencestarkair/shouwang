@@ -33,3 +33,14 @@ const TEMPLATES: Tpl[] = [
   { fraudType: "none", level: "safe", score: [2, 10], channel: "短信", headline: "银行扣款提醒，是正常消息", preview: "【工商银行】您尾号1234的账户支出人民币56.00元，余额3,210.55元……", reasons: [{ point: "只是账户变动提醒，没有链接、没有要求操作", evidence: "支出人民币56.00元" }] },
   { fraudType: "none", level: "low", score: [18, 30], channel: "微信", headline: "老同学聚会通知，暂无风险", preview: "老张，下周六中午同学聚会，地点还是老地方，AA制……", reasons: [{ point: "熟人邀约，没有涉及转账", evidence: "AA制" }] },
 ];
+
+/** 固定种子的伪随机数（mulberry32） */
+function rng(seed: number) {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
