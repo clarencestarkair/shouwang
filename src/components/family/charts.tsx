@@ -143,3 +143,45 @@ export function TypeRadar({ alerts }: { alerts: FamilyAlert[] }) {
     </svg>
   );
 }
+
+/* ———————————— 时段热力 ———————————— */
+const WEEK = ["一", "二", "三", "四", "五", "六", "日"];
+
+export function HourHeatmap({ alerts }: { alerts: FamilyAlert[] }) {
+  const grid = Array.from({ length: 7 }, () => Array.from({ length: 24 }, () => ({ n: 0, max: 0 })));
+  for (const a of alerts) {
+    const d = new Date(a.createdAt);
+    const row = (d.getDay() + 6) % 7;
+    const cell = grid[row][d.getHours()];
+    cell.n++;
+    cell.max = Math.max(cell.max, a.score);
+  }
+  return (
+    <div className="overflow-x-auto">
+      <div className="grid min-w-[34rem] grid-cols-[1.5rem_repeat(24,minmax(0,1fr))] gap-[3px]" role="img" aria-label="星期与时段的风险热力图">
+        {grid.map((row, r) => (
+          <div key={r} className="contents">
+            <span className="text-[10.5px] leading-[1.15rem] text-ink-3">{WEEK[r]}</span>
+            {row.map((cell, h) => {
+              const lv = cell.n ? scoreToLevel(cell.max) : null;
+              return (
+                <span
+                  key={h}
+                  title={cell.n ? `周${WEEK[r]} ${h}:00 · ${cell.n} 条 · 最高 ${cell.max}` : `周${WEEK[r]} ${h}:00`}
+                  className="aspect-square rounded-[4px]"
+                  style={{ background: lv ? LEVEL_COLOR[lv] : "var(--surface-2)", opacity: lv ? 0.35 + (cell.max / 100) * 0.65 : 1 }}
+                />
+              );
+            })}
+          </div>
+        ))}
+        <span />
+        {Array.from({ length: 24 }, (_, h) => (
+          <span key={h} className="text-center text-[10px] text-ink-3">
+            {h % 6 === 0 ? h : ""}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
