@@ -106,3 +106,40 @@ const GROUPS: { label: string; types: FraudType[] }[] = [
   { label: "补贴与链接", types: ["fake_subsidy", "phishing_link"] },
   { label: "保健与中奖", types: ["health_product", "prize_lottery", "rebate_task", "romance", "fake_loan"] },
 ];
+
+export function TypeRadar({ alerts }: { alerts: FamilyAlert[] }) {
+  const S = 260;
+  const c = S / 2;
+  const R = 88;
+  const counts = GROUPS.map((g) => alerts.filter((a) => a.fraudType !== "none" && a.fraudType !== "unknown" && g.types.includes(a.fraudType) && levelRank(a.level) >= 2).length);
+  const max = Math.max(1, ...counts);
+  const ang = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / GROUPS.length;
+  const pt = (i: number, r: number) => [c + Math.cos(ang(i)) * r, c + Math.sin(ang(i)) * r] as const;
+  const poly = counts.map((v, i) => pt(i, 12 + (v / max) * (R - 12)).join(",")).join(" ");
+  return (
+    <svg viewBox={`0 0 ${S} ${S}`} className="mx-auto h-auto w-full max-w-[17rem]" role="img" aria-label={`骗局类型分布：${GROUPS.map((g, i) => `${g.label} ${counts[i]}`).join("，")}`}>
+      {[1, 2, 3].map((k) => (
+        <polygon key={k} points={GROUPS.map((_, i) => pt(i, (R * k) / 3).join(",")).join(" ")} fill="none" stroke="var(--line-2)" />
+      ))}
+      {GROUPS.map((_, i) => (
+        <line key={i} x1={c} y1={c} x2={pt(i, R)[0]} y2={pt(i, R)[1]} stroke="var(--line)" />
+      ))}
+      <polygon points={poly} fill="var(--danger)" fillOpacity="0.22" stroke="var(--danger)" strokeWidth="2" strokeLinejoin="round" />
+      {counts.map((v, i) => (
+        <circle key={i} cx={pt(i, 12 + (v / max) * (R - 12))[0]} cy={pt(i, 12 + (v / max) * (R - 12))[1]} r="3.5" fill="var(--danger)" />
+      ))}
+      {GROUPS.map((g, i) => {
+        const [lx, ly] = pt(i, R + 24);
+        return (
+          <text key={g.label} x={lx} y={ly} fontSize="11" textAnchor="middle" dominantBaseline="middle" fill="var(--ink-2)">
+            {g.label}
+            <tspan fill="var(--ink)" fontWeight="600">
+              {" "}
+              {counts[i]}
+            </tspan>
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
