@@ -151,3 +151,39 @@ function AssistantTurn({ message, userMessage, busy }: { message: GuardianUIMess
   const [showConsole, setShowConsole] = useState(false);
   const report = a.report;
   const writingReport = !report && a.tools.some((t) => t.name === "submitRiskReport");
+
+  return (
+    <div className="space-y-5">
+      <AgentTrace parts={message.parts} busy={busy && !report} />
+      {writingReport && <div className="h-64 animate-pulse rounded-[2rem] bg-surface-2" aria-label="正在写结论" />}
+      {report && <VerdictField report={report} notified={a.notified} fallback={a.fallback} />}
+      {report && <ScamProgress stage={report.scamStage ?? 0} nextMove={report.nextMove} />}
+      {report && <EvidenceView source={a.sourceText} report={report} signals={a.rules?.signals ?? []} />}
+      {a.finalText && (
+        <div className="animate-rise flex gap-3.5">
+          <span className="mt-1 grid size-8 shrink-0 place-items-center rounded-full bg-ink text-[0.75rem] font-semibold text-surface">守</span>
+          <Markdown className="min-w-0 flex-1 text-[1.08rem] leading-[1.85] text-ink [&_li]:ml-5 [&_li]:list-disc [&_p+p]:mt-3 [&_strong]:font-semibold">{a.finalText}</Markdown>
+          {!busy && (
+            <button type="button" onClick={() => speak(a.finalText)} aria-label="朗读这段话" className="grid size-10 shrink-0 place-items-center rounded-full border border-line bg-surface text-ink-2 hover:text-ink">
+              <Volume2 className="size-4" />
+            </button>
+          )}
+        </div>
+      )}
+      {(report || a.tools.length > 0) && (
+        <div className="space-y-3">
+          <button
+            type="button"
+            onClick={() => setShowConsole((v) => !v)}
+            aria-expanded={showConsole}
+            className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-[0.85rem] font-medium text-ink-2 shadow-sm hover:text-ink"
+          >
+            <Cpu className="size-4" aria-hidden /> AI 是怎么判断的
+            <ChevronDown className={`size-4 transition-transform ${showConsole ? "rotate-180" : ""}`} aria-hidden />
+          </button>
+          {showConsole && <AgentConsole a={a} className="animate-rise" />}
+        </div>
+      )}
+    </div>
+  );
+}
