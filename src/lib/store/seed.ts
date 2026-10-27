@@ -4,3 +4,16 @@
  * 使用固定种子的伪随机数，保证每次重置结果一致、便于录制演示。
  */
 import type { Channel, FamilyAlert, FraudType, RiskLevel } from "@/lib/core/types";
+
+const DAY = 24 * 3600 * 1000;
+
+interface Tpl {
+  fraudType: FraudType | "none";
+  level: RiskLevel;
+  score: [number, number];
+  channel: Channel;
+  headline: string;
+  preview: string;
+  reasons: { point: string; evidence: string }[];
+  advice?: string;
+}
