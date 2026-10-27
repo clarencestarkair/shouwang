@@ -66,3 +66,8 @@ export function FamilyBoard() {
       clearInterval(t);
     };
   }, [load]);
+
+  const setStatus = async (id: string, status: FamilyAlert["status"]) => {
+    setAlerts((prev) => prev.map((x) => (x.id === id ? { ...x, status } : x)));
+    await fetch("/api/alerts", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ id, status }) });
+  };
