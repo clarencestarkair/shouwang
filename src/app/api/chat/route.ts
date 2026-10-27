@@ -177,3 +177,10 @@ export async function POST(req: Request) {
       ]
         .filter(Boolean)
         .join("\n");
+
+      const history = await convertToModelMessages(stripFiles(messages.slice(0, -1)), {
+        ignoreIncompleteToolCalls: true,
+        convertDataPart: (part) =>
+          part.type === "data-perception" ? { type: "text", text: `（此前图片识别结果：${(part.data as PerceptionData).text.slice(0, 600)}）` } : undefined,
+      });
+      const modelMessages: ModelMessage[] = [...history, { role: "user", content: contextBlock }];
