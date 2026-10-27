@@ -30,3 +30,13 @@ function beep() {
     // 浏览器未允许自动播放时静默
   }
 }
+
+const isRisky = (l: RiskLevel) => levelRank(l) >= 3;
+
+export function FamilyBoard() {
+  const [alerts, setAlerts] = useState<FamilyAlert[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [live, setLive] = useState(false);
+  const [incoming, setIncoming] = useState<FamilyAlert | null>(null);
+  const [now, setNow] = useState(() => Date.now());
+  const [copied, setCopied] = useState(false);
