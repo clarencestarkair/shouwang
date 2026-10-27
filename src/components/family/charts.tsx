@@ -195,3 +195,36 @@ const CH_COLOR: Record<Channel, string> = {
   线下: "oklch(0.7 0.12 310)",
   其他: "var(--ink-3)",
 };
+
+export function ChannelDonut({ alerts }: { alerts: FamilyAlert[] }) {
+  const risky = alerts.filter((a) => levelRank(a.level) >= 2);
+  const counts = new Map<Channel, number>();
+  for (const a of risky) counts.set(a.channel ?? "其他", (counts.get(a.channel ?? "其他") ?? 0) + 1);
+  const rows = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  const total = rows.reduce((s, r) => s + r[1], 0) || 1;
+  const R = 46;
+  const C = 2 * Math.PI * R;
+  let offset = 0;
+  return (
+    <div className="flex items-center gap-6">
+      <svg viewBox="0 0 120 120" className="size-32 shrink-0 -rotate-90" role="img" aria-label={`可疑信息来源：${rows.map(([k, v]) => `${k} ${v}`).join("，")}`}>
+        <circle cx="60" cy="60" r={R} fill="none" stroke="var(--surface-2)" strokeWidth="14" />
+        {rows.map(([k, v]) => {
+          const len = (v / total) * C;
+          const el = <circle key={k} cx="60" cy="60" r={R} fill="none" stroke={CH_COLOR[k]} strokeWidth="14" strokeDasharray={`${Math.max(0, len - 2)} ${C}`} strokeDashoffset={-offset} />;
+          offset += len;
+          return el;
+        })}
+      </svg>
+      <ul className="min-w-0 flex-1 space-y-2 text-[13px]">
+        {rows.map(([k, v]) => (
+          <li key={k} className="flex items-center gap-2">
+            <span className="size-2.5 rounded-full" style={{ background: CH_COLOR[k] }} />
+            <span className="text-ink-2">{k}</span>
+            <span className="tnum ml-auto font-medium text-ink">{Math.round((v / total) * 100)}%</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
