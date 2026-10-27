@@ -68,3 +68,77 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ———————— 四个入口 ———————— */}
+        <section className="border-t border-line">
+          <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <h2 className="text-[2.3rem] font-semibold leading-tight tracking-tight sm:text-[2.9rem]">
+                骗局针对一个人，
+                <br />
+                防骗靠一家人。
+              </h2>
+              <p className="max-w-sm text-ink-2">长辈判断、子女守护、日常演练，再加一个给评委和开发者看的 AI 指挥台。</p>
+            </div>
+            <div className="mt-12 grid gap-4 lg:grid-cols-6">
+              <Tile href="/elder" k="长辈端" t="整屏变色，三个大字" d="识破骗局的那一刻，整屏警示红，只写“别转钱”。原文上标出可疑句，告诉老人骗子下一步会让他做什么。" className="lg:col-span-3">
+                <div className="mt-6 flex gap-4">
+                  <div className="w-36 shrink-0 rounded-2xl p-4 text-white" style={{ background: "radial-gradient(120% 80% at 20% 0%, oklch(0.74 0.19 40), oklch(0.6 0.22 29) 55%, oklch(0.5 0.2 27))" }}>
+                    <p className="text-[10px] text-white/80">守望 · 极高风险</p>
+                    <p className="mt-2 text-[30px] font-black leading-none">别转钱</p>
+                  </div>
+                  <div className="flex-1 space-y-2 text-[12px]">
+                    {["冒充身份", "制造恐慌", "要求保密", "要钱"].map((x, i) => (
+                      <p key={x} className="flex items-center gap-2">
+                        <span className={`grid size-5 place-items-center rounded-full bg-danger text-[10px] font-bold text-bg ${i === 3 ? "ring-4 ring-danger-soft" : ""}`}>{i < 3 ? <Check className="size-3" strokeWidth={3} /> : 4}</span>
+                        <span className="text-ink-2">{x}</span>
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </Tile>
+              <Tile href="/family" k="子女端" t="家庭守护中心" d="实时预警、14 天风险趋势、类型雷达、高发时段热力，AI 每周写一份守护周报。" className="lg:col-span-3">
+                <svg viewBox="0 0 300 80" className="mt-6 h-20 w-full" aria-hidden>
+                  <defs>
+                    <linearGradient id="tileTrend" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stopColor="var(--danger)" stopOpacity="0.4" />
+                      <stop offset="100%" stopColor="var(--danger)" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M0,62 L30,40 L60,22 L90,24 L120,46 L150,30 L180,36 L210,18 L240,26 L270,44 L300,38 L300,80 L0,80 Z" fill="url(#tileTrend)" />
+                  <path d="M0,62 L30,40 L60,22 L90,24 L120,46 L150,30 L180,36 L210,18 L240,26 L270,44 L300,38" fill="none" stroke="var(--danger)" strokeWidth="2" />
+                  <line x1="0" x2="300" y1="34" y2="34" stroke="var(--danger)" strokeOpacity="0.4" strokeDasharray="4 5" />
+                </svg>
+              </Tile>
+              <Tile href="/console" k="AI 指挥台" t="一次分析，两种视角" d="节点图、服务端计时甘特图、规则命中、检索相似度、双通道校验，每一步都看得见。" className="lg:col-span-4">
+                <div className="mt-6 flex flex-wrap items-center gap-1.5">
+                  {(
+                    [
+                      [Lock, "脱敏"],
+                      [Eye, "感知"],
+                      [ScanText, "规则"],
+                      [Brain, "研判"],
+                      [Database, "检索"],
+                      [ShieldCheck, "审查"],
+                      [Bell, "通知"],
+                    ] as const
+                  ).map(([I, l], i, arr) => (
+                    <span key={l} className="flex items-center gap-1.5">
+                      <span className="glass flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12px]">
+                        <I className="size-3.5 text-ink-2" aria-hidden />
+                        {l}
+                      </span>
+                      {i < arr.length - 1 && <span className="h-px w-3 bg-line-2" />}
+                    </span>
+                  ))}
+                </div>
+              </Tile>
+              <Tile href="/drill" k="反诈演练" t="让 AI 扮一次骗子" d="剧本来自案例库，AI 教练逐句复盘打分。" className="lg:col-span-2">
+                <div className="mt-6 space-y-2 text-[12.5px]">
+                  <p className="w-fit max-w-[90%] rounded-2xl rounded-bl-md bg-surface-3 px-3 py-2">您涉嫌洗钱，不要告诉家人……</p>
+                  <p className="ml-auto w-fit rounded-2xl rounded-br-md bg-accent px-3 py-2 text-bg">我要先问问我儿子</p>
+                </div>
+              </Tile>
+            </div>
+          </div>
+        </section>
