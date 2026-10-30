@@ -29,3 +29,15 @@ export async function POST(req: Request) {
   const hours = risky.map((a) => new Date(a.createdAt).getHours());
   const evening = hours.filter((h) => h >= 18).length;
   const pending = rows.filter((a) => isFinite(a.score) && levelRank(a.level) >= 3 && a.status !== "handled").length;
+
+  const stats = { total: rows.length, risky: risky.length, pending, topTypes, eveningShare: risky.length ? Math.round((evening / risky.length) * 100) : 0 };
+  const key = `${elderName}:${rows.length}:${pending}`;
+  if (cache.has(key)) return Response.json({ stats, digest: cache.get(key) });
+
+  const template: Digest = {
+    summary: rows.length
+      ? `这一周守望帮${elderName}看了 ${stats.total} 条消息，其中 ${stats.risky} 条是高风险骗局${topTypes.length ? `，最多的是「${topTypes[0][0]}」` : ""}。${pending ? `还有 ${pending} 条没有沟通过。` : "所有高风险提醒都已处理。"}`
+      : `这一周${elderName}没有提交需要判断的消息。`,
+    suggestions: [topTypes.length ? `和${elderName}聊聊「${topTypes[0][0]}」的套路，用最近的真实例子讲。` : `周末陪${elderName}做一次反诈演练。`, "约定一个家庭“暗号”，凡是借钱先对暗号。"],
+    generatedBy: "template",
+  };
