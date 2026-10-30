@@ -41,3 +41,23 @@ export async function POST(req: Request) {
     suggestions: [topTypes.length ? `和${elderName}聊聊「${topTypes[0][0]}」的套路，用最近的真实例子讲。` : `周末陪${elderName}做一次反诈演练。`, "约定一个家庭“暗号”，凡是借钱先对暗号。"],
     generatedBy: "template",
   };
+
+  if (!aiStatus().text || rows.length === 0) return Response.json({ stats, digest: template });
+
+  try {
+    const sample = risky.slice(0, 6).map((a) => `- ${new Date(a.createdAt).toLocaleString("zh-CN", { weekday: "short", hour: "2-digit", minute: "2-digit" })} ${a.headline}`).join("\n");
+    const { text } = await generateText({
+      model: textModel(),
+      maxRetries: 1,
+      ...sampling(0.4),
+      system: "你是反诈守护应用“守望”的家庭顾问，给在外地工作的子女写父母的每周反诈周报。语气温和、具体、不制造焦虑。只输出 JSON：{\"summary\": \"2~3 句周报正文\", \"suggestions\": [\"给子女的具体建议，1~3 条，每条一句\"]}",
+      prompt: `家人：${elderName}\n近 7 天检测 ${stats.total} 条，高风险 ${stats.risky} 条，待沟通 ${pending} 条。\n高风险类型：${topTypes.map(([t, n]) => `${t}×${n}`).join("、") || "无"}\n高风险中发生在晚上 18 点后的占 ${stats.eveningShare}%。\n高风险明细：\n${sample || "无"}`,
+    });
+    const parsed = extractJson(text, digestSchema);
+    const digest: Digest = parsed ? { ...parsed, generatedBy: "ai" } : template;
+    cache.set(key, digest);
+    return Response.json({ stats, digest });
+  } catch {
+    return Response.json({ stats, digest: template });
+  }
+}
