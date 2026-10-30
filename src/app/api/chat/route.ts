@@ -221,3 +221,12 @@ export async function POST(req: Request) {
           console.error("[chat] streamText error", error);
         },
       });
+
+      writer.merge(
+        result.toUIMessageStream({
+          sendStart: false,
+          onError: () => "AI 研判中断，已切换到安全兜底模式",
+          messageMetadata: ({ part }) =>
+            part.type === "finish" ? { model: modelConfig.text, usage: part.totalUsage, totalMs: Date.now() - t0 } : undefined,
+        }),
+      );
