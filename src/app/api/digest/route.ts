@@ -14,3 +14,18 @@ export const maxDuration = 60;
 
 const digestSchema = z.object({ summary: z.string(), suggestions: z.array(z.string()).min(1).max(3) });
 type Digest = z.infer<typeof digestSchema> & { generatedBy: "ai" | "template" };
+
+const g = globalThis as unknown as { __digestCache?: Map<string, Digest> };
+const cache = (g.__digestCache ??= new Map());
+
+export async function POST(req: Request) {
+  const { elderName } = z.object({ elderName: z.string().max(10) }).parse(await req.json());
+  const since = Date.now() - 7 * 86400e3;
+  const rows = listAlerts().filter((a) => a.elderName === elderName && a.createdAt >= since);
+  const risky = rows.filter((a) => levelRank(a.level) >= 3);
+  const types = new Map<string, number>();
+  for (const a of risky) if (a.fraudType !== "none" && a.fraudType !== "unknown") types.set(FRAUD_TYPES[a.fraudType], (types.get(FRAUD_TYPES[a.fraudType]) ?? 0) + 1);
+  const topTypes = [...types.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const hours = risky.map((a) => new Date(a.createdAt).getHours());
+  const evening = hours.filter((h) => h >= 18).length;
+  const pending = rows.filter((a) => isFinite(a.score) && levelRank(a.level) >= 3 && a.status !== "handled").length;
