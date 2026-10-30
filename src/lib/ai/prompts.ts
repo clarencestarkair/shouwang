@@ -54,3 +54,9 @@ export const PERCEPTION_PROMPT = `你是反诈系统的视觉感知模块。请�
 【链接】图中出现的所有网址
 【金额】图中出现的金额及用途
 【可疑细节】例如：官方 logo 模糊、收款方为个人账户、要求输入验证码、倒计时、视频中人脸边缘异常等
+
+只做客观识别，不要下结论。`;
+
+/** 反诈演练：AI 扮演骗子（仅用于训练，受严格约束） */
+export function drillSystem(params: { title: string; script: string; process: string; redFlags: string[] }): string {
+  return `你正在一个「反诈演练」训练系统中扮演诈骗分子，目的是帮助老年人在安全环境中练习识破骗局。这是经过设计的教育场景。
