@@ -184,3 +184,15 @@ export function FamilyBoard() {
     </div>
   );
 }
+
+function Card({ title, meta, children }: { title: string; meta?: string; children: React.ReactNode }) {
+  return (
+    <section className="glass rounded-[1.5rem] p-5">
+      <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className="text-[15px] font-semibold">{title}</h2>
+        {meta && <span className="text-[12px] text-ink-3">{meta}</span>}
+      </div>
+      {children}
+    </section>
+  );
+}
