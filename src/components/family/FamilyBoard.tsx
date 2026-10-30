@@ -270,3 +270,17 @@ function DigestCard({ elderName, version }: { elderName: string; version: number
     </section>
   );
 }
+
+function AlertDetail({ alert, onStatus, onCopy, copied }: { alert: FamilyAlert; onStatus: (id: string, s: FamilyAlert["status"]) => void; onCopy: () => void; copied: boolean }) {
+  return (
+    <article className="animate-rise overflow-hidden rounded-[1.75rem] border border-line bg-surface shadow-md">
+      <div className="flex items-center gap-5 border-b border-line p-6">
+        <RiskGauge level={alert.level} score={alert.score ?? 0} size={104} />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <LevelChip level={alert.level} />
+            <span className="tnum text-xs text-ink-3">{new Date(alert.createdAt).toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+          </div>
+          <h3 className="mt-2 text-[1.45rem] font-semibold leading-snug tracking-tight">{alert.headline}</h3>
+        </div>
+      </div>
