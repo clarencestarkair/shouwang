@@ -40,3 +40,10 @@
   RAG 混合检索            家属预警存储            MCP Server
   BM25 + 向量 · RRF     EventEmitter + SSE    stdio / Streamable HTTP
 ```
+
+- **模型接入**：统一走 OpenAI 兼容协议（Vercel AI SDK v6 + `@ai-sdk/openai-compatible`），文本 / 视觉 / 向量模型可分别配置不同服务商（通义千问、DeepSeek、智谱、硅基流动等）。
+- **核心逻辑与框架解耦**：`src/lib/core` 全部是纯函数，Web 端 Agent 与 MCP Server 共用同一实现。
+
+## 快速开始
+
+环境要求：Node.js ≥ 20.12，pnpm ≥ 9。
