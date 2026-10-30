@@ -47,3 +47,17 @@
 ## 快速开始
 
 环境要求：Node.js ≥ 20.12，pnpm ≥ 9。
+
+未配置 `LLM_API_KEY` 时，应用会自动进入**规则引擎兜底模式**，长辈端、子女端、案例库仍可完整演示（反诈演练需要大模型）。
+
+### 常用命令
+
+| 命令 | 作用 |
+| --- | --- |
+| `pnpm dev` / `pnpm build` / `pnpm start` | 开发 / 构建 / 生产运行 |
+| `pnpm typecheck` / `pnpm lint` | 类型检查 / 代码规范 |
+| `pnpm test` | 核心模块单元测试（23 项） |
+| `pnpm eval` | 离线评测：规则引擎准确率、RAG Hit@3 |
+| `pnpm eval:agent <baseUrl> [样本文件]` | 端到端 Agent 评测（真实模型 + 工具 + 安全审查） |
+| `pnpm rag:build` | 生成 `data/embeddings.json` 向量索引 |
+| `pnpm mcp` | 以 stdio 方式启动 MCP Server |
