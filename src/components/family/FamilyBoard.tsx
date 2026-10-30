@@ -41,6 +41,13 @@ export function FamilyBoard() {
   const [now, setNow] = useState(() => Date.now());
   const [copied, setCopied] = useState(false);
 
+  const load = useCallback(async () => {
+    const res = await fetch("/api/alerts", { cache: "no-store" });
+    const data = (await res.json()) as { alerts: FamilyAlert[] };
+    setAlerts(data.alerts);
+    setSelected((cur) => cur ?? data.alerts.find((a) => isRisky(a.level))?.id ?? data.alerts[0]?.id ?? null);
+  }, []);
+
   useEffect(() => {
     load();
     const es = new EventSource("/api/alerts/stream");
