@@ -116,6 +116,39 @@ export function FamilyBoard() {
         </div>
       )}
 
+      <header className="relative flex flex-wrap items-end justify-between gap-5 pb-8 pt-10">
+        <div>
+          <p className="flex items-center gap-2 text-sm font-medium text-ink-3">
+            <span className="relative flex size-2">
+              {live && <span className="animate-pulse-ring absolute inset-0 rounded-full bg-ok" />}
+              <span className={cn("relative size-2 rounded-full", live ? "bg-ok" : "bg-ink-3")} />
+            </span>
+            {live ? "实时守护中" : "正在重新连接…"}
+            {hasDemo && <span className="rounded-full border border-line-2 px-2 py-0.5 text-[11px] text-ink-3">含演示数据</span>}
+          </p>
+          <h1 className="mt-2 text-[2.2rem] font-semibold tracking-tight sm:text-[2.8rem]">家庭守护中心</h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="glass flex rounded-full p-1" role="tablist" aria-label="选择家人">
+            {["全部", ...elders].map((e) => (
+              <button
+                key={e}
+                type="button"
+                role="tab"
+                aria-selected={elderSel === e}
+                onClick={() => setElderSel(e)}
+                className={cn("rounded-full px-4 py-1.5 text-sm font-medium transition-colors", elderSel === e ? "bg-ink text-bg" : "text-ink-2 hover:text-ink")}
+              >
+                {e}
+              </button>
+            ))}
+          </div>
+          <button type="button" onClick={() => fetch("/api/alerts", { method: "DELETE" })} className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-medium text-ink-3 hover:text-ink">
+            <RotateCcw className="size-3.5" aria-hidden /> 重置演示
+          </button>
+        </div>
+      </header>
+
       <div className="relative mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_25rem]">
         <div className="grid gap-4">
           <Card title="风险趋势" meta="近 14 天 · 每日最高风险指数与检测条数">
