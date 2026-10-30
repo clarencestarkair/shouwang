@@ -196,3 +196,44 @@ function Card({ title, meta, children }: { title: string; meta?: string; childre
     </section>
   );
 }
+
+function DigestCard({ elderName, version }: { elderName: string; version: number }) {
+  const [d, setD] = useState<{ summary: string; suggestions: string[]; generatedBy: string } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    setD(null);
+    fetch("/api/digest", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ elderName }) })
+      .then((r) => r.json())
+      .then((j) => alive && setD(j.digest))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [elderName, version]);
+  return (
+    <section className="relative overflow-hidden rounded-[1.5rem] border border-accent/30 bg-[linear-gradient(135deg,oklch(0.7_0.15_258/0.16),transparent_60%)] p-6">
+      <p className="flex items-center gap-2 text-[13px] font-semibold text-accent">
+        <Sparkles className="size-4" aria-hidden /> {elderName}的守护周报
+        <span className="rounded-full bg-accent-soft px-2 py-0.5 text-[11px]">{d ? (d.generatedBy === "ai" ? "AI 生成" : "模板生成") : "生成中…"}</span>
+      </p>
+      {d ? (
+        <>
+          <p className="mt-3 text-[1.05rem] leading-relaxed text-ink">{d.summary}</p>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {d.suggestions.map((x, i) => (
+              <li key={i} className="flex gap-2.5 rounded-xl bg-surface-2/70 p-3 text-[13.5px] leading-relaxed text-ink-2">
+                <span className="tnum mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent text-[11px] font-bold text-bg">{i + 1}</span>
+                {x}
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <div className="mt-4 space-y-2">
+          <div className="h-4 w-11/12 animate-pulse rounded bg-surface-3" />
+          <div className="h-4 w-2/3 animate-pulse rounded bg-surface-3" />
+        </div>
+      )}
+    </section>
+  );
+}
