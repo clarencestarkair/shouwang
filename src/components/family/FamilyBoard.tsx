@@ -115,3 +115,51 @@ export function FamilyBoard() {
           </div>
         </div>
       )}
+
+        <aside className="grid content-start gap-4 xl:sticky xl:top-24 xl:self-start">
+          <Card title="守护记录" meta={`${scoped.length} 条`}>
+            <ul className="-mx-2 max-h-[19rem] space-y-1 overflow-y-auto pr-1">
+              {scoped.map((a) => (
+                <li key={a.id}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelected(a.id);
+                      if (a.status === "new") setStatus(a.id, "read");
+                    }}
+                    aria-current={a.id === selected}
+                    className={cn("flex w-full items-start gap-3 rounded-xl px-2.5 py-2.5 text-left transition-colors", a.id === selected ? "bg-surface-3" : "hover:bg-surface-2")}
+                  >
+                    <span className="mt-1.5 size-2 shrink-0 rounded-full" style={{ background: LEVEL_COLOR[a.level] }} aria-hidden />
+                    <span className="min-w-0 flex-1">
+                      <span className={cn("block truncate text-[13.5px]", a.status === "new" ? "font-semibold text-ink" : "text-ink-2")}>{a.headline}</span>
+                      <span className="mt-0.5 block text-[11.5px] text-ink-3">
+                        {a.elderName} · {a.channel ?? "其他"} · {relativeTime(a.createdAt, now)}
+                      </span>
+                    </span>
+                    <span className="tnum font-mono text-[11px]" style={{ color: LEVEL_COLOR[a.level] }}>
+                      {a.score}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </Card>
+          {current && (
+            <AlertDetail
+              key={current.id}
+              alert={current}
+              copied={copied}
+              onCopy={() => {
+                navigator.clipboard?.writeText(current.familyAdvice ?? "").catch(() => {});
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1600);
+              }}
+              onStatus={setStatus}
+            />
+          )}
+        </aside>
+      </div>
+    </div>
+  );
+}
