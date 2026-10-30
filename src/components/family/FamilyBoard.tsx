@@ -78,3 +78,16 @@ export function FamilyBoard() {
     setAlerts((prev) => prev.map((x) => (x.id === id ? { ...x, status } : x)));
     await fetch("/api/alerts", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ id, status }) });
   };
+
+  // 家人按记录数排序，记录最多的排在前面
+  const elders = useMemo(() => {
+    const n = new Map<string, number>();
+    for (const a of alerts) n.set(a.elderName, (n.get(a.elderName) ?? 0) + 1);
+    return [...n.entries()].sort((x, y) => y[1] - x[1]).map(([e]) => e);
+  }, [alerts]);
+  const [elderSel, setElderSel] = useState<string>("全部");
+  const scoped = elderSel === "全部" ? alerts : alerts.filter((a) => a.elderName === elderSel);
+  const current = alerts.find((a) => a.id === selected) ?? null;
+  const k = useMemo(() => kpis(scoped, now), [scoped, now]);
+  const hasDemo = alerts.some((a) => a.demo);
+  const digestElder = elderSel === "全部" ? elders[0] : elderSel;
