@@ -271,6 +271,26 @@ function DigestCard({ elderName, version }: { elderName: string; version: number
   );
 }
 
+function Stat({ label, value, unit, tone, delta }: { label: string; value: number; unit: string; tone?: "danger" | "warn" | "ok"; delta?: number }) {
+  const color = tone === "danger" ? "var(--danger)" : tone === "warn" ? "var(--warn-ink)" : tone === "ok" ? "var(--ok-ink)" : "var(--ink)";
+  return (
+    <div className="glass rounded-[1.5rem] p-5">
+      <p className="text-[13px] font-medium text-ink-2">{label}</p>
+      <p className="tnum mt-3 text-[2.6rem] font-semibold leading-none tracking-tight" style={{ color }}>
+        {value}
+      </p>
+      <p className="mt-2 flex items-center gap-2 text-[12px] text-ink-3">
+        {unit}
+        {delta !== undefined && delta !== 0 && (
+          <span className="tnum rounded-full bg-surface-3 px-1.5 py-0.5 font-mono text-[10.5px] text-ink-2">
+            {delta > 0 ? "▲" : "▼"} {Math.abs(delta)} 较上周
+          </span>
+        )}
+      </p>
+    </div>
+  );
+}
+
 function AlertDetail({ alert, onStatus, onCopy, copied }: { alert: FamilyAlert; onStatus: (id: string, s: FamilyAlert["status"]) => void; onCopy: () => void; copied: boolean }) {
   return (
     <article className="animate-rise overflow-hidden rounded-[1.75rem] border border-line bg-surface shadow-md">
