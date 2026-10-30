@@ -8,3 +8,9 @@ import { aiStatus, sampling, textModel } from "@/lib/ai/provider";
 import { extractJson } from "@/lib/ai/json";
 import { listAlerts } from "@/lib/store/alerts";
 import { FRAUD_TYPES, levelRank } from "@/lib/core/types";
+
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
+const digestSchema = z.object({ summary: z.string(), suggestions: z.array(z.string()).min(1).max(3) });
+type Digest = z.infer<typeof digestSchema> & { generatedBy: "ai" | "template" };
