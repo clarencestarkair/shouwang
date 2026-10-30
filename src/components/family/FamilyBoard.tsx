@@ -116,6 +116,27 @@ export function FamilyBoard() {
         </div>
       )}
 
+      <div className="relative mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_25rem]">
+        <div className="grid gap-4">
+          <Card title="风险趋势" meta="近 14 天 · 每日最高风险指数与检测条数">
+            <TrendChart alerts={scoped} now={now} onPick={setSelected} />
+          </Card>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card title="骗局类型" meta="需警惕及以上">
+              <TypeRadar alerts={scoped} />
+            </Card>
+            <Card title="来源渠道" meta="需警惕及以上">
+              <div className="flex h-full items-center">
+                <ChannelDonut alerts={scoped} />
+              </div>
+            </Card>
+          </div>
+          <Card title="高发时段" meta="星期 × 24 小时 · 颜色为该时段最高风险">
+            <HourHeatmap alerts={scoped} />
+          </Card>
+          {digestElder && <DigestCard elderName={digestElder} version={alerts.length} />}
+        </div>
+
         <aside className="grid content-start gap-4 xl:sticky xl:top-24 xl:self-start">
           <Card title="守护记录" meta={`${scoped.length} 条`}>
             <ul className="-mx-2 max-h-[19rem] space-y-1 overflow-y-auto pr-1">
