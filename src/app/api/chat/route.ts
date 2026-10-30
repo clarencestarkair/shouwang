@@ -70,6 +70,13 @@ export async function POST(req: Request) {
   const qr = (clientSide?.qr ?? []).slice(0, 5);
   const status = aiStatus();
 
+  const stream = createUIMessageStream<GuardianUIMessage>({
+    execute: async ({ writer }) => {
+      // 由本流水线统一发送 start，后续合并的模型流不再单独发送，保证一次分析只对应一条助手消息
+      const t0 = Date.now();
+      writer.write({ type: "start" });
+      const trace = (data: TraceData) => writer.write({ type: "data-trace", id: `trace-${data.step}`, data: { ...data, at: Date.now() - t0 } });
+
       // ① 端侧预处理结果回显
       const masked = clientSide?.masked ?? [];
       trace({
