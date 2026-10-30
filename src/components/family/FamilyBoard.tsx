@@ -91,3 +91,27 @@ export function FamilyBoard() {
   const k = useMemo(() => kpis(scoped, now), [scoped, now]);
   const hasDemo = alerts.some((a) => a.demo);
   const digestElder = elderSel === "全部" ? elders[0] : elderSel;
+
+  return (
+    <div className="relative mx-auto max-w-[90rem] px-4 pb-20 sm:px-6">
+      <div aria-hidden className="pointer-events-none absolute left-1/3 top-0 h-72 w-[46rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,oklch(0.6_0.2_30/0.18),transparent)]" />
+      {incoming && (
+        <div role="alert" className="animate-rise fixed right-4 top-20 z-40 w-[min(26rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-danger/30 bg-surface shadow-lg sm:right-6">
+          <div className="h-1 bg-danger" />
+          <div className="flex gap-3 p-4">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-danger-soft text-danger">
+              <BellRing className="size-5" aria-hidden />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-danger">
+                {incoming.elderName}刚刚遇到{RISK_LABEL[incoming.level]}
+              </p>
+              <p className="mt-0.5 font-medium leading-snug text-ink">{incoming.headline}</p>
+              <p className="mt-1 text-xs text-ink-3">刚刚 · 已为你准备好沟通建议</p>
+            </div>
+            <button type="button" onClick={() => setIncoming(null)} aria-label="关闭提醒" className="grid size-8 place-items-center rounded-full text-ink-3 hover:bg-surface-2 hover:text-ink">
+              <X className="size-4" />
+            </button>
+          </div>
+        </div>
+      )}
