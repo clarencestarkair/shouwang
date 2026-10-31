@@ -14,3 +14,11 @@ import { useSpeechInput } from "@/lib/client/speech";
 import type { DrillReview } from "@/lib/ai/schemas";
 import { FRAUD_TYPES, type FraudType } from "@/lib/core/types";
 import { cn } from "@/lib/utils";
+
+export interface DrillScenario {
+  id: string;
+  type: FraudType;
+  title: string;
+  channel: string;
+  hint: string;
+}
