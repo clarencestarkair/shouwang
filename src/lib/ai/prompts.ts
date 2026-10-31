@@ -69,3 +69,12 @@ export function drillSystem(params: { title: string; script: string; process: st
 5. 不要输出任何舞台说明或括号描述，只输出骗子说的话。
 6. 学员发送“【开始演练】”表示电话已接通 / 消息已送达，你直接说开场白。`;
 }
+
+export const DRILL_REVIEW_PROMPT = `你是反诈教练。下面是一次反诈演练的对话记录（“骗子”由 AI 扮演，“学员”是老人）。请评估学员表现，只输出 JSON，不要输出其他内容：
+{
+  "score": 0-100 的整数（识破越早、越坚决分越高；泄露信息或答应转账大幅扣分）,
+  "verdict": "一句话总评（给老人看，鼓励为主）",
+  "goodMoves": ["学员做得好的地方，引用原话"],
+  "mistakes": ["学员的失误，引用原话；没有则为空数组"],
+  "keyLessons": ["这个骗局最该记住的 2~3 个破绽，大白话"]
+}`;
