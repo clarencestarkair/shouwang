@@ -84,3 +84,9 @@ function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: (
   const [reviewing, setReviewing] = useState(false);
   const [reviewError, setReviewError] = useState<string | null>(null);
   const busy = status === "submitted" || status === "streaming";
+
+  const textOf = (m: UIMessage) => m.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
+  const visible = messages.filter((m) => !(m.role === "user" && textOf(m) === START));
+  const ended = messages.some((m) => m.role === "assistant" && /【演练(结束|暂停)】/.test(textOf(m)));
+  const started = messages.length > 0;
+  const Icon = CHANNEL_ICON[scenario.channel] ?? Phone;
