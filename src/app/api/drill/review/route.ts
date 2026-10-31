@@ -21,3 +21,16 @@ export async function POST(req: Request) {
   if (!parsed.success) return Response.json({ error: "参数错误" }, { status: 400 });
   const c = getCase(parsed.data.caseId);
   if (!c || !aiStatus().text) return Response.json({ error: "不可用" }, { status: 503 });
+
+  const transcript = parsed.data.transcript.map((t) => `${t.role === "scammer" ? "骗子" : "学员"}：${t.text}`).join("\n");
+  const { text } = await generateText({
+    model: textModel(),
+    system: DRILL_REVIEW_PROMPT,
+    prompt: `骗局类型：${c.title}\n该骗局的破绽：${c.redFlags.join("；")}\n\n对话记录：\n${transcript}`,
+    ...sampling(0.2),
+    maxRetries: 1,
+  });
+  const review = extractJson(text, drillReviewSchema);
+  if (!review) return Response.json({ error: "点评生成失败，请重试" }, { status: 502 });
+  return Response.json({ review });
+}
