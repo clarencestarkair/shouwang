@@ -22,3 +22,12 @@ export interface DrillScenario {
   channel: string;
   hint: string;
 }
+
+const START = "【开始演练】";
+const CHANNEL_ICON: Record<string, typeof Phone> = { 电话: Phone, 视频通话: Video, 微信: MessageSquare, 短信: MessageSquare, 线下: Users };
+
+export function DrillApp({ scenarios }: { scenarios: DrillScenario[] }) {
+  const [scenario, setScenario] = useState<DrillScenario | null>(null);
+  if (!scenario) return <ScenarioPicker scenarios={scenarios} onPick={setScenario} />;
+  return <DrillSession key={scenario.id} scenario={scenario} onExit={() => setScenario(null)} />;
+}
