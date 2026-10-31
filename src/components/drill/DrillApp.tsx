@@ -32,6 +32,50 @@ export function DrillApp({ scenarios }: { scenarios: DrillScenario[] }) {
   return <DrillSession key={scenario.id} scenario={scenario} onExit={() => setScenario(null)} />;
 }
 
+function ScenarioPicker({ scenarios, onPick }: { scenarios: DrillScenario[]; onPick: (s: DrillScenario) => void }) {
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <div className="max-w-2xl">
+        <p className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-ink-2 shadow-sm">
+          <Sparkles className="size-3.5 text-accent" aria-hidden /> AI 角色扮演 · 剧本来自案例库
+        </p>
+        <h1 className="mt-4 text-[2.4rem] font-semibold leading-[1.15] tracking-tight sm:text-[3rem]">
+          跟“骗子”过过招，
+          <br />
+          真遇上了不慌。
+        </h1>
+        <p className="mt-4 text-[1.05rem] leading-relaxed text-ink-2">守望会扮演一个骗子，用真实案例里的说法来“骗”您。照平常的样子回答就行——这里不会真的转钱。结束后，AI 教练会告诉您哪里做得好、哪里要当心。</p>
+      </div>
+      <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {scenarios.map((s) => {
+          const Icon = CHANNEL_ICON[s.channel] ?? Phone;
+          return (
+            <li key={s.id}>
+              <button
+                type="button"
+                onClick={() => onPick(s)}
+                className="group flex h-full w-full flex-col rounded-2xl border border-line bg-surface p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <span className="flex items-center justify-between">
+                  <span className="grid size-10 place-items-center rounded-xl bg-surface-2 text-ink">
+                    <Icon className="size-5" aria-hidden />
+                  </span>
+                  <span className="text-xs font-medium text-ink-3">{FRAUD_TYPES[s.type]}</span>
+                </span>
+                <span className="mt-5 text-[1.15rem] font-semibold leading-snug tracking-tight">{s.title}</span>
+                <span className="mt-1.5 text-sm leading-relaxed text-ink-3">{s.hint}</span>
+                <span className="mt-auto inline-flex items-center gap-1 pt-5 text-sm font-medium text-accent">
+                  开始演练 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: () => void }) {
   const transport = useMemo(() => new DefaultChatTransport<UIMessage>({ api: "/api/drill", body: { caseId: scenario.id } }), [scenario.id]);
   const { messages, sendMessage, status, error } = useChat({ transport });
