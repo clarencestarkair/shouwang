@@ -7,3 +7,15 @@ import { z } from "zod";
 import { aiStatus, sampling, textModel } from "@/lib/ai/provider";
 import { drillSystem } from "@/lib/ai/prompts";
 import { getCase } from "@/lib/core/rag";
+
+  const messages = parsed.data.messages as UIMessage[];
+  const result = streamText({
+    model: textModel(),
+    system: drillSystem(c),
+    // 首轮客户端发送“【开始演练】”，由骗子开场
+    messages: await convertToModelMessages(messages),
+    ...sampling(0.8),
+    maxRetries: 1,
+  });
+  return result.toUIMessageStreamResponse();
+}
