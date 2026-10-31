@@ -14,3 +14,10 @@ const bodySchema = z.object({
   caseId: z.string(),
   transcript: z.array(z.object({ role: z.enum(["scammer", "learner"]), text: z.string().max(2000) })).max(40),
 });
+
+
+export async function POST(req: Request) {
+  const parsed = bodySchema.safeParse(await req.json());
+  if (!parsed.success) return Response.json({ error: "参数错误" }, { status: 400 });
+  const c = getCase(parsed.data.caseId);
+  if (!c || !aiStatus().text) return Response.json({ error: "不可用" }, { status: 503 });
