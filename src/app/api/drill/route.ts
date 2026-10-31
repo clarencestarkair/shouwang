@@ -8,6 +8,18 @@ import { aiStatus, sampling, textModel } from "@/lib/ai/provider";
 import { drillSystem } from "@/lib/ai/prompts";
 import { getCase } from "@/lib/core/rag";
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
+const bodySchema = z.object({ caseId: z.string(), messages: z.array(z.any()).min(1).max(40) });
+
+export async function POST(req: Request) {
+  const parsed = bodySchema.safeParse(await req.json());
+  if (!parsed.success) return new Response("bad request", { status: 400 });
+  const c = getCase(parsed.data.caseId);
+  if (!c) return new Response("case not found", { status: 404 });
+  if (!aiStatus().text) return new Response("演练需要配置大模型", { status: 503 });
+
   const messages = parsed.data.messages as UIMessage[];
   const result = streamText({
     model: textModel(),
