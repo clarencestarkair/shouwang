@@ -90,3 +90,10 @@ function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: (
   const ended = messages.some((m) => m.role === "assistant" && /【演练(结束|暂停)】/.test(textOf(m)));
   const started = messages.length > 0;
   const Icon = CHANNEL_ICON[scenario.channel] ?? Phone;
+
+  const send = (t: string) => {
+    if (!t.trim() || busy || ended) return;
+    sendMessage({ text: t.trim() });
+    setInput("");
+  };
+  const speech = useSpeechInput(send);
