@@ -117,3 +117,22 @@ function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: (
       setReviewing(false);
     }
   };
+
+  return (
+    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <section className="flex min-h-[72dvh] flex-col overflow-hidden rounded-[1.75rem] border border-line bg-surface shadow-md">
+        <header className="flex items-center gap-3 border-b border-line px-4 py-3">
+          <button type="button" onClick={onExit} aria-label="返回选择" className="grid size-9 place-items-center rounded-full text-ink-2 hover:bg-surface-2 hover:text-ink">
+            <ArrowLeft className="size-5" />
+          </button>
+          <span className="grid size-10 place-items-center rounded-full bg-surface-3 text-ink-2">
+            <Icon className="size-5" aria-hidden />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate font-semibold">陌生来电</p>
+            <p className="text-xs text-ink-3">演练模式 · 不会产生任何真实操作</p>
+          </div>
+          <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-danger-soft px-2.5 py-1 text-xs font-semibold text-danger">
+            <ShieldAlert className="size-3.5" aria-hidden /> 模拟骗局
+          </span>
+        </header>
