@@ -31,3 +31,12 @@ export function DrillApp({ scenarios }: { scenarios: DrillScenario[] }) {
   if (!scenario) return <ScenarioPicker scenarios={scenarios} onPick={setScenario} />;
   return <DrillSession key={scenario.id} scenario={scenario} onExit={() => setScenario(null)} />;
 }
+
+function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: () => void }) {
+  const transport = useMemo(() => new DefaultChatTransport<UIMessage>({ api: "/api/drill", body: { caseId: scenario.id } }), [scenario.id]);
+  const { messages, sendMessage, status, error } = useChat({ transport });
+  const [input, setInput] = useState("");
+  const [review, setReview] = useState<DrillReview | null>(null);
+  const [reviewing, setReviewing] = useState(false);
+  const [reviewError, setReviewError] = useState<string | null>(null);
+  const busy = status === "submitted" || status === "streaming";
