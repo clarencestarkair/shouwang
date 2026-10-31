@@ -97,3 +97,23 @@ function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: (
     setInput("");
   };
   const speech = useSpeechInput(send);
+
+  const finish = async () => {
+    setReviewing(true);
+    setReviewError(null);
+    const transcript = visible.map((m) => ({ role: m.role === "assistant" ? ("scammer" as const) : ("learner" as const), text: textOf(m) }));
+    try {
+      const res = await fetch("/api/drill/review", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ caseId: scenario.id, transcript }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "点评失败");
+      setReview(data.review);
+    } catch (e) {
+      setReviewError((e as Error).message);
+    } finally {
+      setReviewing(false);
+    }
+  };
