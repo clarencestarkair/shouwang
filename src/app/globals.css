@@ -137,3 +137,16 @@ body {
 .animate-pulse-ring {
   animation: pulse-ring 1.6s var(--ease-out-quart) infinite;
 }
+
+/* 流光：Agent 运行中的进度条 */
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+.animate-shimmer {
+  animation: shimmer 1.4s var(--ease-out-quart) infinite;
+}
