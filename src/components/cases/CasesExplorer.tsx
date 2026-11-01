@@ -117,3 +117,71 @@ export function CasesExplorer({ cases }: { cases: FraudCase[] }) {
           ))}
         </section>
       )}
+
+      <ul className="mt-8 overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
+        {list.map(({ c, hit }, i) => {
+          const expanded = open === c.id;
+          return (
+            <li key={c.id} className={cn(i > 0 && "border-t border-line")}>
+              <button type="button" onClick={() => setOpen(expanded ? null : c.id)} aria-expanded={expanded} className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-surface-2/60">
+                <span className="hidden w-16 shrink-0 font-mono text-xs text-ink-3 sm:block">{c.id}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-medium leading-snug text-ink">{c.title}</span>
+                  <span className="mt-0.5 block text-xs text-ink-3">
+                    {FRAUD_TYPES[c.type]} · {c.channels.join(" / ")}
+                  </span>
+                </span>
+                {hit && (
+                  <span className="hidden items-center gap-2 sm:flex">
+                    <Channels by={hit.matchedBy} />
+                    <span className="tnum font-mono text-xs text-ink-3">{hit.score.toFixed(3)}</span>
+                  </span>
+                )}
+                <ChevronDown className={cn("size-4 shrink-0 text-ink-3 transition-transform duration-300", expanded && "rotate-180")} aria-hidden />
+              </button>
+              <div className="grid transition-[grid-template-rows] duration-500 ease-[var(--ease-out-expo)]" style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}>
+                <div className="overflow-hidden">
+                  <div className="grid gap-6 px-5 pb-6 sm:pl-25 md:grid-cols-[1.3fr_1fr]">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">骗子会这么说</p>
+                      <blockquote className="mt-2 rounded-xl bg-surface-2 p-4 text-[0.98rem] leading-[1.85] text-ink">“{c.script}”</blockquote>
+                      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">他们是怎么做的</p>
+                      <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-2">{c.process}</p>
+                    </div>
+                    <div className="space-y-5">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-danger">识破它</p>
+                        <ul className="mt-2 space-y-2 text-[0.95rem] leading-relaxed">
+                          {c.redFlags.map((r) => (
+                            <li key={r} className="flex gap-2">
+                              <span className="mt-2.5 size-1 shrink-0 rounded-full bg-danger" />
+                              {r}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ok-ink">防住它</p>
+                        <ul className="mt-2 space-y-2 text-[0.95rem] leading-relaxed">
+                          {c.advice.map((r) => (
+                            <li key={r} className="flex gap-2">
+                              <span className="mt-2.5 size-1 shrink-0 rounded-full bg-ok" />
+                              {r}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <p className="text-xs text-ink-3">
+                        常见对象：{c.targetGroup} · {LOSS[c.lossLevel]}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
