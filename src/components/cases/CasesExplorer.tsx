@@ -30,3 +30,28 @@ export function CasesExplorer({ cases }: { cases: FraudCase[] }) {
   const [channels, setChannels] = useState<{ bm25: boolean; vector: boolean } | null>(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState<string | null>(cases[0]?.id ?? null);
+
+  useEffect(() => {
+    if (query.length < 2) {
+      setHits(null);
+      return;
+    }
+    const ctrl = new AbortController();
+    setLoading(true);
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/cases?q=${encodeURIComponent(query)}`, { signal: ctrl.signal });
+        const data = await res.json();
+        setHits(data.docs);
+        setChannels(data.channels);
+      } catch {
+        /* 被新的输入中断 */
+      } finally {
+        setLoading(false);
+      }
+    }, 280);
+    return () => {
+      clearTimeout(t);
+      ctrl.abort();
+    };
+  }, [query]);
