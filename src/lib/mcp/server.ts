@@ -30,3 +30,14 @@ import { CASES, getCase, hybridSearch } from "../core/rag";
     },
     async ({ phone }) => json(checkPhone(phone)),
   );
+
+  server.registerTool(
+    "check_url",
+    {
+      title: "链接仿冒核验",
+      description: "检测仿冒官方域名（编辑距离/关键词嵌入）、高风险后缀、IP 直连、短链、同形字域名。",
+      inputSchema: { url: z.string() },
+      annotations: { readOnlyHint: true },
+    },
+    async ({ url }) => json(checkUrl(url)),
+  );
