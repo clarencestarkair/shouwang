@@ -85,3 +85,19 @@ export function CasesExplorer({ cases }: { cases: FraudCase[] }) {
       <p className="mt-3 h-4 text-center text-xs text-ink-3">
         {hits && channels ? `混合检索 · BM25 ${channels.vector ? "+ 语义向量" : "（语义向量未启用）"} · RRF 融合排序` : ""}
       </p>
+
+      {!hits && (
+        <div className="mt-6 flex flex-wrap justify-center gap-1.5" role="group" aria-label="按类型筛选">
+          {(["all", ...Object.keys(FRAUD_TYPES)] as (FraudType | "all")[]).map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setType(t)}
+              aria-pressed={type === t}
+              className={cn("rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors", type === t ? "bg-ink text-surface" : "bg-surface text-ink-2 ring-1 ring-line hover:text-ink")}
+            >
+              {t === "all" ? "全部" : FRAUD_TYPES[t]}
+            </button>
+          ))}
+        </div>
+      )}
