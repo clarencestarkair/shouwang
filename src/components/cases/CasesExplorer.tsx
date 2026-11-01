@@ -61,3 +61,12 @@ export function CasesExplorer({ cases }: { cases: FraudCase[] }) {
     ? hits.filter((h) => h.kind === "case").flatMap((h) => (byId.get(h.id) ? [{ c: byId.get(h.id)!, hit: h }] : []))
     : cases.filter((c) => type === "all" || c.type === type).map((c) => ({ c }));
   const knowledgeHits = hits?.filter((h) => h.kind === "knowledge") ?? [];
+
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+      <div className="text-center">
+        <p className="text-sm font-medium text-ink-3">
+          案例库 · <span className="tnum">{cases.length}</span> 个典型骗局
+        </p>
+        <h1 className="mt-2 text-[2.3rem] font-semibold tracking-tight sm:text-[2.8rem]">骗子的套路，都在这里</h1>
+      </div>
