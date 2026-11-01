@@ -19,3 +19,14 @@ import { checkUrl } from "../core/url";
 import { extractEntities, scanText } from "../core/rules";
 import { detectInjection, maskPII } from "../core/safety";
 import { CASES, getCase, hybridSearch } from "../core/rag";
+
+  server.registerTool(
+    "check_phone_number",
+    {
+      title: "号码风险核验",
+      description: "识别境外号、虚拟号段、仿冒银行/政务客服号，返回风险分与解释。",
+      inputSchema: { phone: z.string() },
+      annotations: { readOnlyHint: true },
+    },
+    async ({ phone }) => json(checkPhone(phone)),
+  );
