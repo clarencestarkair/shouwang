@@ -246,3 +246,18 @@ function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: (
     </div>
   );
 }
+
+function ReviewCard({ review }: { review: DrillReview }) {
+  const color = review.score >= 80 ? "var(--ok)" : review.score >= 50 ? "var(--warn)" : "var(--danger)";
+  return (
+    <article className="animate-rise rounded-2xl border border-line bg-surface p-5 shadow-md">
+      <div className="flex items-center gap-4">
+        <Gauge value={review.score} color={color} size={96} stroke={8} caption="防骗得分" />
+        <p className="text-[0.95rem] font-medium leading-relaxed">{review.verdict}</p>
+      </div>
+      {review.goodMoves.length > 0 && <ReviewList title="做得好" items={review.goodMoves} color="var(--ok-ink)" />}
+      {review.mistakes.length > 0 && <ReviewList title="要当心" items={review.mistakes} color="var(--danger)" />}
+      <ReviewList title="记住这几点" items={review.keyLessons} color="var(--ink)" />
+    </article>
+  );
+}
