@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "lint": "eslint",
+    "mcp": "tsx mcp-server/stdio.ts",
     "eval": "tsx scripts/eval-rules.ts",
     "test": "tsx --test tests/*.test.ts",
     "start": "next start"
@@ -13,6 +14,7 @@
   "dependencies": {
     "@ai-sdk/openai-compatible": "2.0.93",
     "@ai-sdk/react": "3.0.335",
+    "@modelcontextprotocol/sdk": "1.32.2",
     "ai": "6.0.332",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
