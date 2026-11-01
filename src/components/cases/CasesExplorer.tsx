@@ -101,3 +101,19 @@ export function CasesExplorer({ cases }: { cases: FraudCase[] }) {
           ))}
         </div>
       )}
+
+      {knowledgeHits.length > 0 && (
+        <section className="mt-8 grid gap-3 sm:grid-cols-2">
+          {knowledgeHits.slice(0, 2).map((k) => (
+            <div key={k.id} className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+              <p className="flex items-center justify-between gap-2 text-xs font-semibold text-ink-2">
+                <span className="inline-flex items-center gap-1.5">
+                  <Lightbulb className="size-3.5 text-warn" aria-hidden /> 反诈常识
+                </span>
+                <Channels by={k.matchedBy} />
+              </p>
+              <p className="mt-2 text-[0.95rem] leading-relaxed text-ink">{k.snippet.replace(/^【[^】]+】/, "")}</p>
+            </div>
+          ))}
+        </section>
+      )}
