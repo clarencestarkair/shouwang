@@ -70,3 +70,18 @@ export function CasesExplorer({ cases }: { cases: FraudCase[] }) {
         </p>
         <h1 className="mt-2 text-[2.3rem] font-semibold tracking-tight sm:text-[2.8rem]">骗子的套路，都在这里</h1>
       </div>
+
+      <label className="relative mx-auto mt-8 block max-w-2xl">
+        <span className="sr-only">搜索案例</span>
+        <Search className="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-ink-3" aria-hidden />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="用自己的话描述，比如“有人说我孙子出事了要钱”"
+          className="h-14 w-full rounded-2xl border border-line-2 bg-surface pl-13 pr-12 text-[1.02rem] shadow-md outline-none transition-shadow focus:border-accent focus:ring-4 focus:ring-accent-soft"
+        />
+        {loading && <Loader2 className="absolute right-5 top-1/2 size-5 -translate-y-1/2 animate-spin text-ink-3" />}
+      </label>
+      <p className="mt-3 h-4 text-center text-xs text-ink-3">
+        {hits && channels ? `混合检索 · BM25 ${channels.vector ? "+ 语义向量" : "（语义向量未启用）"} · RRF 融合排序` : ""}
+      </p>
