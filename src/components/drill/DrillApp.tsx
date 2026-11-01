@@ -261,3 +261,21 @@ function ReviewCard({ review }: { review: DrillReview }) {
     </article>
   );
 }
+
+function ReviewList({ title, items, color }: { title: string; items: string[]; color: string }) {
+  return (
+    <div className="mt-5 border-t border-line pt-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.08em]" style={{ color }}>
+        {title}
+      </p>
+      <ul className="mt-2 space-y-2 text-[0.92rem] leading-relaxed text-ink-2">
+        {items.map((x, i) => (
+          <li key={i} className="flex gap-2">
+            <span className="mt-2 size-1 shrink-0 rounded-full" style={{ background: color }} />
+            {x}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
