@@ -7,3 +7,17 @@ import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { ChevronDown, Lightbulb, Loader2, Search } from "lucide-react";
 import { FRAUD_TYPES, type FraudCase, type FraudType, type RetrievedDoc } from "@/lib/core/types";
 import { cn } from "@/lib/utils";
+
+const LOSS = { high: "损失大", medium: "损失中等", low: "损失较小" } as const;
+
+function Channels({ by }: { by: RetrievedDoc["matchedBy"] }) {
+  return (
+    <span className="inline-flex gap-1">
+      {by.map((m) => (
+        <span key={m} className={cn("rounded-md px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase", m === "bm25" ? "bg-surface-3 text-ink-2" : "bg-accent-soft text-accent")}>
+          {m === "bm25" ? "keyword" : "semantic"}
+        </span>
+      ))}
+    </span>
+  );
+}
