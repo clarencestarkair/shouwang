@@ -136,3 +136,89 @@ function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: (
             <ShieldAlert className="size-3.5" aria-hidden /> 模拟骗局
           </span>
         </header>
+
+        <div className="flex-1 space-y-3 overflow-y-auto bg-surface-2/50 px-4 py-6 sm:px-6" aria-live="polite">
+          {!started && (
+            <div className="grid h-full min-h-[50dvh] place-items-center text-center">
+              <div>
+                <div className="relative mx-auto grid size-24 place-items-center">
+                  <span className="animate-pulse-ring absolute inset-0 rounded-full bg-ok/30" />
+                  <span className="relative grid size-20 place-items-center rounded-full bg-surface shadow-md">
+                    <Icon className="size-8 text-ink" aria-hidden />
+                  </span>
+                </div>
+                <p className="mt-6 text-xl font-semibold tracking-tight">有一个陌生来电</p>
+                <p className="mt-1 text-ink-3">接听后，“骗子”会先开口</p>
+                <button type="button" onClick={() => sendMessage({ text: START })} className="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-ok px-8 font-semibold text-surface shadow-md">
+                  <Phone className="size-4" aria-hidden /> 接听
+                </button>
+              </div>
+            </div>
+          )}
+          {visible.map((m) => {
+            const t = textOf(m);
+            const isScammer = m.role === "assistant";
+            const system = /【演练(结束|暂停)】/.test(t);
+            return (
+              <div key={m.id} className={cn("animate-rise flex", isScammer ? "justify-start" : "justify-end")}>
+                {system ? (
+                  <div className="w-full max-w-[94%] rounded-2xl border border-line bg-surface p-5 shadow-sm">
+                    <p className="flex items-center gap-2 text-sm font-semibold text-accent">
+                      <Sparkles className="size-4" aria-hidden /> 演练结束 · 守望讲解
+                    </p>
+                    <Markdown className="mt-2 text-[1rem] leading-relaxed text-ink [&_li]:ml-5 [&_li]:mt-1.5 [&_ol]:list-decimal [&_p]:mt-2 [&_strong]:font-semibold">{t.replace(/【演练(结束|暂停)】\s*/, "")}</Markdown>
+                  </div>
+                ) : (
+                  <p
+                    className={cn(
+                      "max-w-[82%] whitespace-pre-wrap rounded-[1.3rem] px-4 py-2.5 text-[1.05rem] leading-relaxed shadow-sm",
+                      isScammer ? "rounded-bl-md bg-surface text-ink ring-1 ring-line" : "rounded-br-md bg-accent text-surface",
+                    )}
+                  >
+                    {t}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+          {status === "submitted" && (
+            <div className="flex w-fit items-center gap-1 rounded-full bg-surface px-4 py-3 ring-1 ring-line" aria-label="对方正在输入">
+              {[0, 1, 2].map((i) => (
+                <span key={i} className="size-1.5 animate-bounce rounded-full bg-ink-3" style={{ animationDelay: `${i * 120}ms` }} />
+              ))}
+            </div>
+          )}
+          {error && <p className="text-sm text-danger">连接中断：{error.message}</p>}
+        </div>
+
+        {started && (
+          <footer className="flex items-center gap-2 border-t border-line bg-surface p-3">
+            {speech.supported && (
+              <button
+                type="button"
+                disabled={busy || ended}
+                aria-label="按住说话"
+                onPointerDown={(e) => {
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  speech.start();
+                }}
+                onPointerUp={speech.stop}
+                className={cn("grid size-12 shrink-0 place-items-center rounded-full text-surface disabled:opacity-30", speech.listening ? "bg-danger" : "bg-ink")}
+              >
+                <Mic className="size-5" />
+              </button>
+            )}
+            <input
+              value={speech.listening ? speech.interim : input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && !e.nativeEvent.isComposing && send(input)}
+              disabled={ended}
+              placeholder={ended ? "演练已结束" : "像平时一样回答他…"}
+              className="h-12 min-w-0 flex-1 rounded-full border border-line-2 bg-surface px-5 text-[1rem] outline-none focus:border-accent focus:ring-4 focus:ring-accent-soft"
+            />
+            <button type="button" onClick={() => send(input)} disabled={busy || ended || !input.trim()} aria-label="发送" className="grid size-12 shrink-0 place-items-center rounded-full bg-accent text-surface disabled:bg-surface-3 disabled:text-ink-3">
+              <ArrowUp className="size-5" strokeWidth={2.5} />
+            </button>
+          </footer>
+        )}
+      </section>
