@@ -21,3 +21,12 @@ function Channels({ by }: { by: RetrievedDoc["matchedBy"] }) {
     </span>
   );
 }
+
+export function CasesExplorer({ cases }: { cases: FraudCase[] }) {
+  const [q, setQ] = useState("");
+  const query = useDeferredValue(q.trim());
+  const [type, setType] = useState<FraudType | "all">("all");
+  const [hits, setHits] = useState<RetrievedDoc[] | null>(null);
+  const [channels, setChannels] = useState<{ bm25: boolean; vector: boolean } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState<string | null>(cases[0]?.id ?? null);
