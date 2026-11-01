@@ -222,3 +222,27 @@ function DrillSession({ scenario, onExit }: { scenario: DrillScenario; onExit: (
           </footer>
         )}
       </section>
+
+      <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">本次剧本</p>
+          <p className="mt-2 text-[1.1rem] font-semibold leading-snug tracking-tight">{scenario.title}</p>
+          <p className="mt-1.5 text-sm text-ink-3">{scenario.hint}</p>
+          {!review && (
+            <button
+              type="button"
+              onClick={finish}
+              disabled={reviewing || visible.length < 2}
+              className={cn("mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-full text-sm font-semibold transition-colors disabled:opacity-40", ended ? "bg-ink text-surface" : "border border-line-2 bg-surface text-ink")}
+            >
+              {reviewing ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+              {ended ? "看看我表现得怎么样" : "结束演练，请教练点评"}
+            </button>
+          )}
+          {reviewError && <p className="mt-2 text-sm text-danger">{reviewError}</p>}
+        </div>
+        {review && <ReviewCard review={review} />}
+      </aside>
+    </div>
+  );
+}
