@@ -55,3 +55,9 @@ export function CasesExplorer({ cases }: { cases: FraudCase[] }) {
       ctrl.abort();
     };
   }, [query]);
+
+  const byId = useMemo(() => new Map(cases.map((c) => [c.id, c])), [cases]);
+  const list: { c: FraudCase; hit?: RetrievedDoc }[] = hits
+    ? hits.filter((h) => h.kind === "case").flatMap((h) => (byId.get(h.id) ? [{ c: byId.get(h.id)!, hit: h }] : []))
+    : cases.filter((c) => type === "all" || c.type === type).map((c) => ({ c }));
+  const knowledgeHits = hits?.filter((h) => h.kind === "knowledge") ?? [];
