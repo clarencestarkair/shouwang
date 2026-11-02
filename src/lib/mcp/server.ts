@@ -76,5 +76,17 @@ export function createShouwangMcpServer(opts: { embedQuery?: (q: string) => Prom
     },
   );
 
+  server.registerResource(
+    "fraud-case",
+    new ResourceTemplate("shouwang://cases/{id}", {
+      list: async () => ({ resources: CASES.map((c) => ({ uri: `shouwang://cases/${c.id}`, name: c.title, mimeType: "application/json" })) }),
+    }),
+    { title: "反诈案例", description: "守望案例库中的单个典型诈骗案例", mimeType: "application/json" },
+    async (uri, { id }) => {
+      const c = getCase(String(id));
+      return { contents: [{ uri: uri.href, mimeType: "application/json", text: JSON.stringify(c ?? { error: "not found" }, null, 2) }] };
+    },
+  );
+
   return server;
 }
