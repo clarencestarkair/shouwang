@@ -15,3 +15,5 @@ async function handle(req: Request) {
   await server.connect(transport);
   return transport.handleRequest(req);
 }
+
+export { handle as GET, handle as POST, handle as DELETE };
