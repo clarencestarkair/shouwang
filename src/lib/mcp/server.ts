@@ -20,6 +20,26 @@ import { extractEntities, scanText } from "../core/rules";
 import { detectInjection, maskPII } from "../core/safety";
 import { CASES, getCase, hybridSearch } from "../core/rag";
 
+const json = (data: unknown) => ({ content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }] });
+
+export function createShouwangMcpServer(opts: { embedQuery?: (q: string) => Promise<number[]> } = {}) {
+  const server = new McpServer({ name: "shouwang-anti-fraud", version: "1.0.0" });
+
+  server.registerTool(
+    "search_fraud_cases",
+    {
+      title: "反诈案例检索",
+      description: "在守望反诈案例库与知识库中做混合检索（BM25 + 向量，RRF 融合），返回最相似的诈骗案例与反诈常识。",
+      inputSchema: {
+        query: z.string().describe("检索语句，如“自称警察 安全账户 保密”"),
+        topK: z.number().int().min(1).max(10).default(4),
+        kind: z.enum(["all", "case", "knowledge"]).default("all"),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async ({ query, topK, kind }) => json(await hybridSearch(query, { topK, kind, embedQuery: opts.embedQuery })),
+  );
+
   server.registerTool(
     "check_phone_number",
     {
