@@ -55,3 +55,6 @@ import { CASES, getCase, hybridSearch } from "../core/rag";
       return json({ ...scanText(masked), entities: extractEntities(masked), injection: detectInjection(masked) });
     },
   );
+
+  return server;
+}
