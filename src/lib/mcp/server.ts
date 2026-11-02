@@ -41,3 +41,17 @@ import { CASES, getCase, hybridSearch } from "../core/rag";
     },
     async ({ url }) => json(checkUrl(url)),
   );
+
+  server.registerTool(
+    "scan_text_risk",
+    {
+      title: "文本风险扫描",
+      description: "对短信/聊天/通话转写做规则引擎扫描：风险信号、风险分、可能的诈骗类型、号码链接抽取、提示词注入检测。输入会先脱敏。",
+      inputSchema: { text: z.string().max(5000) },
+      annotations: { readOnlyHint: true },
+    },
+    async ({ text }) => {
+      const masked = maskPII(text).text;
+      return json({ ...scanText(masked), entities: extractEntities(masked), injection: detectInjection(masked) });
+    },
+  );
