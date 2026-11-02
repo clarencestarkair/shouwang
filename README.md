@@ -61,3 +61,14 @@
 | `pnpm eval:agent <baseUrl> [样本文件]` | 端到端 Agent 评测（真实模型 + 工具 + 安全审查） |
 | `pnpm rag:build` | 生成 `data/embeddings.json` 向量索引 |
 | `pnpm mcp` | 以 stdio 方式启动 MCP Server |
+
+### 环境变量
+
+见 [`.env.example`](./.env.example)。开发与评测使用的模型为 Claude Opus 5.5（文本 / 视觉）+ text-embedding-3-small（向量），经 OpenAI 兼容网关接入；换用其他服务商时建议先运行 `pnpm eval:agent` 验证效果。最少只需 `LLM_API_KEY`（默认使用通义千问：`qwen-plus` + `qwen-vl-max` + `text-embedding-v3`）。部分模型（如 Claude Opus 5.x）不接受 `temperature`，设置 `LLM_SUPPORTS_TEMPERATURE=false` 即可。
+
+### 部署
+
+```bash
+docker compose up -d --build        # 读取 .env.local，预警数据挂载卷持久化
+# 或：pnpm build && pnpm start      # Next.js standalone 产物
+```
