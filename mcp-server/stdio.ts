@@ -5,3 +5,8 @@
  */
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { createShouwangMcpServer } from "../src/lib/mcp/server";
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
