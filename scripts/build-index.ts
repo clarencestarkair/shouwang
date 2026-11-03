@@ -23,3 +23,20 @@ if (!apiKey) {
   console.error("缺少 LLM_API_KEY / EMBEDDING_API_KEY，请先配置 .env.local");
   process.exit(1);
 }
+
+const model = createOpenAICompatible({ name: "embedding", baseURL, apiKey }).embeddingModel(modelId);
+const BATCH = 10; // 兼容 DashScope 等单次最多 10 条的限制
+
+async function main() {
+  const vectors: Record<string, number[]> = {};
+  for (let i = 0; i < DOCS.length; i += BATCH) {
+    const batch = DOCS.slice(i, i + BATCH);
+    const { embeddings } = await embedMany({ model, values: batch.map((d) => d.text.slice(0, 2000)), maxRetries: 2 });
+    batch.forEach((d, j) => (vectors[d.id] = embeddings[j].map((x) => Number(x.toFixed(6)))));
+    process.stdout.write(`\r已向量化 ${Math.min(i + BATCH, DOCS.length)}/${DOCS.length}`);
+  }
+  const dim = Object.values(vectors)[0]?.length ?? 0;
+  const out = path.join(process.cwd(), "data", "embeddings.json");
+  fs.writeFileSync(out, JSON.stringify({ model: modelId, dim, vectors }));
+  console.log(`\n完成：${DOCS.length} 条文档，维度 ${dim}，写入 ${out}`);
+}
