@@ -40,3 +40,8 @@ async function main() {
   fs.writeFileSync(out, JSON.stringify({ model: modelId, dim, vectors }));
   console.log(`\n完成：${DOCS.length} 条文档，维度 ${dim}，写入 ${out}`);
 }
+
+main().catch((e) => {
+  console.error("\n构建失败：", e.message);
+  process.exit(1);
+});
