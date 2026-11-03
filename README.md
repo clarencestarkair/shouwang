@@ -72,3 +72,14 @@
 docker compose up -d --build        # 读取 .env.local，预警数据挂载卷持久化
 # 或：pnpm build && pnpm start      # Next.js standalone 产物
 ```
+
+## MCP 接入
+
+守望把 4 个反诈工具与案例资源以 [Model Context Protocol](https://modelcontextprotocol.io) 开放：
+
+| 工具 | 说明 |
+| --- | --- |
+| `search_fraud_cases` | 案例/知识混合检索 |
+| `check_phone_number` | 号码风险核验 |
+| `check_url` | 链接仿冒核验 |
+| `scan_text_risk` | 规则引擎扫描 + 提示词注入检测 |
