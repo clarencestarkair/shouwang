@@ -83,3 +83,13 @@ docker compose up -d --build        # 读取 .env.local，预警数据挂载卷�
 | `check_phone_number` | 号码风险核验 |
 | `check_url` | 链接仿冒核验 |
 | `scan_text_risk` | 规则引擎扫描 + 提示词注入检测 |
+
+**本地（stdio）**，以 Claude Desktop 为例：
+
+```json
+{
+  "mcpServers": {
+    "shouwang": { "command": "pnpm", "args": ["--dir", "/path/to/shouwang", "mcp"] }
+  }
+}
+```
