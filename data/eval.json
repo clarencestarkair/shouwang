@@ -1,0 +1,62 @@
+[
+  {
+    "text": "您好，我是市公安局民警，您的身份证涉嫌一起洗钱案，现在需要把存款转到安全账户进行资金清查，此事要保密不能告诉家人",
+    "scam": true,
+    "type": "impersonate_police"
+  },
+  {
+    "text": "这里是最高检察院，您涉嫌非法集资，已发出逮捕令，请下载会议软件开启屏幕共享配合调查",
+    "scam": true,
+    "type": "impersonate_police"
+  },
+  {
+    "text": "您好，我是京东客服，您之前开通了百万保障服务，现在每月要自动扣费800元，如需注销请按我说的操作，先告诉我收到的验证码",
+    "scam": true,
+    "type": "impersonate_service"
+  },
+  {
+    "text": "您好，您的快递在运输中丢失，我们将给您三倍理赔，请添加理赔专员微信，扫码下载理赔App",
+    "scam": true,
+    "type": "impersonate_service"
+  },
+  {
+    "text": "爷爷我是小明，我手机掉了换了个号，我在外面出事了急用钱，你先转5000到这个卡上，千万别告诉我爸",
+    "scam": true,
+    "type": "impersonate_relative"
+  },
+  {
+    "text": "老同学，好久不见！我现在在外地住院做手术，手头紧，能不能先借我两万，下个月一定还你",
+    "scam": true,
+    "type": "impersonate_relative"
+  },
+  {
+    "text": "刚才儿子打视频过来，画面有点卡，声音一样，说公司急用钱让我马上转三万给他的领导",
+    "scam": true,
+    "type": "deepfake"
+  },
+  {
+    "text": "王老师带您稳赚不赔，内幕消息，跟着操作日赚上千，加入我们的投资群，保本高收益",
+    "scam": true,
+    "type": "fake_investment"
+  },
+  {
+    "text": "某养老公寓项目火热认购中，现在预订床位年化分红15%，以房养老更划算，名额有限今天之内截止",
+    "scam": true,
+    "type": "pension_scam"
+  },
+  {
+    "text": "社区门口免费讲座，专家义诊，祖传神药包治高血压糖尿病，降三高根治，现场购买还送鸡蛋",
+    "scam": true,
+    "type": "health_product"
+  },
+  {
+    "text": "在家就能做的兼职，给商品点赞返佣金，先垫付100元刷单，马上返还本金和佣金",
+    "scam": true,
+    "type": "rebate_task"
+  },
+  {
+    "text": "亲爱的，我发现一个投资平台，我舅舅在里面工作，稳赚不赔，你也跟着我投一点吧",
+    "scam": true,
+    "type": "romance"
+  }
+]
