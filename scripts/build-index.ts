@@ -8,3 +8,9 @@ import path from "node:path";
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { embedMany } from "ai";
 import { DOCS } from "../src/lib/core/rag";
+
+for (const f of [".env.local", ".env"]) {
+  try {
+    process.loadEnvFile(f);
+  } catch {}
+}
