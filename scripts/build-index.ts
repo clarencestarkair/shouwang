@@ -14,3 +14,12 @@ for (const f of [".env.local", ".env"]) {
     process.loadEnvFile(f);
   } catch {}
 }
+
+const baseURL = process.env.EMBEDDING_BASE_URL || process.env.LLM_BASE_URL || "https://dashscope.aliyuncs.com/compatible-mode/v1";
+const apiKey = process.env.EMBEDDING_API_KEY || process.env.LLM_API_KEY;
+const modelId = process.env.EMBEDDING_MODEL || "text-embedding-v3";
+
+if (!apiKey) {
+  console.error("缺少 LLM_API_KEY / EMBEDDING_API_KEY，请先配置 .env.local");
+  process.exit(1);
+}
