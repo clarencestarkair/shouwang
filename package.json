@@ -6,9 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "rag:build": "tsx scripts/build-index.ts",
     "mcp": "tsx mcp-server/stdio.ts",
     "eval": "tsx scripts/eval-rules.ts",
     "test": "tsx --test tests/*.test.ts",
+    "eval:agent": "tsx scripts/eval-agent.ts",
     "start": "next start"
   },
   "dependencies": {
