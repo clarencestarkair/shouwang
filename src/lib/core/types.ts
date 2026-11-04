@@ -120,3 +120,27 @@ export interface UrlCheckResult {
   imitating?: string;
   explanation: string;
 }
+
+/** 信息来源渠道（家属看板的渠道分布） */
+export type Channel = "电话" | "短信" | "微信" | "截图" | "线下" | "其他";
+
+/** 推送给家属端的预警 */
+export interface FamilyAlert {
+  id: string;
+  createdAt: number;
+  elderName: string;
+  level: RiskLevel;
+  /** 风险分 0-100 */
+  score: number;
+  /** 信息来源渠道 */
+  channel?: Channel;
+  /** 是否为演示种子数据（界面会明确标注） */
+  demo?: boolean;
+  fraudType: RiskReport["fraudType"];
+  headline: string;
+  /** 已脱敏的原始内容摘要 */
+  contentPreview: string;
+  reasons: RiskReport["reasons"];
+  familyAdvice?: string;
+  status: "new" | "read" | "handled";
+}
