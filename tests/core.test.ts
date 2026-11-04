@@ -33,6 +33,13 @@ describe("规则引擎", () => {
   });
 });
 
+describe("号码核验", () => {
+  it("官方号码低风险", () => assert.equal(checkPhone("96110").riskScore, 0));
+  it("境外前缀高风险", () => assert.ok(checkPhone("+00 852 6123 4567").riskScore >= 50));
+  it("仿冒银行客服长号", () => assert.ok(checkPhone("955880001").tags.includes("仿冒客服短号")));
+  it("虚拟号段", () => assert.ok(checkPhone("17012345678").tags.includes("虚拟运营商号段")));
+});
+
 describe("链接核验", () => {
   it("官方域名低风险", () => assert.ok(checkUrl("https://www.nhsa.gov.cn/x").riskScore < 20));
   it("冒用 gov 字样 + 高风险后缀", () => assert.ok(checkUrl("yibao-gov-cn.top").riskScore >= 50));
