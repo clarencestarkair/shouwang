@@ -83,4 +83,41 @@ function metrics(rows: Row[], pred: (r: Row) => boolean) {
   };
 }
 
+async function main() {
+  const samples = JSON.parse(fs.readFileSync(FILE, "utf8")) as Sample[];
+  const rows: Row[] = [];
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: CONCURRENCY }, async () => {
+      while (next < samples.length) {
+        const s = samples[next++];
+        const r = await runOne(s);
+        rows.push(r);
+        console.log(`${rows.length}/${samples.length} ${r.scam ? "诈骗" : "正常"} 规则${r.ruleScore} 模型${r.modelLevel} 最终${r.finalLevel} ${r.seconds.toFixed(0)}s  ${s.text.slice(0, 24)}`);
+      }
+    }),
+  );
+  const atLeastMedium = (l: RiskLevel | null) => l !== null && levelRank(l) >= levelRank("medium");
+  const typed = rows.filter((r) => r.type);
+  const summary = {
+    model: process.env.LLM_MODEL ?? "(见 .env.local)",
+    samples: rows.length,
+    rules: metrics(rows, (r) => r.ruleScore >= 40),
+    model_only: metrics(rows, (r) => atLeastMedium(r.modelLevel)),
+    dual_channel: metrics(rows, (r) => atLeastMedium(r.finalLevel)),
+    typeAccuracy: typed.filter((r) => r.fraudType === r.type).length / typed.length,
+    avgToolCalls: rows.reduce((s, r) => s + r.tools.length, 0) / rows.length,
+    avgSeconds: rows.reduce((s, r) => s + r.seconds, 0) / rows.length,
+    guardAdjusted: rows.filter((r) => r.guardNotes.length > 0).length,
+    fallbacks: rows.filter((r) => r.fallback).length,
+  };
+  fs.writeFileSync(OUT, JSON.stringify({ summary, rows }, null, 2));
+  const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
+  console.log("\n通道        准确率   精确率   召回率   误报率");
+  for (const [k, m] of [["规则", summary.rules], ["模型", summary.model_only], ["双通道", summary.dual_channel]] as const)
+    console.log(`${k.padEnd(8)} ${pct(m.accuracy).padStart(7)} ${pct(m.precision).padStart(7)} ${pct(m.recall).padStart(7)} ${pct(m.falsePositiveRate).padStart(7)}`);
+  console.log(`类型识别准确率 ${pct(summary.typeAccuracy)}  平均工具调用 ${summary.avgToolCalls.toFixed(1)} 次  平均耗时 ${summary.avgSeconds.toFixed(1)}s  安全审查修正 ${summary.guardAdjusted} 例  兜底 ${summary.fallbacks} 例`);
+  for (const r of rows.filter((r) => r.type && r.fraudType !== r.type)) console.log(`类型不一致：期望 ${r.type} 得到 ${r.fraudType} | ${r.text.slice(0, 30)}`);
+}
+
 main();
