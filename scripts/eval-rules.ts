@@ -8,3 +8,9 @@ import fs from "node:fs";
 import { scanText } from "../src/lib/core/rules";
 import { hybridSearch } from "../src/lib/core/rag";
 import type { FraudType } from "../src/lib/core/types";
+
+interface Sample {
+  text: string;
+  scam: boolean;
+  type?: FraudType;
+}
