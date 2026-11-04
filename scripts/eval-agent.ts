@@ -28,3 +28,35 @@ interface Row {
   seconds: number;
   fallback: boolean;
 }
+
+async function runOne(s: Sample): Promise<Row> {
+  const t0 = Date.now();
+  const res = await fetch(`${BASE}/api/chat`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ messages: [{ id: "u", role: "user", parts: [{ type: "text", text: s.text }] }], profile: { elderName: "评测" } }),
+  });
+  const body = await res.text();
+  const row: Row = { ...s, ruleScore: 0, modelLevel: null, finalLevel: null, fraudType: null, tools: [], guardNotes: [], seconds: 0, fallback: false };
+  for (const line of body.split("\n")) {
+    if (!line.startsWith("data: {")) continue;
+    const ev = JSON.parse(line.slice(6));
+    if (ev.type === "data-rules") row.ruleScore = ev.data.score;
+    if (ev.type === "tool-input-available") {
+      row.tools.push(ev.toolName);
+      if (ev.toolName === "submitRiskReport") row.modelLevel = ev.input.level;
+    }
+    if (ev.type === "tool-output-available" && ev.output?.report) {
+      row.finalLevel = ev.output.report.level;
+      row.fraudType = ev.output.report.fraudType;
+      row.guardNotes = ev.output.report.guardNotes ?? [];
+    }
+    if (ev.type === "data-fallback") {
+      row.fallback = true;
+      row.finalLevel = ev.data.report.level;
+      row.fraudType = ev.data.report.fraudType;
+    }
+  }
+  row.seconds = (Date.now() - t0) / 1000;
+  return row;
+}
