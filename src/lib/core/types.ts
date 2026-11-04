@@ -148,6 +148,14 @@ export interface RiskReport {
   nextMove?: string;
 }
 
+/** 通用诈骗剧本的四个阶段（用于“骗局进度条”） */
+export const SCAM_STAGES = [
+  { n: 1, title: "冒充身份", desc: "装成警察、客服、亲人，先让你相信他" },
+  { n: 2, title: "制造恐慌或诱惑", desc: "说你涉案、账户异常，或许诺好处" },
+  { n: 3, title: "让你保密、隔离", desc: "不许告诉家人，要求屏幕共享、下载 App" },
+  { n: 4, title: "要钱或要验证码", desc: "转账、交费、报验证码，钱就没了" },
+] as const;
+
 /** 信息来源渠道（家属看板的渠道分布） */
 export type Channel = "电话" | "短信" | "微信" | "截图" | "线下" | "其他";
 
