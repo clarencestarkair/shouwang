@@ -58,3 +58,18 @@ describe("RAG 检索", () => {
     assert.ok(docs.some((d) => d.fraudType === "impersonate_police"));
   });
 });
+
+describe("兜底报告", () => {
+  it("高风险时给出不转账建议并通知家属", async () => {
+    const scan = scanText("我是公安局的，把钱转到安全账户，要保密");
+    const { docs } = await hybridSearch("公安 安全账户", { topK: 3 });
+    const r = buildFallbackReport(scan, docs);
+    assert.ok(r.notifyFamily);
+    assert.ok(r.actions[0].includes("不要转账"));
+  });
+  it("分数到等级映射单调", () => {
+    assert.equal(scoreToLevel(0), "safe");
+    assert.equal(scoreToLevel(50), "medium");
+    assert.equal(scoreToLevel(99), "critical");
+  });
+});
