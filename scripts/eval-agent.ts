@@ -10,6 +10,11 @@
 import fs from "node:fs";
 import { levelRank, type RiskLevel } from "../src/lib/core/types";
 
+const BASE = process.argv[2] ?? "http://localhost:3000";
+const FILE = process.argv[3] ?? "data/eval.json";
+const OUT = FILE.replace(/\.json$/, "-agent-results.json");
+const CONCURRENCY = 5;
+
 interface Sample {
   text: string;
   scam: boolean;
