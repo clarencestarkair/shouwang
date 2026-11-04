@@ -121,6 +121,33 @@ export interface UrlCheckResult {
   explanation: string;
 }
 
+/** Agent 产出的最终风险报告（结构化，前端渲染为风险卡片） */
+export interface RiskReport {
+  level: RiskLevel;
+  score: number;
+  fraudType: FraudType | "none" | "unknown";
+  /** 一句话结论，给老人看的大字 */
+  headline: string;
+  /** 用老人听得懂的话解释为什么 */
+  reasons: { point: string; evidence: string }[];
+  /** 现在马上要做的事，按顺序 */
+  actions: string[];
+  /** 引用的案例 id，可解释性 */
+  citedCases: string[];
+  /** 是否需要通知家属 */
+  notifyFamily: boolean;
+  /** 给子女的沟通建议 */
+  familyAdvice?: string;
+  /** 安全审查后附加的说明（双通道校验结果等） */
+  guardNotes?: string[];
+  /** 整屏大字：2~4 字的行动指令，如“别转钱”“别点链接”“放心” */
+  shortVerdict?: string;
+  /** 骗局进行到第几步：0 非诈骗 / 1 冒充身份 / 2 制造恐慌或诱惑 / 3 隔离受害人 / 4 索要钱财或凭证 */
+  scamStage?: number;
+  /** 预判：骗子下一步很可能让您做什么 */
+  nextMove?: string;
+}
+
 /** 信息来源渠道（家属看板的渠道分布） */
 export type Channel = "电话" | "短信" | "微信" | "截图" | "线下" | "其他";
 
