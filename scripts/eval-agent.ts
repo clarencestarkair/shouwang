@@ -60,3 +60,20 @@ async function runOne(s: Sample): Promise<Row> {
   row.seconds = (Date.now() - t0) / 1000;
   return row;
 }
+
+function metrics(rows: Row[], pred: (r: Row) => boolean) {
+  let tp = 0, fp = 0, tn = 0, fn = 0;
+  for (const r of rows) {
+    const p = pred(r);
+    if (p && r.scam) tp++;
+    else if (p && !r.scam) fp++;
+    else if (!p && !r.scam) tn++;
+    else fn++;
+  }
+  return {
+    accuracy: (tp + tn) / rows.length,
+    precision: tp / Math.max(1, tp + fp),
+    recall: tp / Math.max(1, tp + fn),
+    falsePositiveRate: fp / Math.max(1, fp + tn),
+  };
+}
