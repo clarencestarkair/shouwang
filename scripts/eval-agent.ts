@@ -9,3 +9,22 @@
  */
 import fs from "node:fs";
 import { levelRank, type RiskLevel } from "../src/lib/core/types";
+
+interface Sample {
+  text: string;
+  scam: boolean;
+  type?: string;
+}
+interface Row {
+  text: string;
+  scam: boolean;
+  type?: string;
+  ruleScore: number;
+  modelLevel: RiskLevel | null;
+  finalLevel: RiskLevel | null;
+  fraudType: string | null;
+  tools: string[];
+  guardNotes: string[];
+  seconds: number;
+  fallback: boolean;
+}
