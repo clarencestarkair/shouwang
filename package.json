@@ -7,6 +7,7 @@
     "build": "next build --turbopack",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"scripts/**/*.ts\" \"mcp-server/**/*.ts\"",
     "rag:build": "tsx scripts/build-index.ts",
     "mcp": "tsx mcp-server/stdio.ts",
     "eval": "tsx scripts/eval-rules.ts",
@@ -24,6 +25,7 @@
     "geist": "1.9.2",
     "jsqr": "1.4.0",
     "lucide-react": "1.74.0",
+    "motion": "14.14.0",
     "next": "15.5.29",
     "react": "19.2.9",
     "react-dom": "19.2.9",
@@ -41,6 +43,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.29",
+    "prettier": "^3.10.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"
