@@ -109,3 +109,14 @@ export interface PhoneCheckResult {
   tags: string[];
   explanation: string;
 }
+
+/** 链接核验结果 */
+export interface UrlCheckResult {
+  input: string;
+  hostname: string | null;
+  riskScore: number;
+  tags: string[];
+  /** 疑似仿冒的官方域名 */
+  imitating?: string;
+  explanation: string;
+}
