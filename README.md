@@ -93,3 +93,11 @@ docker compose up -d --build        # 读取 .env.local，预警数据挂载卷�
   }
 }
 ```
+
+**远程（Streamable HTTP）**：部署后连接 `https://<你的域名>/api/mcp`。
+
+## 评测
+
+端到端评测对每条样本调用真实的 `/api/chat`（测试环境：Claude Opus 5.5 + text-embedding-3-small），对比三个通道。结果文件见 `data/*-agent-results.json`。
+
+**常规评测集** `data/eval.json`（30 例：诈骗 20 例覆盖 14 类 + 提示词注入，正常 10 例）
