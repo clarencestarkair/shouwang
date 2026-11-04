@@ -82,3 +82,5 @@ function metrics(rows: Row[], pred: (r: Row) => boolean) {
     falsePositiveRate: fp / Math.max(1, fp + tn),
   };
 }
+
+main();
