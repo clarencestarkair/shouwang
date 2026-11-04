@@ -14,3 +14,5 @@ interface Sample {
   scam: boolean;
   type?: FraudType;
 }
+
+main();
