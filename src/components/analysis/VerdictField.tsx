@@ -25,6 +25,14 @@ export function VerdictField({ report, notified, fallback }: { report: RiskRepor
   const speech = `${big}。${report.headline}。${report.reasons.map((r) => r.point).join("。")}。您现在要做的是：${report.actions.join("。")}`;
   const spoken = useRef(false);
 
+  useEffect(() => {
+    if (autoSpeak && !spoken.current) {
+      spoken.current = true;
+      const t = setTimeout(() => speak(speech), 700);
+      return () => clearTimeout(t);
+    }
+  }, [autoSpeak, speech]);
+
   return (
     <article aria-label="风险判断结果" className="animate-rise relative overflow-hidden rounded-[2rem] text-white shadow-lg" style={{ background: f.bg }}>
       <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-white/10 blur-2xl" />
