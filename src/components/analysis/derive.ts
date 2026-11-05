@@ -13,3 +13,20 @@ export interface ToolRun {
   output: unknown;
   time?: ToolTimeData;
 }
+
+export interface Analysis {
+  report: RiskReport | null;
+  notified: boolean;
+  fallback: boolean;
+  rules: RulesData | null;
+  perception: PerceptionData | null;
+  traces: Record<string, TraceData>;
+  tools: ToolRun[];
+  searches: { query: string; docs: RetrievedDoc[]; channels?: { bm25: boolean; vector: boolean } }[];
+  phones: PhoneCheckResult[];
+  urls: UrlCheckResult[];
+  meta: GuardianMetadata | undefined;
+  finalText: string;
+  sourceText: string;
+  busy: boolean;
+}
