@@ -4,3 +4,12 @@
  */
 import type { GuardianUIMessage, RulesData, PerceptionData, TraceData, ToolTimeData, GuardianMetadata } from "@/lib/ai/messages";
 import type { RiskReport, RetrievedDoc, PhoneCheckResult, UrlCheckResult } from "@/lib/core/types";
+
+export interface ToolRun {
+  id: string;
+  name: "searchFraudCases" | "checkPhoneNumber" | "checkUrl" | "submitRiskReport" | "notifyFamily";
+  state: string;
+  input: unknown;
+  output: unknown;
+  time?: ToolTimeData;
+}
