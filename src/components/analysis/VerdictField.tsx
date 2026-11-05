@@ -52,3 +52,16 @@ export function VerdictField({ report, notified, fallback }: { report: RiskRepor
           </div>
         </div>
       </div>
+
+      {report.actions.length > 0 && (
+        <ol className="relative mx-5 grid gap-2 sm:mx-7 sm:grid-cols-3">
+          {report.actions.slice(0, 3).map((a, i) => (
+            <li key={i} className="flex gap-3 rounded-2xl bg-white/14 p-3.5 text-[1rem] font-medium leading-snug backdrop-blur-sm">
+              <span className="tnum grid size-6 shrink-0 place-items-center rounded-full bg-white text-[0.8rem] font-bold" style={{ color: f.deep }}>
+                {i + 1}
+              </span>
+              {a}
+            </li>
+          ))}
+        </ol>
+      )}
