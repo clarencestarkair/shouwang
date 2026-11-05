@@ -24,3 +24,23 @@ export function VerdictField({ report, notified, fallback }: { report: RiskRepor
   const typeLabel = report.fraudType !== "none" && report.fraudType !== "unknown" ? FRAUD_TYPES[report.fraudType] : null;
   const speech = `${big}。${report.headline}。${report.reasons.map((r) => r.point).join("。")}。您现在要做的是：${report.actions.join("。")}`;
   const spoken = useRef(false);
+
+  return (
+    <article aria-label="风险判断结果" className="animate-rise relative overflow-hidden rounded-[2rem] text-white shadow-lg" style={{ background: f.bg }}>
+      <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-white/10 blur-2xl" />
+      <div className="relative grid gap-8 p-7 sm:grid-cols-[1fr_auto] sm:p-9">
+        <div className="min-w-0">
+          <p className="flex flex-wrap items-center gap-2 text-[0.85rem] font-semibold tracking-wide text-white/85">
+            <span>守望 · {RISK_LABEL[report.level]}</span>
+            {typeLabel && <span className="rounded-full bg-white/18 px-2.5 py-0.5 font-medium">{typeLabel}</span>}
+            {fallback && <span className="rounded-full bg-black/20 px-2.5 py-0.5 font-medium">离线兜底</span>}
+          </p>
+          <h3 className="mt-4 text-[4.2rem] font-black leading-[0.95] tracking-[-0.04em] sm:text-[5.6rem]">{big}</h3>
+          <p className="mt-4 max-w-[28rem] text-[1.25rem] font-semibold leading-snug text-white/95">{report.headline}</p>
+        </div>
+        <div className="flex items-start sm:justify-end">
+          <div className="rounded-full bg-white/12 p-2 backdrop-blur-sm">
+            <Gauge value={report.score} color="white" size={128} stroke={9} caption="风险指数" animate />
+          </div>
+        </div>
+      </div>
