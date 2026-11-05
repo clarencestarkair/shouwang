@@ -65,3 +65,22 @@ export function VerdictField({ report, notified, fallback }: { report: RiskRepor
           ))}
         </ol>
       )}
+
+      <div className="relative flex flex-wrap items-center gap-2.5 p-5 sm:px-7 sm:pb-7">
+        {rank >= 2 && (
+          <a href={familyPhone ? `tel:${familyPhone}` : "tel:96110"} className="inline-flex min-h-13 items-center gap-2 rounded-full bg-white px-6 text-[1.05rem] font-bold shadow-md transition-transform active:scale-[0.97]" style={{ color: f.deep }}>
+            <Phone className="size-5" aria-hidden /> {familyPhone ? "打给孩子" : "拨打 96110"}
+          </a>
+        )}
+        <button type="button" onClick={() => speak(speech)} className="inline-flex min-h-13 items-center gap-2 rounded-full bg-black/20 px-6 text-[1.05rem] font-semibold transition-transform active:scale-[0.97]">
+          <Volume2 className="size-5" aria-hidden /> 读给我听
+        </button>
+        {notified && (
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[0.9rem] font-medium text-white/90">
+            <BellRing className="size-4" aria-hidden /> 已悄悄告诉家里人
+          </span>
+        )}
+      </div>
+    </article>
+  );
+}
