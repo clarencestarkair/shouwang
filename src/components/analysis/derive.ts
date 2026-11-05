@@ -30,3 +30,9 @@ export interface Analysis {
   sourceText: string;
   busy: boolean;
 }
+
+/** 感知结果中取出【完整文字】段落 */
+export function perceptionPlain(text: string): string {
+  const blocks = [...text.matchAll(/【完整文字】([\s\S]*?)(?=【|$)/g)].map((m) => m[1].trim());
+  return (blocks.length ? blocks.join("\n") : text).trim();
+}
