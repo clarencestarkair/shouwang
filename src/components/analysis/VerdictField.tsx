@@ -15,3 +15,12 @@ const FIELD = {
   warn: { bg: "radial-gradient(120% 90% at 15% 0%, oklch(0.85 0.15 80) 0%, oklch(0.75 0.17 60) 50%, oklch(0.66 0.17 48) 100%)", deep: "oklch(0.5 0.13 50)" },
   ok: { bg: "radial-gradient(120% 90% at 15% 0%, oklch(0.68 0.14 160) 0%, oklch(0.53 0.12 158) 55%, oklch(0.42 0.1 158) 100%)", deep: "oklch(0.36 0.09 158)" },
 };
+
+export function VerdictField({ report, notified, fallback }: { report: RiskReport; notified: boolean; fallback?: boolean }) {
+  const { autoSpeak, familyPhone } = useSettings();
+  const rank = levelRank(report.level);
+  const f = rank >= 3 ? FIELD.danger : rank === 2 ? FIELD.warn : FIELD.ok;
+  const big = report.shortVerdict || (rank >= 3 ? "别转钱" : rank === 2 ? "先别信" : "放心");
+  const typeLabel = report.fraudType !== "none" && report.fraudType !== "unknown" ? FRAUD_TYPES[report.fraudType] : null;
+  const speech = `${big}。${report.headline}。${report.reasons.map((r) => r.point).join("。")}。您现在要做的是：${report.actions.join("。")}`;
+  const spoken = useRef(false);
