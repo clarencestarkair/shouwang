@@ -15,3 +15,17 @@ interface Range {
   idx: number;
   label: string;
 }
+
+/** 在原文中定位证据：先整句匹配，再按省略号拆段匹配 */
+function locate(source: string, evidence: string): [number, number][] {
+  const clean = evidence.replace(/^[“"「]|[”"」]$/g, "").trim();
+  if (!clean || clean === "—") return [];
+  const at = source.indexOf(clean);
+  if (at >= 0) return [[at, at + clean.length]];
+  const out: [number, number][] = [];
+  for (const seg of clean.split(/……|\.\.\.|…|，|,|。/).map((x) => x.trim()).filter((x) => x.length >= 4)) {
+    const i = source.indexOf(seg);
+    if (i >= 0) out.push([i, i + seg.length]);
+  }
+  return out;
+}
