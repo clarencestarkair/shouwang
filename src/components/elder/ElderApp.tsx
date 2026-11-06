@@ -227,3 +227,41 @@ function EmptyState({ onPick, onPickImage }: { onPick: (text: string) => void; o
           </div>
         </ModeCard>
       </ul>
+
+      <div>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="text-[1.3rem] font-semibold tracking-tight">试试这些真实的骗局</h2>
+          <p className="text-[0.85rem] text-ink-3">点一下，守望就开始分析</p>
+        </div>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {DEMO_IMAGES.map((d) => (
+            <li key={d.src}>
+              <button type="button" onClick={() => onPickImage(d.src, d.text)} className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-line bg-surface text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                <span className="relative block h-28 overflow-hidden bg-surface-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={d.src} alt="" className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]" />
+                  <span className="absolute left-3 top-3 rounded-full bg-ink/80 px-2 py-0.5 text-[0.7rem] font-medium text-surface backdrop-blur">图片</span>
+                </span>
+                <span className="flex flex-1 items-center justify-between gap-3 p-4">
+                  <span className="text-[0.98rem] font-medium leading-snug text-ink">{d.label}</span>
+                  <ArrowRight className="size-4 shrink-0 text-ink-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </span>
+              </button>
+            </li>
+          ))}
+          {EXAMPLES.map((ex) => (
+            <li key={ex.label}>
+              <button type="button" onClick={() => onPick(ex.text)} className="group flex h-full w-full flex-col rounded-2xl border border-line bg-surface p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                <span className="flex items-center justify-between">
+                  <span className="rounded-full bg-surface-2 px-2.5 py-0.5 text-[0.75rem] font-medium text-ink-2">{ex.label}</span>
+                  <ArrowRight className="size-4 text-ink-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </span>
+                <span className="mt-3 line-clamp-3 text-[0.95rem] leading-relaxed text-ink">“{ex.text}”</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
