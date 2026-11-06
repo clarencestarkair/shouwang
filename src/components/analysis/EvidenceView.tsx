@@ -29,3 +29,23 @@ function locate(source: string, evidence: string): [number, number][] {
   }
   return out;
 }
+
+export function EvidenceView({ source, report, signals }: { source: string; report: RiskReport; signals: RiskSignal[] }) {
+  const [hover, setHover] = useState<number | null>(null);
+
+  const ranges = useMemo(() => {
+    const rs: Range[] = [];
+    report.reasons.forEach((r, i) => {
+      for (const [s, e] of locate(source, r.evidence)) rs.push({ start: s, end: e, kind: "reason", idx: i, label: r.point });
+    });
+    signals.forEach((sig, i) => {
+      for (const [s, e] of locate(source, sig.evidence)) {
+        if (!rs.some((x) => x.kind === "reason" && s < x.end && e > x.start)) rs.push({ start: s, end: e, kind: "rule", idx: i, label: sig.label });
+      }
+    });
+    // 去重叠：按起点排序，后者与前者重叠则跳过
+    const sorted = rs.sort((a, b) => a.start - b.start || (a.kind === "reason" ? -1 : 1));
+    const kept: Range[] = [];
+    for (const r of sorted) if (!kept.length || r.start >= kept[kept.length - 1].end) kept.push(r);
+    return kept;
+  }, [source, report.reasons, signals]);
