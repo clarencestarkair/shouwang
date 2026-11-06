@@ -77,3 +77,34 @@ export function EvidenceView({ source, report, signals }: { source: string; repo
     cur = r.end;
   });
   if (cur < source.length) pieces.push(<span key="tail">{source.slice(cur)}</span>);
+
+  return (
+    <section aria-label="证据标注" className="animate-rise grid gap-px overflow-hidden rounded-[1.75rem] border border-line bg-line shadow-sm lg:grid-cols-[1.15fr_1fr]">
+      <div className="bg-surface p-6 sm:p-7">
+        <p className="flex items-center gap-2 text-[0.8rem] font-semibold uppercase tracking-[0.08em] text-ink-3">
+          <FileText className="size-4" aria-hidden /> 您发来的内容 · 可疑处已标出
+        </p>
+        <p className="mt-4 whitespace-pre-wrap text-[1.08rem] leading-[2]">{pieces}</p>
+        <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-[0.78rem] text-ink-3">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-3 w-5 rounded bg-danger-soft ring-1 ring-danger/30" /> AI 判断依据
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="w-5 border-b-2 border-dashed border-warn" /> 规则引擎命中
+          </span>
+        </p>
+      </div>
+      <div className="bg-surface p-6 sm:p-7">
+        <p className="text-[0.8rem] font-semibold uppercase tracking-[0.08em] text-ink-3">为什么说它有问题</p>
+        <ol className="mt-4 space-y-4">
+          {report.reasons.map((r, i) => (
+            <li key={i} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} className={cn("flex gap-3 rounded-xl p-2 transition-colors", hover === i && "bg-danger-soft")}>
+              <span className="tnum mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-danger text-[0.75rem] font-bold text-white">{i + 1}</span>
+              <span className="text-[1.05rem] font-medium leading-relaxed text-ink">{r.point}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
