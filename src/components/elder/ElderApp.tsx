@@ -109,6 +109,14 @@ export function ElderApp() {
           />
         )}
 
+        {messages.map((m, idx) =>
+          m.role === "user" ? (
+            <UserBubble key={m.id} message={m} />
+          ) : (
+            <AssistantTurn key={m.id} message={m} userMessage={messages[idx - 1]} busy={busy && idx === messages.length - 1} />
+          ),
+        )}
+
         {status === "submitted" && messages[messages.length - 1]?.role === "user" && <AgentTrace parts={[]} busy />}
 
         {error && (
