@@ -49,3 +49,31 @@ export function EvidenceView({ source, report, signals }: { source: string; repo
     for (const r of sorted) if (!kept.length || r.start >= kept[kept.length - 1].end) kept.push(r);
     return kept;
   }, [source, report.reasons, signals]);
+
+  if (!source.trim()) return null;
+
+  const pieces: React.ReactNode[] = [];
+  let cur = 0;
+  ranges.forEach((r, k) => {
+    if (r.start > cur) pieces.push(<span key={`t${k}`}>{source.slice(cur, r.start)}</span>);
+    const text = source.slice(r.start, r.end);
+    pieces.push(
+      r.kind === "reason" ? (
+        <mark
+          key={`m${k}`}
+          onMouseEnter={() => setHover(r.idx)}
+          onMouseLeave={() => setHover(null)}
+          className={cn("rounded-md bg-danger-soft px-0.5 text-ink ring-danger/40 transition-shadow", hover === r.idx && "ring-2")}
+        >
+          {text}
+          <sup className="tnum ml-0.5 rounded-full bg-danger px-1.5 text-[0.65rem] font-bold text-white">{r.idx + 1}</sup>
+        </mark>
+      ) : (
+        <span key={`r${k}`} title={`规则命中：${r.label}`} className="underline decoration-warn decoration-dashed decoration-2 underline-offset-4">
+          {text}
+        </span>
+      ),
+    );
+    cur = r.end;
+  });
+  if (cur < source.length) pieces.push(<span key="tail">{source.slice(cur)}</span>);
