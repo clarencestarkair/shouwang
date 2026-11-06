@@ -195,3 +195,30 @@ function AssistantTurn({ message, userMessage, busy }: { message: GuardianUIMess
     </div>
   );
 }
+
+function EmptyState({ onPick, onPickImage }: { onPick: (text: string) => void; onPickImage: (src: string, text: string) => void }) {
+  return (
+    <section className="animate-rise space-y-12">
+      <ul className="grid gap-3 sm:grid-cols-3">
+        <ModeCard title="说给我听" desc="按住下方黑色按钮，把对方说的话讲给我">
+          <div className="flex h-full items-center justify-center gap-[3px]" aria-hidden>
+            {[10, 22, 36, 18, 44, 28, 52, 30, 40, 16, 34, 24, 12, 26, 8].map((h, i) => (
+              <span key={i} className="w-[5px] rounded-full bg-ink" style={{ height: h, opacity: 0.35 + (h / 52) * 0.65 }} />
+            ))}
+          </div>
+        </ModeCard>
+        <ModeCard title="拍给我看" desc="短信、聊天记录、传单，拍照或截图">
+          <div className="relative h-full" aria-hidden>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/demo/sms-yibao.png" alt="" className="absolute left-[24%] top-3 h-[86%] -rotate-6 rounded-md object-cover object-top shadow-md ring-1 ring-line" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/demo/poster-qr.png" alt="" className="absolute left-[46%] top-2 h-[86%] rotate-[5deg] rounded-md object-cover shadow-md ring-1 ring-line" />
+          </div>
+        </ModeCard>
+        <ModeCard title="粘贴过来" desc="复制可疑短信，粘贴到下面的框里">
+          <div className="flex h-full flex-col justify-center gap-1.5 px-5" aria-hidden>
+            <span className="w-[85%] rounded-xl rounded-bl-sm bg-surface px-3 py-2 text-[0.72rem] leading-snug text-ink-2 shadow-sm ring-1 ring-line">【医保服务】您的医保卡即将停用，请登录…</span>
+            <span className="ml-auto rounded-full bg-ink px-2.5 py-1 text-[0.68rem] font-medium text-surface">粘贴</span>
+          </div>
+        </ModeCard>
+      </ul>
