@@ -265,3 +265,15 @@ function EmptyState({ onPick, onPickImage }: { onPick: (text: string) => void; o
     </section>
   );
 }
+
+function ModeCard({ title, desc, children }: { title: string; desc: string; children: React.ReactNode }) {
+  return (
+    <li className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
+      <div className="h-28 border-b border-line bg-surface-2/70">{children}</div>
+      <div className="p-4">
+        <p className="text-[1.08rem] font-semibold tracking-tight">{title}</p>
+        <p className="mt-1 text-[0.88rem] leading-relaxed text-ink-2">{desc}</p>
+      </div>
+    </li>
+  );
+}
