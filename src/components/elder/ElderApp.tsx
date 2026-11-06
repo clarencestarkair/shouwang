@@ -196,6 +196,11 @@ function AssistantTurn({ message, userMessage, busy }: { message: GuardianUIMess
   );
 }
 
+const DEMO_IMAGES = [
+  { src: "/demo/sms-yibao.png", label: "医保卡“冻结”短信截图", text: "帮我看看这条短信" },
+  { src: "/demo/poster-qr.png", label: "小区门口发的福利传单", text: "楼下发的传单，说扫码能领补贴，是真的吗" },
+];
+
 function EmptyState({ onPick, onPickImage }: { onPick: (text: string) => void; onPickImage: (src: string, text: string) => void }) {
   return (
     <section className="animate-rise space-y-12">
