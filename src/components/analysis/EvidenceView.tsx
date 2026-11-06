@@ -7,3 +7,11 @@ import { useMemo, useState } from "react";
 import { FileText } from "lucide-react";
 import type { RiskReport, RiskSignal } from "@/lib/core/types";
 import { cn } from "@/lib/utils";
+
+interface Range {
+  start: number;
+  end: number;
+  kind: "reason" | "rule";
+  idx: number;
+  label: string;
+}
