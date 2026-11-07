@@ -59,3 +59,26 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
     { key: "guard", label: "安全审查", sub: "双通道 · 护栏", icon: ShieldCheck, state: traceState(a, "guard") },
     { key: "notify", label: "家属通知", sub: "SSE 推送", icon: Bell, state: a.report ? (a.notified ? "done" : "skipped") : "idle" },
   ];
+
+  const running = a.busy || Object.values(a.traces).some((t) => t.status === "running");
+  const total = a.meta?.totalMs ?? (Object.values(a.traces).reduce((m, t) => Math.max(m, t.at ?? 0), 0) || undefined);
+
+  return (
+    <section aria-label="AI 指挥台" className={cn("dark-stage overflow-hidden rounded-[1.75rem] border border-line", className)}>
+      {/* 头部状态栏 */}
+      <header className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-line px-5 py-4 sm:px-6">
+        <div className="flex items-center gap-2.5">
+          <span className="relative flex size-2.5">
+            {running && <span className="animate-pulse-ring absolute inset-0 rounded-full bg-accent" />}
+            <span className={cn("relative size-2.5 rounded-full", running ? "bg-accent" : "bg-ok")} />
+          </span>
+          <h4 className="text-[15px] font-semibold tracking-tight">Agent 指挥台</h4>
+          <span className="text-[13px] text-ink-3">{running ? "分析中" : "已完成"}</span>
+        </div>
+        <dl className="ml-auto flex flex-wrap gap-x-6 gap-y-1 font-mono text-[12px]">
+          <Stat k="model" v={a.meta?.model ?? (a.fallback ? "rules-fallback" : "—")} />
+          <Stat k="latency" v={fmtMs(total) || "—"} />
+          <Stat k="tokens" v={a.meta?.usage?.totalTokens ? `${a.meta.usage.inputTokens ?? 0} in · ${a.meta.usage.outputTokens ?? 0} out` : "—"} />
+          <Stat k="tools" v={String(a.tools.length)} />
+        </dl>
+      </header>
