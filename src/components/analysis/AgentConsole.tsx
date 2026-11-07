@@ -82,3 +82,23 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
           <Stat k="tools" v={String(a.tools.length)} />
         </dl>
       </header>
+
+      {/* 节点图 */}
+      <div className="px-5 py-6 sm:px-6">
+        <ol className="flex flex-wrap items-center gap-y-4">
+          {stages.map((s, i) => (
+            <li key={i} className="flex items-center">
+              {Array.isArray(s) ? (
+                <div className="flex flex-col gap-2">
+                  {s.map((n) => (
+                    <NodeCard key={n.key} n={n} compact />
+                  ))}
+                </div>
+              ) : (
+                <NodeCard n={s} />
+              )}
+              {i < stages.length - 1 && <Connector active={edgeActive(stages, i)} />}
+            </li>
+          ))}
+        </ol>
+      </div>
