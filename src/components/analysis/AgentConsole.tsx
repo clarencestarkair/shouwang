@@ -198,3 +198,27 @@ function edgeActive(stages: (GNode | GNode[])[], i: number) {
   const n = Array.isArray(next) ? next[0] : next;
   return n?.state === "running" || n?.state === "done";
 }
+
+function NodeCard({ n, compact }: { n: GNode; compact?: boolean }) {
+  const Icon = n.icon;
+  return (
+    <div
+      className={cn(
+        "glass relative rounded-2xl transition-all duration-500",
+        compact ? "w-[8.5rem] px-3 py-2" : "w-[7.75rem] px-3 py-2.5",
+        n.state === "running" && "glow-accent",
+        n.state === "idle" && "opacity-40",
+        n.state === "skipped" && "opacity-55",
+      )}
+    >
+      <div className="flex items-center justify-between">
+        <span className={cn("grid size-7 place-items-center rounded-lg", n.state === "done" ? "bg-ink text-bg" : n.state === "running" ? "bg-accent text-bg" : n.state === "error" ? "bg-danger text-bg" : "bg-surface-3 text-ink-3")}>
+          <Icon className="size-3.5" aria-hidden />
+        </span>
+        <span className="font-mono text-[10px] text-ink-3">{n.state === "running" ? "running" : n.state === "skipped" ? "skip" : fmtMs(n.ms)}</span>
+      </div>
+      <p className="mt-2 text-[13px] font-semibold leading-tight text-ink">{n.label}</p>
+      <p className="mt-0.5 truncate text-[11px] text-ink-3">{n.sub}</p>
+    </div>
+  );
+}
