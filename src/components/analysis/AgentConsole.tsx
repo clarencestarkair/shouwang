@@ -293,3 +293,24 @@ function Timeline({ a, total }: { a: Analysis; total?: number }) {
     });
   }
   if (reportAt && total > reportAt) rows.push({ label: "口语总结（流式）", start: reportAt, end: total, color: "var(--ink-2)" });
+
+  return (
+    <div className="border-t border-line px-5 py-5 sm:px-6">
+      <div className="flex items-center justify-between text-[12px] text-ink-3">
+        <span className="font-semibold uppercase tracking-[0.08em]">时间线 · 服务端计时</span>
+        <span className="font-mono">0 — {fmtMs(total)}</span>
+      </div>
+      <ul className="mt-3 space-y-1.5">
+        {rows.map((r, i) => (
+          <li key={i} className="grid grid-cols-[7.5rem_1fr_3.5rem] items-center gap-3 text-[12px]">
+            <span className="truncate text-ink-2">{r.label}</span>
+            <span className="relative h-2.5 rounded-full bg-surface-2">
+              <span className="absolute inset-y-0 rounded-full" style={{ left: `${(r.start / total) * 100}%`, width: `${Math.max(0.6, ((r.end - r.start) / total) * 100)}%`, background: r.color }} />
+            </span>
+            <span className="tnum text-right font-mono text-[11px] text-ink-3">{fmtMs(r.end - r.start)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
