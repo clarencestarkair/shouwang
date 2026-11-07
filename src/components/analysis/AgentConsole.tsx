@@ -162,3 +162,14 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
             <Empty>等待报告…</Empty>
           )}
         </Panel>
+
+        <Panel title="多模态感知" icon={Eye} meta={a.perception ? `${a.perception.images} 张图` : undefined}>
+          {a.perception ? (
+            <div className="space-y-2">
+              <p className="line-clamp-6 whitespace-pre-wrap text-[12.5px] leading-relaxed text-ink-2">{perceptionPlain(a.perception.text)}</p>
+              {a.perception.qr.length > 0 && <p className="text-[12px] text-accent">端侧二维码：{a.perception.qr.join("、")}</p>}
+            </div>
+          ) : (
+            <Empty>本次没有图片输入</Empty>
+          )}
+        </Panel>
