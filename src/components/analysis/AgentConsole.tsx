@@ -173,3 +173,22 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
             <Empty>本次没有图片输入</Empty>
           )}
         </Panel>
+
+        <Panel title="骗局阶段研判" icon={GaugeIcon} meta={a.report?.scamStage ? `第 ${a.report.scamStage} / 4 步` : undefined}>
+          {a.report ? (
+            <div className="space-y-2.5">
+              <div className="flex gap-1.5">
+                {[1, 2, 3, 4].map((n) => (
+                  <span key={n} className={cn("h-1.5 flex-1 rounded-full", (a.report?.scamStage ?? 0) >= n ? "bg-danger" : "bg-surface-3")} />
+                ))}
+              </div>
+              <p className="text-[12.5px] leading-relaxed text-ink-2">{a.report.nextMove ? `预判下一步：${a.report.nextMove}` : "未处于诈骗流程中"}</p>
+            </div>
+          ) : (
+            <Empty>等待报告…</Empty>
+          )}
+        </Panel>
+      </div>
+    </section>
+  );
+}
