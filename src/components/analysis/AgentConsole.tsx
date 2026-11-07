@@ -21,3 +21,23 @@ interface GNode {
   state: NodeState;
   ms?: number;
 }
+
+function toolState(state: string): NodeState {
+  return state === "output-available" ? "done" : state === "output-error" ? "error" : "running";
+}
+
+const fmtMs = (ms?: number) => (ms === undefined ? "" : ms < 1000 ? `${Math.round(ms)}ms` : `${(ms / 1000).toFixed(1)}s`);
+
+export function AgentConsole({ a, className }: { a: Analysis; className?: string }) {
+  const hasImage = Boolean(a.perception) || Boolean(a.traces.perception);
+  const toolNodes: GNode[] = a.tools
+    .filter((t) => t.name !== "submitRiskReport" && t.name !== "notifyFamily")
+    .map((t) => ({
+      key: t.id,
+      label: t.name === "searchFraudCases" ? "案例检索" : t.name === "checkPhoneNumber" ? "号码核验" : "链接核验",
+      sub: t.name === "searchFraudCases" ? "RAG · BM25 + 向量" : t.name === "checkPhoneNumber" ? "Function Calling" : "Function Calling",
+      icon: t.name === "searchFraudCases" ? Database : t.name === "checkPhoneNumber" ? Phone : Link2,
+      state: toolState(t.state),
+      ms: t.time?.durationMs,
+    }));
+  const report = a.tools.find((t) => t.name === "submitRiskReport");
