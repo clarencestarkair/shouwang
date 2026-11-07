@@ -131,6 +131,43 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
           )}
         </Panel>
 
+        <Panel title="案例检索 · RAG" icon={Database} meta={a.searches.length ? `${a.searches.length} 次检索` : undefined}>
+          {a.searches.length ? (
+            <div className="space-y-3">
+              {a.searches.slice(0, 2).map((q, i) => {
+                const max = Math.max(...q.docs.map((d) => d.score), 0.0001);
+                return (
+                  <div key={i}>
+                    <p className="truncate font-mono text-[11px] text-ink-3">query: {q.query}</p>
+                    <ul className="mt-1.5 space-y-1.5">
+                      {q.docs.slice(0, 3).map((d) => (
+                        <li key={d.id} className="grid grid-cols-[3.6rem_1fr_auto] items-center gap-2 text-[12.5px]">
+                          <span className="font-mono text-[11px] text-accent">{d.id}</span>
+                          <span className="min-w-0">
+                            <span className="block truncate text-ink">{d.title}</span>
+                            <span className="mt-1 block h-1 overflow-hidden rounded-full bg-surface-3">
+                              <span className="block h-full rounded-full bg-accent" style={{ width: `${(d.score / max) * 100}%` }} />
+                            </span>
+                          </span>
+                          <span className="flex gap-1">
+                            {d.matchedBy.map((m) => (
+                              <span key={m} className="rounded bg-surface-3 px-1 font-mono text-[9.5px] uppercase text-ink-2">
+                                {m === "bm25" ? "kw" : "vec"}
+                              </span>
+                            ))}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <Empty>{a.report ? "本次未检索" : "等待 Agent 规划…"}</Empty>
+          )}
+        </Panel>
+
         <Panel title="号码 / 链接核验" icon={Phone} meta={a.phones.length + a.urls.length ? `${a.phones.length + a.urls.length} 项` : undefined}>
           {a.phones.length + a.urls.length ? (
             <ul className="space-y-2.5">
