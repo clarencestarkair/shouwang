@@ -130,3 +130,18 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
             <Empty>等待中…</Empty>
           )}
         </Panel>
+
+        <Panel title="号码 / 链接核验" icon={Phone} meta={a.phones.length + a.urls.length ? `${a.phones.length + a.urls.length} 项` : undefined}>
+          {a.phones.length + a.urls.length ? (
+            <ul className="space-y-2.5">
+              {a.phones.map((p) => (
+                <Check key={p.normalized} name={p.input} score={p.riskScore} tags={p.tags} />
+              ))}
+              {a.urls.map((u) => (
+                <Check key={u.input} name={u.hostname ?? u.input} score={u.riskScore} tags={u.tags} />
+              ))}
+            </ul>
+          ) : (
+            <Empty>内容中没有需要核验的号码或链接</Empty>
+          )}
+        </Panel>
