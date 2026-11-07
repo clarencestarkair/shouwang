@@ -41,3 +41,15 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
       ms: t.time?.durationMs,
     }));
   const report = a.tools.find((t) => t.name === "submitRiskReport");
+
+  const stages: (GNode | GNode[])[] = [
+    { key: "input", label: "用户输入", sub: hasImage ? "文字 + 图片" : "文字", icon: MessageSquareText, state: "done" },
+    { key: "privacy", label: "端侧脱敏", sub: "PII Masking", icon: Lock, state: traceState(a, "privacy"), ms: a.traces.privacy?.at },
+    { key: "perception", label: "感知 Agent", sub: hasImage ? "VLM 看图识字" : "无图片，跳过", icon: Eye, state: hasImage ? traceState(a, "perception") : "skipped" },
+    { key: "rules", label: "规则引擎", sub: "30 条规则 · 注入检测", icon: ScanText, state: traceState(a, "rules") },
+    { key: "agent", label: "研判 Agent", sub: "Tool Loop 规划", icon: Brain, state: traceState(a, "agent") },
+    toolNodes.length ? toolNodes : [{ key: "tools", label: "工具调用", sub: "等待规划", icon: Database, state: a.report ? "skipped" : "idle" }],
+    { key: "report", label: "结构化报告", sub: "zod schema", icon: FileCheck2, state: a.fallback ? "skipped" : report ? toolState(report.state) : "idle" },
+    { key: "guard", label: "安全审查", sub: "双通道 · 护栏", icon: ShieldCheck, state: traceState(a, "guard") },
+    { key: "notify", label: "家属通知", sub: "SSE 推送", icon: Bell, state: a.report ? (a.notified ? "done" : "skipped") : "idle" },
+  ];
