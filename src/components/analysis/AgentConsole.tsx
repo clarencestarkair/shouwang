@@ -102,3 +102,31 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
           ))}
         </ol>
       </div>
+
+      {/* 甘特时间线 */}
+      <Timeline a={a} total={total} />
+
+      {/* 明细面板 */}
+      <div className="grid gap-px border-t border-line bg-line md:grid-cols-2 xl:grid-cols-3">
+        <Panel title="规则引擎" icon={ScanText} meta={a.rules ? `初筛分 ${a.rules.score}` : undefined}>
+          {a.rules ? (
+            a.rules.signals.length ? (
+              <ul className="space-y-2">
+                {[...a.rules.signals].sort((x, y) => y.weight - x.weight).slice(0, 6).map((s) => (
+                  <li key={s.id} className="grid grid-cols-[1fr_5rem_2rem] items-center gap-3 text-[13px]">
+                    <span className="truncate text-ink">{s.label}</span>
+                    <span className="h-1.5 overflow-hidden rounded-full bg-surface-3">
+                      <span className="block h-full rounded-full bg-warn" style={{ width: `${Math.min(100, (s.weight / 45) * 100)}%` }} />
+                    </span>
+                    <span className="tnum text-right font-mono text-[11px] text-ink-3">+{s.weight}</span>
+                  </li>
+                ))}
+                {a.rules.injection.length > 0 && <li className="rounded-lg bg-danger-soft px-2.5 py-1.5 text-[12px] text-danger">检测到操纵 AI 的语句：{a.rules.injection.join("、")}</li>}
+              </ul>
+            ) : (
+              <Empty>未命中可疑规则</Empty>
+            )
+          ) : (
+            <Empty>等待中…</Empty>
+          )}
+        </Panel>
