@@ -22,6 +22,12 @@ interface GNode {
   ms?: number;
 }
 
+function traceState(a: Analysis, step: string): NodeState {
+  const t = a.traces[step];
+  if (!t) return "idle";
+  return t.status === "running" ? "running" : t.status === "skipped" ? "skipped" : t.status === "error" ? "error" : "done";
+}
+
 function toolState(state: string): NodeState {
   return state === "output-available" ? "done" : state === "output-error" ? "error" : "running";
 }
