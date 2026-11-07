@@ -259,3 +259,37 @@ function NodeCard({ n, compact }: { n: GNode; compact?: boolean }) {
     </div>
   );
 }
+
+function Connector({ active }: { active: boolean }) {
+  return <span aria-hidden className={cn("mx-1 h-0.5 w-4 rounded-full", active ? "flow-line" : "bg-surface-3")} />;
+}
+
+function Timeline({ a, total }: { a: Analysis; total?: number }) {
+  if (!total) return null;
+  const t = a.traces;
+  const rows: { label: string; start: number; end: number; color: string }[] = [];
+  const privacyEnd = t.privacy?.at ?? 0;
+  rows.push({ label: "端侧脱敏", start: 0, end: Math.max(privacyEnd, total * 0.004), color: "var(--ink-3)" });
+  let cursor = privacyEnd;
+  if (t.perception?.at && t.perception.status !== "running") {
+    rows.push({ label: "感知 Agent", start: cursor, end: t.perception.at, color: "var(--accent)" });
+    cursor = t.perception.at;
+  }
+  if (t.rules?.at) {
+    rows.push({ label: "规则引擎", start: cursor, end: Math.max(t.rules.at, cursor + total * 0.004), color: "var(--warn)" });
+    cursor = t.rules.at;
+  }
+  const reportTool = a.tools.find((x) => x.name === "submitRiskReport");
+  const reportAt = reportTool?.time?.endAt ?? t.guard?.at;
+  // 研判 Agent 的推理覆盖从规则结束到提交报告的整段；工具调用嵌套在其中
+  if (reportAt) rows.push({ label: "研判 Agent（推理）", start: cursor, end: reportAt, color: "var(--danger)" });
+  for (const tool of a.tools) {
+    if (!tool.time || tool.name === "submitRiskReport" || tool.name === "notifyFamily") continue;
+    rows.push({
+      label: tool.name === "searchFraudCases" ? "↳ 案例检索" : tool.name === "checkPhoneNumber" ? "↳ 号码核验" : "↳ 链接核验",
+      start: tool.time.startAt,
+      end: Math.max(tool.time.endAt ?? tool.time.startAt, tool.time.startAt + total * 0.004),
+      color: "var(--ok)",
+    });
+  }
+  if (reportAt && total > reportAt) rows.push({ label: "口语总结（流式）", start: reportAt, end: total, color: "var(--ink-2)" });
