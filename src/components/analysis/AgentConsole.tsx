@@ -192,3 +192,9 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
     </section>
   );
 }
+
+function edgeActive(stages: (GNode | GNode[])[], i: number) {
+  const next = stages[i + 1];
+  const n = Array.isArray(next) ? next[0] : next;
+  return n?.state === "running" || n?.state === "done";
+}
