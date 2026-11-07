@@ -145,3 +145,20 @@ export function AgentConsole({ a, className }: { a: Analysis; className?: string
             <Empty>内容中没有需要核验的号码或链接</Empty>
           )}
         </Panel>
+
+        <Panel title="双通道校验 · 安全审查" icon={ShieldCheck} meta={a.report ? RISK_LABEL[a.report.level] : undefined}>
+          {a.report ? (
+            <div className="space-y-3">
+              <DualBar label="规则通道" value={a.rules?.score ?? 0} color="var(--warn)" />
+              <DualBar label="模型 + 审查（最终）" value={a.report.score} color="var(--danger)" />
+              <p className="text-[12.5px] leading-relaxed text-ink-2">
+                {a.report.guardNotes?.length ? a.report.guardNotes.join("；") : "两通道结论一致，未触发修正；危险建议过滤通过。"}
+              </p>
+              <p className="text-[12px] text-ink-3">
+                类型：{a.report.fraudType !== "none" && a.report.fraudType !== "unknown" ? FRAUD_TYPES[a.report.fraudType] : "非诈骗 / 未知"} · 引用 {a.report.citedCases.length} 条依据
+              </p>
+            </div>
+          ) : (
+            <Empty>等待报告…</Empty>
+          )}
+        </Panel>
