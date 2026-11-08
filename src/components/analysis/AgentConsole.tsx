@@ -236,6 +236,15 @@ function edgeActive(stages: (GNode | GNode[])[], i: number) {
   return n?.state === "running" || n?.state === "done";
 }
 
+function Stat({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="flex gap-1.5">
+      <dt className="text-ink-3">{k}</dt>
+      <dd className="text-ink">{v}</dd>
+    </div>
+  );
+}
+
 function NodeCard({ n, compact }: { n: GNode; compact?: boolean }) {
   const Icon = n.icon;
   return (
