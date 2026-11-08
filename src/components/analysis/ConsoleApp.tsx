@@ -20,3 +20,9 @@ const IMAGES = [
   { src: "/demo/sms-yibao.png", label: "医保短信截图", text: "帮我看看这条短信" },
   { src: "/demo/poster-qr.png", label: "带二维码的传单", text: "楼下发的传单，说扫码能领补贴，是真的吗" },
 ];
+
+export function ConsoleApp() {
+  const transport = useMemo(() => new DefaultChatTransport<GuardianUIMessage>({ api: "/api/chat" }), []);
+  const { messages, sendMessage, status, setMessages } = useChat<GuardianUIMessage>({ transport });
+  const [input, setInput] = useState("");
+  const busy = status === "submitted" || status === "streaming";
