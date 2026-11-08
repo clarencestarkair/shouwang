@@ -15,3 +15,8 @@ import { AgentConsole } from "./AgentConsole";
 import { PhonePreview } from "./PhonePreview";
 import { deriveAnalysis } from "./derive";
 import { cn } from "@/lib/utils";
+
+const IMAGES = [
+  { src: "/demo/sms-yibao.png", label: "医保短信截图", text: "帮我看看这条短信" },
+  { src: "/demo/poster-qr.png", label: "带二维码的传单", text: "楼下发的传单，说扫码能领补贴，是真的吗" },
+];
