@@ -26,3 +26,32 @@ export function ConsoleApp() {
   const { messages, sendMessage, status, setMessages } = useChat<GuardianUIMessage>({ transport });
   const [input, setInput] = useState("");
   const busy = status === "submitted" || status === "streaming";
+
+      {/* 场景选择 */}
+      <div className="relative flex flex-wrap gap-2">
+        {IMAGES.map((x) => (
+          <button key={x.src} type="button" disabled={busy} onClick={() => run(x.text, x.src)} className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] text-ink disabled:opacity-40">
+            <ImageIcon className="size-3.5 text-accent" /> {x.label}
+          </button>
+        ))}
+        {EXAMPLES.slice(0, 5).map((x) => (
+          <button key={x.label} type="button" disabled={busy} onClick={() => run(x.text)} className="glass rounded-full px-3.5 py-2 text-[13px] text-ink disabled:opacity-40">
+            {x.label}：{x.text.slice(0, 12)}…
+          </button>
+        ))}
+      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (input.trim()) run(input.trim());
+        }}
+        className="glass relative mt-3 flex items-center gap-2 rounded-2xl p-1.5 pl-4"
+      >
+        <label htmlFor="console-input" className="sr-only">
+          输入要分析的内容
+        </label>
+        <input id="console-input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="粘贴任意可疑短信、通话内容…" className="h-11 min-w-0 flex-1 bg-transparent text-[15px] text-ink outline-none placeholder:text-ink-3" />
+        <button type="submit" disabled={busy || !input.trim()} aria-label="开始分析" className={cn("grid size-10 place-items-center rounded-xl", input.trim() && !busy ? "bg-accent text-bg" : "bg-surface-3 text-ink-3")}>
+          <ArrowUp className="size-5" strokeWidth={2.5} />
+        </button>
+      </form>
