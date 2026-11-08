@@ -359,3 +359,17 @@ function Check({ name, score, tags }: { name: string; score: number; tags: strin
     </li>
   );
 }
+
+function DualBar({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div>
+      <div className="flex justify-between text-[12px]">
+        <span className="text-ink-2">{label}</span>
+        <span className="tnum font-mono text-ink">{value}</span>
+      </div>
+      <div className="mt-1 h-2 overflow-hidden rounded-full bg-surface-3">
+        <span className="block h-full rounded-full transition-[width] duration-700" style={{ width: `${value}%`, background: color }} />
+      </div>
+    </div>
+  );
+}
