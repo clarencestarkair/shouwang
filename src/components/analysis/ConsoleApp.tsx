@@ -76,3 +76,23 @@ export function ConsoleApp() {
           <ArrowUp className="size-5" strokeWidth={2.5} />
         </button>
       </form>
+
+      <div className="relative mt-8 grid gap-8 xl:grid-cols-[300px_minmax(0,1fr)] xl:items-start">
+        <div className="xl:sticky xl:top-24">
+          <PhonePreview a={pending ? null : analysis} idle={!busy && messages.length === 0} />
+          <p className="mt-4 text-center text-[12px] text-ink-3">老人看到的画面</p>
+        </div>
+        {analysis ? (
+          <AgentConsole a={analysis} />
+        ) : (
+          <div className="glass grid min-h-[28rem] place-items-center rounded-[1.75rem] p-8 text-center">
+            <div>
+              <p className="text-[1.15rem] font-semibold">{pending ? "流水线启动中…" : "选择一个场景，观察 Agent 如何工作"}</p>
+              <p className="mt-2 text-[13px] text-ink-3">节点图、时间线、规则命中、检索相似度、号码链接核验、双通道校验会在这里实时出现</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
