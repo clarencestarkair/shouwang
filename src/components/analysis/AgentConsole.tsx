@@ -323,3 +323,39 @@ function Timeline({ a, total }: { a: Analysis; total?: number }) {
     </div>
   );
 }
+
+function Panel({ title, icon: Icon, meta, children }: { title: string; icon: typeof Brain; meta?: string; children: ReactNode }) {
+  return (
+    <div className="bg-bg p-5">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <p className="flex items-center gap-2 text-[13px] font-semibold text-ink">
+          <Icon className="size-4 text-ink-3" aria-hidden /> {title}
+        </p>
+        {meta && <span className="font-mono text-[11px] text-ink-3">{meta}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function Empty({ children }: { children: ReactNode }) {
+  return <p className="text-[12.5px] text-ink-3">{children}</p>;
+}
+
+function Check({ name, score, tags }: { name: string; score: number; tags: string[] }) {
+  const color = score >= 50 ? "var(--danger)" : score >= 20 ? "var(--warn)" : "var(--ok)";
+  return (
+    <li className="text-[12.5px]">
+      <div className="flex items-center justify-between gap-2">
+        <span className="truncate font-mono text-ink">{name}</span>
+        <span className="tnum font-mono text-[11px]" style={{ color }}>
+          {score}
+        </span>
+      </div>
+      <div className="mt-1 h-1 overflow-hidden rounded-full bg-surface-3">
+        <span className="block h-full rounded-full" style={{ width: `${score}%`, background: color }} />
+      </div>
+      <p className="mt-1 truncate text-[11.5px] text-ink-3">{tags.join(" · ")}</p>
+    </li>
+  );
+}
