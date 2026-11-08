@@ -48,6 +48,22 @@ export function ConsoleApp() {
     setInput("");
   };
 
+  return (
+    <div className="relative mx-auto max-w-[90rem] px-4 pb-16 sm:px-6">
+      <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 h-80 w-[50rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,oklch(0.6_0.18_258/0.25),transparent)]" />
+      <header className="relative flex flex-wrap items-end justify-between gap-4 pb-8 pt-10">
+        <div>
+          <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-accent">Agent Console</p>
+          <h1 className="mt-2 text-[2.2rem] font-semibold tracking-tight sm:text-[2.8rem]">一次分析，两种视角</h1>
+          <p className="mt-2 max-w-xl text-ink-2">左边是老人手机上看到的结论，右边是多智能体流水线的每一步：谁在工作、调用了什么工具、检索到哪些案例、耗时多少。</p>
+        </div>
+        {messages.length > 0 && !busy && (
+          <button type="button" onClick={() => setMessages([])} className="inline-flex items-center gap-1.5 rounded-full border border-line px-3.5 py-1.5 text-[13px] text-ink-2 hover:text-ink">
+            <RotateCcw className="size-3.5" /> 清空
+          </button>
+        )}
+      </header>
+
       {/* 场景选择 */}
       <div className="relative flex flex-wrap gap-2">
         {IMAGES.map((x) => (
