@@ -27,6 +27,27 @@ export function ConsoleApp() {
   const [input, setInput] = useState("");
   const busy = status === "submitted" || status === "streaming";
 
+  const lastIdx = messages.findLastIndex((m) => m.role === "assistant");
+  const analysis = lastIdx >= 0 ? deriveAnalysis(messages[lastIdx], messages[lastIdx - 1], busy && lastIdx === messages.length - 1) : null;
+  const pending = busy && (lastIdx < 0 || messages[messages.length - 1].role === "user");
+
+  const run = async (text: string, image?: string) => {
+    if (busy) return;
+    setMessages([]);
+    const files = [];
+    const qr: string[] = [];
+    if (image) {
+      const blob = await (await fetch(image)).blob();
+      const img = await prepareImage(new File([blob], image.split("/").pop() ?? "demo.png", { type: blob.type }));
+      files.push({ type: "file" as const, mediaType: img.mediaType, url: img.dataUrl, filename: img.name });
+      if (img.qr) qr.push(img.qr);
+    }
+    const masked = maskPII(text);
+    const body: GuardianRequestBody = { profile: { elderName: "妈妈" }, clientSide: { qr, masked: masked.masked } };
+    sendMessage({ text: masked.text, files }, { body });
+    setInput("");
+  };
+
       {/* 场景选择 */}
       <div className="relative flex flex-wrap gap-2">
         {IMAGES.map((x) => (
