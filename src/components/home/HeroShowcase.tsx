@@ -5,6 +5,16 @@
  */
 import { Bell, Brain, Check, Database, Eye, Lock, ScanText, ShieldCheck } from "lucide-react";
 
+const NODES = [
+  [Lock, "脱敏"],
+  [Eye, "感知"],
+  [ScanText, "规则"],
+  [Brain, "研判"],
+  [Database, "检索"],
+  [ShieldCheck, "审查"],
+  [Bell, "通知"],
+] as const;
+
 const BARS: [string, number, number, string][] = [
   ["感知 Agent", 0, 29, "var(--accent)"],
   ["规则引擎", 29, 30, "var(--warn)"],
