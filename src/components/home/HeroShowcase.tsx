@@ -13,3 +13,8 @@ const BARS: [string, number, number, string][] = [
   ["↳ 链接核验", 52, 53, "var(--ok)"],
   ["口语总结", 84, 100, "var(--ink-3)"],
 ];
+
+export function HeroShowcase() {
+  return (
+    <div className="relative mx-auto w-full max-w-[36rem] pb-10 pt-6" aria-hidden>
+      <div className="pointer-events-none absolute -inset-10 rounded-full bg-[radial-gradient(closest-side,oklch(0.62_0.21_30/0.35),transparent)] blur-2xl" />
