@@ -237,3 +237,17 @@ export async function POST(req: Request) {
             part.type === "finish" ? { model: modelConfig.text, usage: part.totalUsage, totalMs: Date.now() - t0 } : undefined,
         }),
       );
+
+      await result.consumeStream();
+      if (failure && !reported) {
+        const msg = failure instanceof Error ? failure.message : String(failure);
+        await fallback(`大模型调用失败（${msg.slice(0, 40)}），已启用兜底`);
+      } else if (!reported) {
+        trace({ step: "agent", status: "done", title: "AI 研判", detail: "已回答" });
+      }
+    },
+    onError: (e) => {
+      console.error("[chat] stream error", e);
+      return "守望暂时出了点问题，请稍后再试。如果情况紧急，请直接拨打 96110。";
+    },
+  });
