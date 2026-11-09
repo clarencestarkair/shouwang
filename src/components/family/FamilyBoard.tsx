@@ -348,3 +348,19 @@ function AlertDetail({ alert, onStatus, onCopy, copied }: { alert: FamilyAlert; 
     </article>
   );
 }
+
+function kpis(alerts: FamilyAlert[], now: number) {
+  const week = now - 7 * 86400e3;
+  const prev = now - 14 * 86400e3;
+  const cur = alerts.filter((a) => a.createdAt >= week);
+  const last = alerts.filter((a) => a.createdAt >= prev && a.createdAt < week);
+  const risky = cur.filter((a) => isRisky(a.level));
+  return {
+    total: cur.length,
+    prevTotal: last.length,
+    blocked: risky.length,
+    prevBlocked: last.filter((a) => isRisky(a.level)).length,
+    avg: risky.length ? Math.round(risky.reduce((s, a) => s + (a.score ?? 0), 0) / risky.length) : 0,
+    pending: alerts.filter((a) => isRisky(a.level) && a.status !== "handled").length,
+  };
+}
