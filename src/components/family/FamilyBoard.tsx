@@ -327,3 +327,24 @@ function AlertDetail({ alert, onStatus, onCopy, copied }: { alert: FamilyAlert; 
             ))}
           </ul>
         </div>
+
+        <div className="flex flex-wrap gap-2.5">
+          {alert.familyAdvice && (
+            <button type="button" onClick={onCopy} className="inline-flex h-10 items-center gap-2 rounded-full bg-ink px-4 text-sm font-medium text-surface">
+              {copied ? <Check className="size-4" aria-hidden /> : <Copy className="size-4" aria-hidden />} {copied ? "已复制" : "复制沟通建议"}
+            </button>
+          )}
+          {alert.status !== "handled" ? (
+            <button type="button" onClick={() => onStatus(alert.id, "handled")} className="inline-flex h-10 items-center gap-2 rounded-full border border-line-2 bg-surface px-4 text-sm font-medium">
+              <Check className="size-4" aria-hidden /> 标记为已沟通
+            </button>
+          ) : (
+            <span className="inline-flex h-10 items-center gap-2 px-2 text-sm font-medium text-ok-ink">
+              <Check className="size-4" aria-hidden /> 已沟通处理
+            </span>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
