@@ -150,3 +150,13 @@ body {
 .animate-shimmer {
   animation: shimmer 1.4s var(--ease-out-quart) infinite;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
