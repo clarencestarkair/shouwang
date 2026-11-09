@@ -87,3 +87,21 @@ export function HeroShowcase() {
           </div>
         </div>
       </div>
+
+      {/* 子女端通知 */}
+      <div className="glass absolute -top-2 right-[-4%] flex w-[15.5rem] gap-2.5 rounded-2xl p-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.9)]">
+        <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-danger text-[11px] font-bold text-white">守</span>
+        <div className="min-w-0 text-[11px] leading-snug">
+          <p className="flex justify-between text-ink-3">
+            <span>守望 · 子女端</span>
+            <span>现在</span>
+          </p>
+          <p className="mt-0.5 font-semibold text-ink">妈妈刚刚差点被骗，已拦下</p>
+          <p className="mt-0.5 flex items-center gap-1 text-ok-ink">
+            <Check className="size-3" /> 附沟通建议
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
