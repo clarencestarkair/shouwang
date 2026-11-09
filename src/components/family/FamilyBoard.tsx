@@ -149,6 +149,14 @@ export function FamilyBoard() {
         </div>
       </header>
 
+      {/* KPI */}
+      <section className="relative grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Stat label="本周检测" value={k.total} unit="条消息" delta={k.total - k.prevTotal} />
+        <Stat label="拦下骗局" value={k.blocked} unit="次高风险" tone="danger" delta={k.blocked - k.prevBlocked} />
+        <Stat label="平均风险指数" value={k.avg} unit="高风险消息平均" tone="warn" />
+        <Stat label="待沟通" value={k.pending} unit={k.pending ? "条需要关心" : "全部处理完"} tone={k.pending ? "danger" : "ok"} />
+      </section>
+
       <div className="relative mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_25rem]">
         <div className="grid gap-4">
           <Card title="风险趋势" meta="近 14 天 · 每日最高风险指数与检测条数">
