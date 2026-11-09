@@ -69,3 +69,21 @@ export function HeroShowcase() {
           </div>
         </div>
       </div>
+
+      {/* 手机：老人看到的整屏警示 */}
+      <div className="absolute bottom-0 left-0 w-[40%] -rotate-[4deg] rounded-[2.2rem] bg-[#0b0c0e] p-[6px] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.95),inset_0_0_0_1.5px_#2c2e33]">
+        <div className="relative flex aspect-[9/18.5] flex-col overflow-hidden rounded-[1.8rem] p-3.5 text-white" style={{ background: "radial-gradient(120% 80% at 20% 0%, oklch(0.74 0.19 40), oklch(0.6 0.22 29) 50%, oklch(0.5 0.2 27))" }}>
+          <span className="absolute left-1/2 top-2 h-4 w-14 -translate-x-1/2 rounded-full bg-[#0b0c0e]" />
+          <p className="mt-5 flex justify-between text-[8.5px] font-semibold text-white/85">
+            <span>守望 · 极高风险</span>
+            <span>90</span>
+          </p>
+          <p className="mt-3 text-[34px] font-black leading-none tracking-[-0.04em]">别扫码</p>
+          <p className="mt-2 text-[10px] font-semibold leading-snug">假补贴！先交钱的都是骗局</p>
+          <div className="mt-auto space-y-1">
+            <p className="rounded-lg bg-white/16 px-2 py-1.5 text-[8.5px]">国家补贴从来不让先交钱</p>
+            <p className="rounded-lg bg-white/16 px-2 py-1.5 text-[8.5px]">二维码指向冒充政府的网站</p>
+            <p className="rounded-lg bg-white py-1.5 text-center text-[9px] font-bold text-[oklch(0.5_0.2_27)]">打给孩子</p>
+          </div>
+        </div>
+      </div>
