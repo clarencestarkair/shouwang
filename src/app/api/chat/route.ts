@@ -259,3 +259,6 @@ export async function POST(req: Request) {
       return "守望暂时出了点问题，请稍后再试。如果情况紧急，请直接拨打 96110。";
     },
   });
+
+  return createUIMessageStreamResponse({ stream });
+}
