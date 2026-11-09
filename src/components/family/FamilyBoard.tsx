@@ -313,6 +313,12 @@ function AlertDetail({ alert, onStatus, onCopy, copied }: { alert: FamilyAlert; 
         </div>
       </div>
 
+      <div className="space-y-6 p-6">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">{alert.elderName}收到的内容 · 已隐去敏感信息</p>
+          <p className="mt-2 rounded-xl bg-surface-2 px-4 py-3 text-[0.92rem] leading-relaxed text-ink-2">{alert.contentPreview}</p>
+        </div>
+
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">判断依据</p>
           <ul className="mt-2 space-y-2.5">
