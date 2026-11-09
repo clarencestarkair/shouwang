@@ -304,3 +304,18 @@ function AlertDetail({ alert, onStatus, onCopy, copied }: { alert: FamilyAlert; 
           <h3 className="mt-2 text-[1.45rem] font-semibold leading-snug tracking-tight">{alert.headline}</h3>
         </div>
       </div>
+
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-3">判断依据</p>
+          <ul className="mt-2 space-y-2.5">
+            {alert.reasons.map((r, i) => (
+              <li key={i} className="flex gap-2.5 text-[0.95rem] leading-relaxed">
+                <span className="mt-2 size-1.5 shrink-0 rounded-full bg-ink-3" />
+                <span>
+                  {r.point}
+                  {r.evidence && r.evidence !== "—" && <span className="text-ink-3"> ——“{r.evidence}”</span>}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
