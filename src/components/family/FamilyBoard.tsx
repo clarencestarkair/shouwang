@@ -334,6 +334,15 @@ function AlertDetail({ alert, onStatus, onCopy, copied }: { alert: FamilyAlert; 
           </ul>
         </div>
 
+        {alert.familyAdvice && (
+          <div className="rounded-2xl bg-accent-soft p-4">
+            <p className="flex items-center gap-2 text-sm font-semibold text-accent">
+              <MessageCircleHeart className="size-4" aria-hidden /> 怎么跟{alert.elderName}说
+            </p>
+            <p className="mt-1.5 leading-relaxed text-ink">{alert.familyAdvice}</p>
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-2.5">
           {alert.familyAdvice && (
             <button type="button" onClick={onCopy} className="inline-flex h-10 items-center gap-2 rounded-full bg-ink px-4 text-sm font-medium text-surface">
