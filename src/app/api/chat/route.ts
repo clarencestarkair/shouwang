@@ -192,6 +192,14 @@ export async function POST(req: Request) {
       });
       const modelMessages: ModelMessage[] = [...history, { role: "user", content: contextBlock }];
 
+      const tools = createGuardianTools({
+        elderName,
+        ruleScore: scan.score,
+        injectionSuspicious: injection.suspicious,
+        contentPreview: preview,
+        channel: detectChannel(userText, images.length > 0),
+      });
+
       let reported = false;
       let failure: unknown = null;
       const result = streamText({
