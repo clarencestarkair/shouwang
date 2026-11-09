@@ -78,3 +78,5 @@ export const DRILL_REVIEW_PROMPT = `你是反诈教练。下面是一次反诈�
   "mistakes": ["学员的失误，引用原话；没有则为空数组"],
   "keyLessons": ["这个骗局最该记住的 2~3 个破绽，大白话"]
 }`;
+
+export const FAMILY_ADVICE_HINT = `familyAdvice 字段写给子女：如何和老人沟通这件事（不责备、先共情、讲清楚、教一个具体方法），1~2 句。`;
