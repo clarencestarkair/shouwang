@@ -192,3 +192,10 @@ body {
   background: var(--bg);
   color: var(--ink);
 }
+
+/* 暗场上的玻璃面板 */
+.glass {
+  background: linear-gradient(180deg, oklch(1 0 0 / 0.06), oklch(1 0 0 / 0.025));
+  border: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+}
