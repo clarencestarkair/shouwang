@@ -199,3 +199,18 @@ function Tile({ href, k, t, d, className, children }: { href: string; k: string;
     </Link>
   );
 }
+
+function Layer({ name, items, accent }: { name: string; items: string[]; accent?: boolean }) {
+  return (
+    <div className={`grid gap-3 rounded-2xl border p-4 sm:grid-cols-[8rem_1fr] sm:items-center ${accent ? "border-accent/40 bg-accent-soft" : "border-line bg-surface/60"}`}>
+      <p className={`text-[14px] font-semibold ${accent ? "text-accent" : "text-ink-2"}`}>{name}</p>
+      <div className="flex flex-wrap gap-2">
+        {items.map((x) => (
+          <span key={x} className="rounded-lg border border-line bg-bg/60 px-3 py-1.5 text-[13px] text-ink">
+            {x}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
