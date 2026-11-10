@@ -111,3 +111,67 @@ export function HomeStory() {
     </div>
   );
 }
+
+function StoryPhone({ step }: { step: number }) {
+  const red = step >= 4;
+  return (
+    <div className="relative mx-auto w-[300px]">
+      <div aria-hidden className={cn("absolute -inset-16 rounded-full blur-3xl transition-opacity duration-700", red ? "opacity-100" : "opacity-30")} style={{ background: "radial-gradient(closest-side, oklch(0.62 0.21 30 / 0.45), transparent)" }} />
+      <div className="relative rounded-[48px] bg-[#0b0c0e] p-[10px] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.9),inset_0_0_0_1.5px_#2c2e33]">
+        <div
+          className="relative flex aspect-[9/19] flex-col overflow-hidden rounded-[39px] transition-[background] duration-700"
+          style={{ background: red ? "radial-gradient(120% 80% at 20% 0%, oklch(0.74 0.19 40), oklch(0.6 0.22 29) 50%, oklch(0.5 0.2 27))" : "oklch(0.985 0.002 260)" }}
+        >
+          <span className="absolute left-1/2 top-[16px] z-10 h-6 w-[84px] -translate-x-1/2 rounded-full bg-[#0b0c0e]" />
+          <div className={cn("flex justify-between px-6 pt-4 font-mono text-[11px] font-semibold", red ? "text-white" : "text-[#16181d]")}>
+            <span>9:41</span>
+            <span>5G</span>
+          </div>
+          {red ? (
+            <div className="animate-rise flex flex-1 flex-col p-5 text-white">
+              <p className="flex justify-between text-[10.5px] font-semibold text-white/85">
+                <span>守望 · 极高风险</span>
+                <span>90</span>
+              </p>
+              <p className="mt-5 text-[54px] font-black leading-none tracking-[-0.04em]">别扫码</p>
+              <p className="mt-3 text-[14px] font-semibold">假补贴！别扫码，别交 199 元</p>
+              <div className="mt-auto space-y-1.5">
+                <p className="rounded-xl bg-white/16 px-3 py-2 text-[11.5px]">国家补贴从来不让先交钱</p>
+                <p className="rounded-xl bg-white/16 px-3 py-2 text-[11.5px]">二维码指向冒充政府的假网站</p>
+                <div className="grid grid-cols-2 gap-1.5 pt-1">
+                  <span className="rounded-xl bg-white py-2.5 text-center text-[12px] font-bold text-[oklch(0.5_0.2_27)]">打给孩子</span>
+                  <span className="rounded-xl bg-black/20 py-2.5 text-center text-[12px] font-semibold">读给我听</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-1 flex-col gap-3 p-4 text-[#16181d]">
+              <p className="text-[11px] text-[#7c818c]">发给守望</p>
+              <div className="relative ml-auto w-[78%] overflow-hidden rounded-2xl rounded-br-md shadow-md ring-1 ring-black/5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/demo/poster-qr.png" alt="小区门口发的福利传单" className="block w-full" />
+                {step >= 1 && (
+                  <>
+                    <span className="animate-rise absolute left-[8%] top-[41%] h-[5%] w-[76%] rounded bg-[oklch(0.62_0.21_30/0.35)] ring-2 ring-[oklch(0.62_0.21_30)]" />
+                    <span className="animate-rise absolute left-[29%] top-[58%] h-[24%] w-[42%] rounded ring-2 ring-[oklch(0.62_0.21_30)]" />
+                  </>
+                )}
+              </div>
+              {step >= 2 && (
+                <div className="animate-rise space-y-1.5 rounded-2xl bg-white p-3 text-[11px] shadow-sm ring-1 ring-black/5">
+                  <p className="font-semibold">守望正在分析</p>
+                  {["案例检索 · 6 条相关", "链接核验 · 风险 75", step >= 3 ? "安全审查 · 通过" : "研判中…"].map((x) => (
+                    <p key={x} className="flex items-center gap-1.5 text-[#4b505b]">
+                      <span className="size-1.5 rounded-full bg-[oklch(0.57_0.2_258)]" />
+                      {x}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
