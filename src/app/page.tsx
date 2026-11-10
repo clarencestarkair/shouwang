@@ -142,3 +142,37 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ———————— 评测 ———————— */}
+        <section className="border-t border-line">
+          <div className="mx-auto grid max-w-6xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+            <div>
+              <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-accent">Evaluation</p>
+              <h2 className="mt-3 text-[2.3rem] font-semibold leading-tight tracking-tight sm:text-[2.9rem]">
+                骗子换个说法，规则就失灵。
+                <br />
+                守望依然识破。
+              </h2>
+              <p className="mt-4 leading-relaxed text-ink-2">16 条未参与规则编写的隐蔽样本，真实模型 + 工具调用 + 安全审查跑完整条流水线。</p>
+            </div>
+            <div className="glass rounded-[1.75rem] p-7">
+              <p className="text-sm text-ink-2">困难样本召回率</p>
+              <div className="mt-6 space-y-5">
+                <Bar label="纯规则引擎" value={12.5} color="var(--surface-3)" />
+                <Bar label="守望 · 双通道 Agent" value={100} color="var(--danger)" />
+              </div>
+              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-line pt-6">
+                {[
+                  ["0%", "常规样本误报"],
+                  ["23/23", "单元测试"],
+                  ["2.9", "次工具调用 / 分析"],
+                ].map(([v, k]) => (
+                  <div key={k}>
+                    <p className="tnum text-xl font-semibold tracking-tight">{v}</p>
+                    <p className="mt-0.5 text-xs text-ink-3">{k}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
