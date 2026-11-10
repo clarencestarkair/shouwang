@@ -187,3 +187,15 @@ export default function Home() {
     </div>
   );
 }
+
+function Tile({ href, k, t, d, className, children }: { href: string; k: string; t: string; d: string; className?: string; children?: React.ReactNode }) {
+  return (
+    <Link href={href} className={`glass group relative overflow-hidden rounded-[1.75rem] p-7 transition-colors hover:border-line-2 ${className ?? ""}`}>
+      <p className="text-[13px] font-semibold text-ink-3">{k}</p>
+      <h3 className="mt-2 text-[1.4rem] font-semibold tracking-tight">{t}</h3>
+      <p className="mt-2 max-w-md text-[14.5px] leading-relaxed text-ink-2">{d}</p>
+      {children}
+      <ArrowRight className="absolute right-7 top-7 size-5 text-ink-3 transition-transform group-hover:translate-x-1" aria-hidden />
+    </Link>
+  );
+}
