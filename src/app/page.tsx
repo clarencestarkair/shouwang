@@ -176,3 +176,14 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <footer className="border-t border-line">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-10 text-sm text-ink-3 sm:px-6">
+            <Wordmark />
+            <p>第九届传智杯 AI WEB 网页开发挑战赛参赛作品 · 西安交通大学 AIFuture · 遇到诈骗请拨打 110 · 反诈咨询 96110</p>
+          </div>
+        </footer>
+      </main>
+    </div>
+  );
+}
