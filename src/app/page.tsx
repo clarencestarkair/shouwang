@@ -214,3 +214,16 @@ function Layer({ name, items, accent }: { name: string; items: string[]; accent?
     </div>
   );
 }
+
+function Bar({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div>
+      <p className="mb-2 text-sm text-ink-2">{label}</p>
+      <div className="h-10 overflow-hidden rounded-xl bg-surface-2">
+        <div className="flex h-full items-center justify-end rounded-xl px-3" style={{ width: `${Math.max(value, 14)}%`, background: color }}>
+          <span className="tnum text-sm font-semibold text-ink">{value}%</span>
+        </div>
+      </div>
+    </div>
+  );
+}
