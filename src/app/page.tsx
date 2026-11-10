@@ -143,6 +143,20 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ———————— 架构 ———————— */}
+        <section className="border-t border-line">
+          <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+            <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-accent">Architecture</p>
+            <h2 className="mt-3 text-[2.3rem] font-semibold tracking-tight sm:text-[2.9rem]">多智能体流水线，一套可复用的能力核心</h2>
+            <div className="mt-12 grid gap-3">
+              <Layer name="浏览器端" items={["Next.js 15 · React 19", "PII 脱敏", "jsQR 二维码", "Web Speech 语音", "UI Message Stream"]} />
+              <Layer name="智能体" accent items={["感知 Agent · VLM", "规则引擎 · 注入检测", "研判 Agent · Tool Loop", "安全审查 · 双通道", "演练 / 教练 Agent"]} />
+              <Layer name="能力核心" items={[`RAG · ${CASES.length} 案例 + ${KNOWLEDGE.length} 常识`, "BM25 + 向量 · RRF", "号码核验", "链接仿冒核验", "MCP Server（stdio / HTTP）"]} />
+              <Layer name="模型层" items={["OpenAI 兼容协议", "文本 / 视觉 / 向量分别配置", "通义千问 · DeepSeek · Claude", "无模型时规则兜底"]} />
+            </div>
+          </div>
+        </section>
+
         {/* ———————— 评测 ———————— */}
         <section className="border-t border-line">
           <div className="mx-auto grid max-w-6xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[1fr_1.15fr] lg:items-center">
