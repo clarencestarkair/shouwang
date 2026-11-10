@@ -70,3 +70,44 @@ export function HomeStory() {
     refs.current.forEach((el) => el && io.observe(el));
     return () => io.disconnect();
   }, []);
+
+  return (
+    <div className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]">
+      <div className="lg:sticky lg:top-28 lg:self-start">
+        <StoryPhone step={active} />
+      </div>
+      <ol className="space-y-4">
+        {STEPS.map((s, i) => {
+          const Icon = s.icon;
+          return (
+            <li
+              key={s.t}
+              ref={(el) => {
+                refs.current[i] = el;
+              }}
+              data-i={i}
+              className={cn("glass rounded-[1.5rem] p-6 transition-all duration-500 lg:min-h-[13rem]", active === i ? "border-line-2 opacity-100" : "opacity-60")}
+            >
+              <div className="flex items-center gap-3">
+                <span className={cn("grid size-10 place-items-center rounded-xl transition-colors", active === i ? "bg-ink text-bg" : "bg-surface-3 text-ink-2")}>
+                  <Icon className="size-5" aria-hidden />
+                </span>
+                <span className="font-mono text-xs text-ink-3">STEP {i + 1}</span>
+              </div>
+              <h3 className="mt-4 text-[1.35rem] font-semibold tracking-tight">{s.t}</h3>
+              <p className="mt-2 max-w-[34rem] leading-relaxed text-ink-2">{s.d}</p>
+              <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-2">
+                {s.data.map(([k, v]) => (
+                  <div key={k}>
+                    <dt className="text-[12px] text-ink-3">{k}</dt>
+                    <dd className="tnum mt-0.5 font-mono text-[15px] text-ink">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
