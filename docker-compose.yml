@@ -1,0 +1,11 @@
+services:
+  shouwang:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env.local
+    volumes:
+      - shouwang-runtime:/app/data/runtime
+    restart: unless-stopped
+volumes:
+  shouwang-runtime:
