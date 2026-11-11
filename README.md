@@ -114,3 +114,28 @@ docker compose up -d --build        # 读取 .env.local，预警数据挂载卷�
 | --- | --- | --- | --- | --- |
 | 规则引擎 | 50.0% | 50.0% | 12.5% | 12.5% |
 | **双通道（最终）** | **93.8%** | 88.9% | **100%** | 12.5% |
+
+> 骗子换个说法，规则召回率跌到 12.5%，Agent 仍全部识别；唯一误报是真实的反诈中心预警短信被保守判为“需警惕”。评测集规模有限（共 46 例），常规集与规则同期编写，结果偏乐观。
+
+## 目录结构
+
+```
+src/
+├── app/                    # 页面与 API 路由（App Router）
+│   ├── elder/ family/ drill/ cases/
+│   └── api/ chat · drill · alerts(+stream) · cases · mcp · status
+├── components/             # 按业务域划分的组件
+│   ├── common/             # 风险仪表 RiskGauge、Logo、导航
+│   ├── elder/              # 输入区、思考过程、风险报告卡
+│   ├── family/ drill/ cases/
+├── lib/
+│   ├── core/               # 纯函数核心：规则引擎、RAG、号码/链接核验、安全护栏
+│   ├── ai/                 # 模型接入、Prompt、Agent 工具、消息类型
+│   ├── mcp/                # MCP Server 定义
+│   ├── store/              # 家属预警存储 + 发布订阅
+│   ├── client/             # 端侧能力：图像预处理、语音
+│   └── stores/             # Zustand 状态
+data/                       # 案例库、知识库、评测集、向量索引
+mcp-server/                 # MCP stdio 入口
+scripts/                    # 向量索引构建、离线评测
+```
