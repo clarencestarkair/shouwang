@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>守望 · 银发反诈守护 Agent · 技术文档</title>
+<style>
+  @page { size: A4; margin: 18mm 17mm 18mm 17mm; }
+  :root {
+    --ink: #16181d; --ink2: #4b505b; --ink3: #7c818c; --line: #e3e5ea; --paper: #fafbfc; --paper2: #f2f3f6;
+    --pine: #1f6feb; --pine-soft: #eaf1fe; --cinnabar: #d93a35; --cin-soft: #fdeceb; --amber: #e8890c; --amber-soft: #fdf3e2;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; color: var(--ink); font-size: 10.2pt; line-height: 1.75; }
+  h1, h2, h3, .serif { font-family: "PingFang SC", "Noto Sans SC", sans-serif; letter-spacing: -0.01em; }
+  h1 { font-size: 21pt; margin: 0 0 4mm; font-weight: 600; }
+  h1 .no { color: var(--ink3); margin-right: 3mm; font-weight: 500; }
+  h2 { font-size: 13.5pt; margin: 7mm 0 2.5mm; }
+  h3 { font-size: 11.2pt; margin: 5mm 0 1.5mm; }
+  p { margin: 1.6mm 0; text-align: justify; }
+  /* 章节连续排版，只在封面、目录、第 1 章前分页，避免短章节留下大片空白 */
+  .chapter { margin-top: 9mm; padding-top: 5mm; border-top: 1.5px solid var(--ink); }
+  .chapter.newpage { break-before: page; margin-top: 0; padding-top: 0; border-top: 0; }
+  h1, h2, h3 { break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+  .lead { color: var(--ink2); font-size: 10.6pt; }
+  table { width: 100%; border-collapse: collapse; margin: 2.5mm 0 3.5mm; font-size: 9.2pt; line-height: 1.55; }
+  tr { break-inside: avoid; }
+  th, td { border-bottom: 1px solid var(--line); padding: 1.6mm 2mm; text-align: left; vertical-align: top; }
+  th { background: var(--paper2); font-weight: 600; border-bottom: 1.5px solid #cfd3da; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .good { color: var(--pine); font-weight: 600; }
+  .bad { color: var(--cinnabar); font-weight: 600; }
+  figure { margin: 3mm 0 4mm; break-inside: avoid; }
+  figure img { display: block; width: auto; max-width: 100%; max-height: 100mm; margin: 0 auto; object-fit: contain; border: 1px solid var(--line); border-radius: 2mm; }
+  .two figure img { max-height: 78mm; }
+  figcaption { font-size: 8.8pt; color: var(--ink3); text-align: center; margin-top: 1.5mm; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .callout { background: var(--paper2); border-radius: 2mm; padding: 2.6mm 3.5mm; margin: 3mm 0; font-size: 9.6pt; break-inside: avoid; }
+  .callout.pine { background: var(--pine-soft); }
+  .callout.red { background: var(--cin-soft); }
+  .callout b { color: var(--ink); }
+  code, .mono { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 8.6pt; }
+  pre { background: #16181d; color: #e6e8ec; border-radius: 2mm; padding: 3mm 3.5mm; font-size: 8.2pt; line-height: 1.55; overflow: hidden; white-space: pre-wrap; break-inside: avoid; margin: 2.5mm 0 3.5mm; }
+  pre .c { color: #8b93a1; }
+  ul, ol { margin: 1.5mm 0; padding-left: 5.5mm; }
+  li { margin: .8mm 0; }
+  .tag { display: inline-block; font-size: 8pt; padding: 0 1.8mm; border-radius: 1mm; background: var(--pine-soft); color: var(--pine); margin-right: 1mm; }
+  .tag.red { background: var(--cin-soft); color: var(--cinnabar); }
+  svg text { font-family: "PingFang SC", sans-serif; }
+  /* 封面 */
+  .cover { height: 258mm; display: flex; flex-direction: column; position: relative; }
+  .cover .seal { width: 22mm; height: 22mm; }
+  .cover h1 { font-size: 36pt; margin: 18mm 0 3mm; line-height: 1.15; font-weight: 600; letter-spacing: -0.02em; }
+  .cover .sub { font-size: 13pt; color: var(--ink2); }
+  .cover .meta { margin-top: auto; border-top: 1px solid var(--line); padding-top: 5mm; font-size: 10.5pt; line-height: 2; }
+  .cover .meta span { display: inline-block; width: 26mm; color: var(--ink3); }
+  .toc ol { list-style: none; padding: 0; columns: 1; }
+  .toc li { display: flex; gap: 3mm; border-bottom: 1px dotted var(--line); padding: 1.3mm 0; margin: 0; }
+  .toc li .n { color: var(--ink3); width: 9mm; font-weight: 600; }
+  .toc li.sub { padding-left: 9mm; font-size: 9.4pt; color: var(--ink2); border: 0; padding-top: .3mm; padding-bottom: .3mm; }
+  .kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 3mm 0; }
+  .kpi div { border-top: 2px solid var(--ink); padding-top: 1.5mm; }
+  .kpi b { font-size: 18pt; display: block; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+  .kpi small { color: var(--ink3); font-size: 8.4pt; }
+</style>
+</head>
+<body>
