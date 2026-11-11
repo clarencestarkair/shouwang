@@ -134,3 +134,12 @@
     <tr><td><b>案例库</b></td><td>48 个典型骗局 + 32 条反诈常识；自然语言检索，展示关键词 / 语义双通道命中</td><td>BM25 + 向量混合检索</td></tr>
     <tr><td><b>MCP Server</b></td><td>4 个反诈工具 + 案例资源以 MCP 标准开放，支持 stdio 与 Streamable HTTP</td><td>Model Context Protocol</td></tr>
   </table>
+
+  <h2>1.4 关键指标</h2>
+  <div class="kpi">
+    <div><b>100%</b><small>常规评测集召回率（30 例，误报 0）</small></div>
+    <div><b>100%</b><small>困难评测集召回率（16 例，规则仅 12.5%）</small></div>
+    <div><b>23 / 23</b><small>核心模块单元测试通过</small></div>
+    <div><b>307 kB</b><small>长辈端首屏 JS（优化前 386 kB）</small></div>
+  </div>
+  <p style="font-size:9pt;color:var(--ink3)">评测在开发测试环境完成（文本/视觉模型 Claude Opus 5.5，向量模型 text-embedding-3-small），方法与局限见第 6 章。</p>
