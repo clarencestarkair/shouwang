@@ -12,3 +12,17 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
+RUN addgroup -S app && adduser -S app -G app
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
+# 案例库、知识库与向量索引（运行时读取）；runtime 目录用于预警持久化
+COPY --from=build /app/data ./data
+RUN mkdir -p data/runtime && chown -R app:app data
+USER app
+EXPOSE 3000
+CMD ["node", "server.js"]
