@@ -475,3 +475,17 @@ server.registerTool("check_url", {
     <tr><td>端到端 Agent 评测</td><td class="mono">pnpm eval:agent</td><td>真实模型 + 工具 + 安全审查，三通道对比</td></tr>
     <tr><td>浏览器 E2E</td><td>Playwright 脚本</td><td>长辈端上传 → 端侧扫码 → 报告 → 子女端预警全链路</td></tr>
   </table>
+
+  <h2>6.2 单元测试</h2>
+  <p>使用 Node 内置测试运行器（node:test + tsx），无额外依赖，23 项全部通过。重点用例包括：双通道校验在规则远高于模型时上调等级并补充 96110；检测到注入时至少“需警惕”；危险建议过滤对“验证码不能告诉任何人”等否定句不误删；脱敏后不残留身份证号与验证码；每类诈骗案例不少于 3 条。</p>
+
+  <h2>6.3 端到端 Agent 评测</h2>
+  <p>评测脚本对每条样本调用真实的 <code>/api/chat</code>，分别统计三个通道：<b>规则</b>（初筛分 ≥ 40 判为诈骗）、<b>模型</b>（模型提交报告时的原始等级 ≥ 需警惕）、<b>双通道</b>（安全审查后的最终等级）。</p>
+  <h3>常规评测集（30 例：诈骗 20 例覆盖 14 类 + 注入，正常 10 例）</h3>
+  <table>
+    <tr><th>通道</th><th class="num">准确率</th><th class="num">精确率</th><th class="num">召回率</th><th class="num">误报率</th></tr>
+    <tr><td>规则引擎</td><td class="num">96.7%</td><td class="num">100%</td><td class="num">95.0%</td><td class="num">0%</td></tr>
+    <tr><td>大模型</td><td class="num">100%</td><td class="num">100%</td><td class="num">100%</td><td class="num">0%</td></tr>
+    <tr><td><b>双通道（最终）</b></td><td class="num good">100%</td><td class="num good">100%</td><td class="num good">100%</td><td class="num good">0%</td></tr>
+  </table>
+  <p>诈骗类型识别准确率 90%（2 例把“冒充医保/人社发链接”归为“钓鱼链接”而非“冒充政府补贴”，二者本身存在交叉）；平均每次分析 2.9 次工具调用；兜底 0 例。</p>
