@@ -180,3 +180,57 @@
     <li><b>可移植性：</b>统一 OpenAI 兼容协议，可在国内外多家模型服务商间切换。</li>
   </ul>
 </section>
+
+<!-- ============ 3 系统架构 ============ -->
+<section class="chapter">
+  <h1><span class="no">3</span>系统架构设计</h1>
+
+  <h2>3.1 总体架构</h2>
+  <p>系统分为四层：<b>浏览器端</b>负责交互与端侧预处理；<b>服务端流水线</b>编排多个智能体；<b>能力层</b>是与框架无关的纯函数核心（规则、检索、核验、护栏），同时被 Web Agent 与 MCP Server 复用；<b>模型层</b>通过 OpenAI 兼容协议接入文本、视觉、向量三类模型。</p>
+  <figure>
+  <svg viewBox="0 0 760 430" width="100%">
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7c818c"/></marker></defs>
+    <!-- 端侧 -->
+    <rect x="10" y="10" width="740" height="92" rx="8" fill="#f2f3f6" stroke="#e3e5ea"/>
+    <text x="24" y="32" font-size="13" font-weight="700" fill="#16181d">浏览器端（Next.js App Router · React 19 · TypeScript · Tailwind v4 · Zustand）</text>
+    <g font-size="11.5" fill="#16181d">
+      <rect x="24" y="44" width="160" height="46" rx="6" fill="#fff"/><text x="36" y="63">长辈端 /elder</text><text x="36" y="80" fill="#4b505b" font-size="10.5">语音 · 拍照 · 风险仪表</text>
+      <rect x="194" y="44" width="150" height="46" rx="6" fill="#fff"/><text x="206" y="63">子女端 /family</text><text x="206" y="80" fill="#4b505b" font-size="10.5">SSE 实时预警</text>
+      <rect x="354" y="44" width="150" height="46" rx="6" fill="#fff"/><text x="366" y="63">反诈演练 /drill</text><text x="366" y="80" fill="#4b505b" font-size="10.5">AI 扮演骗子</text>
+      <rect x="514" y="44" width="222" height="46" rx="6" fill="#eaf1fe"/><text x="526" y="63" fill="#1f6feb" font-weight="600">端侧预处理</text><text x="526" y="80" fill="#1f6feb" font-size="10.5">PII 脱敏 · 图片压缩 · jsQR 解码</text>
+    </g>
+    <line x1="380" y1="104" x2="380" y2="128" stroke="#7c818c" stroke-width="1.5" marker-end="url(#ar)"/>
+    <text x="390" y="121" font-size="10.5" fill="#7c818c">UI Message Stream（类型安全的流式协议）· SSE</text>
+    <!-- 流水线 -->
+    <rect x="10" y="132" width="740" height="104" rx="8" fill="#fff" stroke="#1f6feb" stroke-width="1.5"/>
+    <text x="24" y="154" font-size="13" font-weight="700" fill="#1f6feb">服务端 · /api/chat 多智能体流水线（Vercel AI SDK v6）</text>
+    <g font-size="11.5">
+      <rect x="24" y="166" width="128" height="56" rx="6" fill="#eaf1fe"/><text x="36" y="188" font-weight="600">① 感知 Agent</text><text x="36" y="206" font-size="10.5" fill="#4b505b">VLM 看图识字</text>
+      <rect x="166" y="166" width="128" height="56" rx="6" fill="#eaf1fe"/><text x="178" y="188" font-weight="600">② 规则初筛</text><text x="178" y="206" font-size="10.5" fill="#4b505b">30 条规则 · 注入检测</text>
+      <rect x="308" y="166" width="170" height="56" rx="6" fill="#eaf1fe"/><text x="320" y="188" font-weight="600">③ 研判 Agent（Tool Loop）</text><text x="320" y="206" font-size="10.5" fill="#4b505b">检索 · 核验 · 提交报告</text>
+      <rect x="492" y="166" width="120" height="56" rx="6" fill="#eaf1fe"/><text x="504" y="188" font-weight="600">④ 安全审查</text><text x="504" y="206" font-size="10.5" fill="#4b505b">双通道 · 过滤</text>
+      <rect x="626" y="166" width="110" height="56" rx="6" fill="#fdeceb"/><text x="638" y="188" font-weight="600" fill="#d93a35">⑤ 降级兜底</text><text x="638" y="206" font-size="10.5" fill="#d93a35">模型不可用时</text>
+      <path d="M152 194 H164 M294 194 H306 M478 194 H490" stroke="#1f6feb" stroke-width="1.5" marker-end="url(#ar)"/>
+    </g>
+    <line x1="380" y1="238" x2="380" y2="262" stroke="#7c818c" stroke-width="1.5" marker-end="url(#ar)"/>
+    <!-- 能力层 -->
+    <rect x="10" y="266" width="740" height="76" rx="8" fill="#f2f3f6" stroke="#e3e5ea"/>
+    <text x="24" y="288" font-size="13" font-weight="700">能力层 · src/lib/core（纯函数，Web Agent 与 MCP Server 共用）</text>
+    <g font-size="11">
+      <rect x="24" y="298" width="128" height="32" rx="5" fill="#fff"/><text x="34" y="318">RAG 混合检索</text>
+      <rect x="160" y="298" width="112" height="32" rx="5" fill="#fff"/><text x="170" y="318">号码核验</text>
+      <rect x="280" y="298" width="112" height="32" rx="5" fill="#fff"/><text x="290" y="318">链接仿冒核验</text>
+      <rect x="400" y="298" width="112" height="32" rx="5" fill="#fff"/><text x="410" y="318">规则引擎</text>
+      <rect x="520" y="298" width="96" height="32" rx="5" fill="#fff"/><text x="530" y="318">安全护栏</text>
+      <rect x="624" y="298" width="112" height="32" rx="5" fill="#fff"/><text x="634" y="318">预警存储 + Pub/Sub</text>
+    </g>
+    <!-- 模型层 + MCP -->
+    <rect x="10" y="356" width="470" height="64" rx="8" fill="#fff" stroke="#e3e5ea"/>
+    <text x="24" y="378" font-size="13" font-weight="700">模型层（OpenAI 兼容协议，可分别配置服务商）</text>
+    <text x="24" y="402" font-size="11" fill="#4b505b">文本模型（规划/工具调用）· 视觉模型（感知）· 向量模型（语义检索）</text>
+    <rect x="492" y="356" width="258" height="64" rx="8" fill="#fdf3e2" stroke="#f3dcb0"/>
+    <text x="506" y="378" font-size="13" font-weight="700" fill="#9a5b06">MCP Server</text>
+    <text x="506" y="402" font-size="11" fill="#9a5b06">stdio / Streamable HTTP · 4 工具 + 资源</text>
+  </svg>
+  <figcaption>图 3-1　守望总体架构</figcaption>
+  </figure>
