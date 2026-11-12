@@ -406,3 +406,8 @@ writer.merge(result.toUIMessageStream({ sendStart: false }));</pre>
     <li><b>前端性能：</b>react-markdown 与 jsQR 按需动态加载，长辈端首屏 JS 由 386 kB 降至 307 kB；页面静态预渲染。</li>
   </ul>
 </section>
+
+  <h2>5.2 子女端：家庭守护中心</h2>
+  <p>子女端采用暗色“守护中心”：可在多位家人之间切换；四个 KPI（本周检测、拦下骗局、平均风险指数、待沟通）带周环比；<b>14 天风险趋势</b>以每日最高风险指数画线并标出 40 / 65 两条阈值，<b>骗局类型雷达</b>、<b>来源渠道环图</b>和<b>星期 × 24 小时热力图</b>帮助子女看清父母什么时候、通过什么渠道、最容易遇到哪类骗局。<b>AI 守护周报</b>由大模型根据近 7 天统计写成，并给出具体建议（例如“高风险多发生在晚上 6 点后，可以把通话放在晚饭后”）。高风险到达时通过 SSE 实时弹出提醒，附“怎么跟妈妈说”的沟通建议。图表均为手写 SVG，无第三方图表库；演示种子数据在界面上明确标注“含演示数据”。</p>
+  <figure><img src="../assets/05-family.jpg" /><figcaption>图 5-4　家庭守护中心：KPI、风险趋势、守护记录与详情</figcaption></figure>
+  <figure><img src="../assets/family-alert.jpg" /><figcaption>图 5-5　长辈端上传传单约 49 秒后，子女端无需刷新即弹出极高风险预警</figcaption></figure>
