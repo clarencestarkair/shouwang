@@ -513,3 +513,12 @@ server.registerTool("check_url", {
     <li>子女端无需刷新即收到红色预警横幅，详情中的内容预览为“用户原话 + 图片文字 + 二维码”；</li>
     <li>同一次分析只渲染一个思考过程面板（修复了模型流 start 事件导致消息拆分的问题）。</li>
   </ul>
+
+  <h2>6.5 性能</h2>
+  <table>
+    <tr><th>页面</th><th class="num">首屏 JS（生产构建）</th><th>渲染方式</th></tr>
+    <tr><td>首页 /</td><td class="num">130 kB</td><td>静态预渲染</td></tr>
+    <tr><td>长辈端 /elder</td><td class="num">307 kB（优化前 386 kB）</td><td>静态预渲染 + 按需加载 Markdown、jsQR</td></tr>
+    <tr><td>子女端 /family</td><td class="num">136 kB</td><td>静态预渲染 + SSE</td></tr>
+    <tr><td>案例库 /cases</td><td class="num">133 kB</td><td>静态预渲染（案例数据随 HTML 下发）</td></tr>
+  </table>
