@@ -452,3 +452,12 @@ server.registerTool("check_url", {
   inputSchema: { url: z.string() },
   annotations: { readOnlyHint: true },
 }, async ({ url }) => json(checkUrl(url)));
+
+<span class="c">// 联调结果：tools/call check_url("https://yibao-gov-cn.top/renew")</span>
+<span class="c">// → riskScore 75，tags: 高风险后缀 .top / 冒用官方字样 gov、yibao / 多段连字符</span></pre>
+
+  <div class="two">
+    <figure><img src="../assets/01b-home-story.jpg" /><figcaption>图 5-10　首页叙事：“一张诈骗传单的 40 秒”，左侧手机随滚动变为整屏警示</figcaption></figure>
+    <figure style="text-align:center"><img src="../assets/09-elder-mobile.jpg" style="width:52%;margin:0 auto" /><figcaption>图 5-11　移动端：语音按钮独占一行</figcaption></figure>
+  </div>
+</section>
