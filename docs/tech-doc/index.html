@@ -522,3 +522,12 @@ server.registerTool("check_url", {
     <tr><td>子女端 /family</td><td class="num">136 kB</td><td>静态预渲染 + SSE</td></tr>
     <tr><td>案例库 /cases</td><td class="num">133 kB</td><td>静态预渲染（案例数据随 HTML 下发）</td></tr>
   </table>
+
+  <h2>6.6 部署</h2>
+  <ul>
+    <li><b>Docker：</b>多阶段构建，最终镜像只包含 Next.js standalone 产物、静态资源与 data 目录，以非 root 用户运行；<code>docker compose up -d</code> 一键启动，预警数据挂载卷持久化。</li>
+    <li><b>云服务器 / Node：</b><code>pnpm build &amp;&amp; pnpm start</code>（prestart 自动拷贝静态资源、数据与环境变量到 standalone 目录）。</li>
+    <li><b>配置：</b>只需 <code>LLM_API_KEY</code> 即可运行；视觉、向量模型可选；未配置模型时自动进入兜底模式，长辈端、子女端、案例库仍可完整演示。API 密钥只通过环境变量注入，不进入仓库。</li>
+    <li><b>安全响应头：</b>X-Content-Type-Options、Referrer-Policy、Permissions-Policy（仅本站可用麦克风/摄像头）。</li>
+  </ul>
+</section>
