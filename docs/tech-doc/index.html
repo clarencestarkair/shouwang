@@ -290,3 +290,12 @@
 <section class="chapter">
   <h1><span class="no">4</span>AI 技术方案</h1>
   <p class="lead">守望的 AI 不是“一次 API 调用”，而是一条由感知、规则、研判、审查组成的多智能体流水线。本章说明每个环节的选型理由、集成方式与优化策略。</p>
+
+  <h2>4.1 模型选型</h2>
+  <table>
+    <tr><th style="width:15%">用途</th><th style="width:28%">默认 / 测试模型</th><th>选型理由</th></tr>
+    <tr><td>文本推理</td><td>默认 qwen-plus；测试 Claude Opus 5.5</td><td>需要稳定的多步工具调用与中文口语化表达。默认选国内服务便于合规与部署；开发阶段用更强模型确定能力上限</td></tr>
+    <tr><td>视觉感知</td><td>默认 qwen-vl-max；测试 Claude Opus 5.5</td><td>要求逐字转写截图文字、识别画面类型与可疑细节（个人收款账户、倒计时等）</td></tr>
+    <tr><td>语义向量</td><td>默认 text-embedding-v3；测试 text-embedding-3-small</td><td>中文语义相似度；文档向量离线预计算，运行时只需对查询做一次向量化</td></tr>
+  </table>
+  <p>三类模型通过环境变量独立配置服务商（如文本用 DeepSeek、视觉用通义千问 VL）。对于不接受 <code>temperature</code> 参数的新模型，通过 <code>LLM_SUPPORTS_TEMPERATURE=false</code> 自动省略，业务代码无需感知差异。</p>
