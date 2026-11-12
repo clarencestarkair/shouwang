@@ -294,6 +294,20 @@
     <li><b>适老化字号系统：</b>所有尺寸使用 rem，三档字号只需改变根字号（18/20/23px），整个界面等比缩放。</li>
   </ul>
 
+  <h2>3.5 接口设计</h2>
+  <table>
+    <tr><th style="width:26%">接口</th><th style="width:10%">方法</th><th>说明</th></tr>
+    <tr><td class="mono">/api/chat</td><td>POST</td><td>多智能体分析流水线，返回 UI Message Stream</td></tr>
+    <tr><td class="mono">/api/alerts</td><td>GET / PATCH / DELETE</td><td>预警列表 / 更新处理状态 / 重置演示数据</td></tr>
+    <tr><td class="mono">/api/alerts/stream</td><td>GET</td><td>SSE 实时推送，20s 心跳保活</td></tr>
+    <tr><td class="mono">/api/cases?q=</td><td>GET</td><td>混合检索，返回结果与命中通道</td></tr>
+    <tr><td class="mono">/api/drill · /api/drill/review</td><td>POST</td><td>反诈演练流式对话 / 结构化复盘</td></tr>
+    <tr><td class="mono">/api/mcp</td><td>GET / POST</td><td>MCP Streamable HTTP（无状态模式）</td></tr>
+    <tr><td class="mono">/api/digest</td><td>POST</td><td>AI 守护周报：统计近 7 天记录，由大模型生成周报与建议（带缓存与模板兜底）</td></tr>
+    <tr><td class="mono">/api/status</td><td>GET</td><td>模型配置与向量索引状态</td></tr>
+  </table>
+</section>
+
 <!-- ============ 4 AI 技术方案 ============ -->
 <section class="chapter">
   <h1><span class="no">4</span>AI 技术方案</h1>
@@ -317,3 +331,22 @@
     <tr><td><b>安全审查</b></td><td>对报告做护栏检查与修正，决定是否通知家属</td><td>双通道就高不就低、危险建议过滤（识别否定语义）、高风险强制兜底动作</td></tr>
     <tr><td><b>降级兜底</b></td><td>模型未配置 / 超时 / 报错时，由规则 + 检索生成保守报告</td><td>前端渲染同一张报告卡，并标注“离线兜底模式”</td></tr>
   </table>
+
+  <h2>4.3 Prompt 工程</h2>
+  <ul>
+    <li><b>工作流显式化：</b>系统提示明确“先检索、再核验、后报告、最后口语总结”四步，并要求互不依赖的工具并行调用，使行为稳定可控。</li>
+    <li><b>专业判断与通俗表达分离：</b>判断原则面向“反诈民警”，表达规范面向“晚辈对长辈”：称呼“您”、短句、不用“钓鱼”“话术”等术语、先结论后理由、不责备。</li>
+    <li><b>输出约束交给工具 schema：</b>等级、分数、类型枚举、理由（每条必须带原文证据）、行动清单、引用案例、是否通知家属、给子女的沟通建议，全部通过 <code>submitRiskReport</code> 的入参 schema 约束，避免自由文本解析的不稳定。</li>
+    <li><b>不可信内容隔离：</b>用户转发的内容统一包裹在 <code>&lt;untrusted_content&gt;</code> 中，并在系统提示中声明其中的指令一律不执行、且应视为可疑特征；包裹前会剔除伪造的闭合标签，防止逃逸。</li>
+    <li><b>预分析作为参考而非结论：</b>规则引擎结果以“仅供参考”注入上下文，模型若判断明显低于规则，必须在理由中说明。</li>
+  </ul>
+<pre><span class="c">// 研判 Agent：工具循环 + 结构化报告（src/app/api/chat/route.ts，节选）</span>
+const result = streamText({
+  model: textModel(),
+  system: `${GUARDIAN_SYSTEM}\n\n${FAMILY_ADVICE_HINT}`,
+  messages: [...history, { role: "user", content: contextBlock }],
+  tools: createGuardianTools({ elderName, ruleScore: scan.score, injectionSuspicious, contentPreview }),
+  stopWhen: stepCountIs(8),
+  ...sampling(0.3),
+});
+writer.merge(result.toUIMessageStream({ sendStart: false }));</pre>
