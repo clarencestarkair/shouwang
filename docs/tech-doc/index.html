@@ -489,3 +489,18 @@ server.registerTool("check_url", {
     <tr><td><b>双通道（最终）</b></td><td class="num good">100%</td><td class="num good">100%</td><td class="num good">100%</td><td class="num good">0%</td></tr>
   </table>
   <p>诈骗类型识别准确率 90%（2 例把“冒充医保/人社发链接”归为“钓鱼链接”而非“冒充政府补贴”，二者本身存在交叉）；平均每次分析 2.9 次工具调用；兜底 0 例。</p>
+
+  <h3>困难评测集（16 例：未参与规则编写的隐蔽诈骗 8 例 + 易误报正常消息 8 例）</h3>
+  <table>
+    <tr><th>通道</th><th class="num">准确率</th><th class="num">精确率</th><th class="num">召回率</th><th class="num">误报率</th></tr>
+    <tr><td>规则引擎</td><td class="num">50.0%</td><td class="num">50.0%</td><td class="num bad">12.5%</td><td class="num">12.5%</td></tr>
+    <tr><td>大模型</td><td class="num">93.8%</td><td class="num">88.9%</td><td class="num">100%</td><td class="num">12.5%</td></tr>
+    <tr><td><b>双通道（最终）</b></td><td class="num good">93.8%</td><td class="num">88.9%</td><td class="num good">100%</td><td class="num">12.5%</td></tr>
+  </table>
+  <div class="callout">
+    <b>结论与分析：</b>
+    ① 骗子换一种说法（“儿子同事代为借钱”“报一下卡背面三位数”“保单激活”），规则召回率跌到 12.5%，而研判 Agent 结合案例检索仍然 100% 识别——这正是引入大模型的价值。
+    ② 支付宝转账通知被规则误打 58 分（命中“转账”“立即”），模型判为低风险；由于双通道阈值为“相差 ≥ 2 级才上调”，最终未被误报，验证了阈值设计。
+    ③ 唯一误报是真实的反诈中心预警短信被判为“需警惕”（模型因无法核实发送号码而保守处理），属于偏安全的错误，后续可通过 12381 官方号码白名单消除。
+  </div>
+  <div class="callout red"><b>局限说明：</b>评测集规模较小（共 46 例），常规集与规则同期编写、结果偏乐观；困难集为补充的独立样本。耗时在测试环境中平均约 45 秒/次（模型经隧道网关访问），实际部署使用国内低时延模型可显著缩短。后续计划扩充至数百例并引入人工标注。</div>
