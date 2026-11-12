@@ -360,3 +360,14 @@ writer.merge(result.toUIMessageStream({ sendStart: false }));</pre>
     <li><b>优雅降级：</b>向量索引缺失或向量服务失败时自动只走 BM25，检索不中断。</li>
     <li><b>Agent 自主检索：</b>检索作为工具交给研判 Agent，它会根据内容换不同说法检索 1~2 次（实测平均每次分析 2.9~3.0 次工具调用）。</li>
   </ul>
+
+  <h2>4.5 Function Calling 与 MCP</h2>
+  <table>
+    <tr><th style="width:24%">工具</th><th>功能</th></tr>
+    <tr><td class="mono">searchFraudCases</td><td>案例/知识混合检索，返回片段、得分与命中通道</td></tr>
+    <tr><td class="mono">checkPhoneNumber</td><td>官方号码白名单、境外前缀、虚拟号段、仿冒 95/96 客服号、106 企业短信号、400 号</td></tr>
+    <tr><td class="mono">checkUrl</td><td>官方域名白名单、编辑距离仿冒、官方字样嵌入（如 yibao-gov-cn.top）、高风险后缀、IP 直连、短链、Punycode 同形字</td></tr>
+    <tr><td class="mono">submitRiskReport</td><td>提交结构化报告；执行时经过安全审查，并写入家属预警</td></tr>
+    <tr><td class="mono">notifyFamily</td><td>老人明确要求“告诉我儿子”时主动通知家属</td></tr>
+  </table>
+  <p><b>MCP：</b>检索、查号、核链、文本扫描 4 个能力同时以 MCP 标准工具开放（另提供 <code>shouwang://cases/{id}</code> 资源）。Web Agent 与 MCP Server 调用的是同一份 <code>lib/core</code> 实现，保证行为一致。MCP Server 支持本地 stdio（<code>pnpm mcp</code>）与远程 Streamable HTTP（<code>/api/mcp</code>），已通过 JSON-RPC 完成 initialize / tools/list / tools/call 联调。</p>
