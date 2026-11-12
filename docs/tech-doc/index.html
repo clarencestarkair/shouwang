@@ -461,3 +461,17 @@ server.registerTool("check_url", {
     <figure style="text-align:center"><img src="../assets/09-elder-mobile.jpg" style="width:52%;margin:0 auto" /><figcaption>图 5-11　移动端：语音按钮独占一行</figcaption></figure>
   </div>
 </section>
+
+<!-- ============ 6 测试与部署 ============ -->
+<section class="chapter">
+  <h1><span class="no">6</span>测试与部署</h1>
+
+  <h2>6.1 测试体系</h2>
+  <table>
+    <tr><th style="width:22%">层次</th><th style="width:30%">命令</th><th>内容</th></tr>
+    <tr><td>静态检查</td><td class="mono">pnpm typecheck · pnpm lint</td><td>TypeScript 严格模式、ESLint（next/core-web-vitals）零错误零警告</td></tr>
+    <tr><td>单元测试</td><td class="mono">pnpm test</td><td>23 项，覆盖规则、号码、链接、安全护栏、RAG、兜底</td></tr>
+    <tr><td>离线评测</td><td class="mono">pnpm eval</td><td>规则引擎准确率、BM25 Hit@3</td></tr>
+    <tr><td>端到端 Agent 评测</td><td class="mono">pnpm eval:agent</td><td>真实模型 + 工具 + 安全审查，三通道对比</td></tr>
+    <tr><td>浏览器 E2E</td><td>Playwright 脚本</td><td>长辈端上传 → 端侧扫码 → 报告 → 子女端预警全链路</td></tr>
+  </table>
