@@ -391,3 +391,9 @@ writer.merge(result.toUIMessageStream({ sendStart: false }));</pre>
     <tr><td>可解释性</td><td>每条理由附原话证据；引用案例编号；思考过程逐步可见；安全审查修正记录写入报告</td></tr>
     <tr><td>角色扮演越界</td><td>演练中 AI 骗子不得使用真实机构网址/号码；学员表示要转账或说出验证码时立即暂停并讲解</td></tr>
   </table>
+
+  <h2>4.8 骗局阶段研判与下一步预判</h2>
+  <p>所有电信诈骗都绕不开同一套四步剧本：<b>冒充身份 → 制造恐慌或诱惑 → 让你保密、隔离 → 要钱或要验证码</b>。研判 Agent 的结构化报告新增三个字段：<code>shortVerdict</code>（2~4 字的整屏行动指令）、<code>scamStage</code>（骗子已推进到第几步）、<code>nextMove</code>（预判骗子下一步会让老人做什么）。这让守望从“判断这条消息是不是诈骗”前进到“告诉老人骗局走到了哪、接下来会发生什么”，帮助老人在关键动作之前识破。大模型不可用时，兜底报告依据规则信号的类别（身份 / 施压与诱饵 / 保密与技术隔离 / 资金与凭证）推断阶段。</p>
+
+  <h2>4.9 可观测性：Agent 指挥台</h2>
+  <p>为让评审与开发者看见 AI 的每一步，服务端在流式协议中同时输出：各阶段完成时刻（<code>data-trace.at</code>）、工具调用的起止与耗时（利用 AI SDK 的 <code>onToolCallStart / onToolCallFinish</code> 回调写入 <code>data-tooltime</code>）、模型名称与 token 用量（<code>messageMetadata</code>）。前端据此绘制节点图与甘特时间线，所有数字均来自真实运行，没有模拟值。实测一次传单分析：感知 Agent 14~18 s、研判 Agent 推理约 24~28 s，其中两次检索并行各约 5.5 s，号码与链接核验约 0.2 s。</p>
