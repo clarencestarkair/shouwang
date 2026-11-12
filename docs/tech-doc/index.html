@@ -440,3 +440,15 @@ writer.merge(result.toUIMessageStream({ sendStart: false }));</pre>
     <figure><img src="../assets/07-drill-pick.jpg" /><figcaption>图 5-7　演练剧本选择</figcaption></figure>
     <figure><img src="../assets/08-drill-review.jpg" style="max-height:120mm;object-fit:cover;object-position:top" /><figcaption>图 5-8　一次真实演练与 AI 教练复盘（88 分）</figcaption></figure>
   </div>
+
+  <h2>5.5 案例库：检索过程可解释</h2>
+  <figure><img src="../assets/06-cases.jpg" /><figcaption>图 5-9　输入“有人打电话说我孙子出事了要赔钱”，前 4 条均为冒充亲友 / AI 拟声类案例，并标注双通道命中</figcaption></figure>
+
+  <h2>5.6 MCP Server</h2>
+<pre><span class="c">// 共享核心实现，注册为标准 MCP 工具（src/lib/mcp/server.ts，节选）</span>
+server.registerTool("check_url", {
+  title: "链接仿冒核验",
+  description: "检测仿冒官方域名、高风险后缀、IP 直连、短链、同形字域名。",
+  inputSchema: { url: z.string() },
+  annotations: { readOnlyHint: true },
+}, async ({ url }) => json(checkUrl(url)));
