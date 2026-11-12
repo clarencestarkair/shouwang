@@ -397,3 +397,12 @@ writer.merge(result.toUIMessageStream({ sendStart: false }));</pre>
 
   <h2>4.9 可观测性：Agent 指挥台</h2>
   <p>为让评审与开发者看见 AI 的每一步，服务端在流式协议中同时输出：各阶段完成时刻（<code>data-trace.at</code>）、工具调用的起止与耗时（利用 AI SDK 的 <code>onToolCallStart / onToolCallFinish</code> 回调写入 <code>data-tooltime</code>）、模型名称与 token 用量（<code>messageMetadata</code>）。前端据此绘制节点图与甘特时间线，所有数字均来自真实运行，没有模拟值。实测一次传单分析：感知 Agent 14~18 s、研判 Agent 推理约 24~28 s，其中两次检索并行各约 5.5 s，号码与链接核验约 0.2 s。</p>
+
+  <h2>4.10 优化策略</h2>
+  <ul>
+    <li><b>时延：</b>互不依赖的工具同一轮并行调用；文档向量离线预计算；图片端侧压缩；规则初筛在模型调用前即推送到界面，首条反馈 &lt; 1 秒。</li>
+    <li><b>成本：</b>历史消息中的图片替换为感知文字；检索片段截断至 360 字；报告理由与行动各不超过 3 条。</li>
+    <li><b>稳定性：</b>工具入参 zod 校验；JSON 抽取兼容各服务商结构化输出差异（演练复盘）；模型错误时自动切换兜底并在界面说明。</li>
+    <li><b>前端性能：</b>react-markdown 与 jsQR 按需动态加载，长辈端首屏 JS 由 386 kB 降至 307 kB；页面静态预渲染。</li>
+  </ul>
+</section>
