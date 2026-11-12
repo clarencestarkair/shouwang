@@ -371,3 +371,10 @@ writer.merge(result.toUIMessageStream({ sendStart: false }));</pre>
     <tr><td class="mono">notifyFamily</td><td>老人明确要求“告诉我儿子”时主动通知家属</td></tr>
   </table>
   <p><b>MCP：</b>检索、查号、核链、文本扫描 4 个能力同时以 MCP 标准工具开放（另提供 <code>shouwang://cases/{id}</code> 资源）。Web Agent 与 MCP Server 调用的是同一份 <code>lib/core</code> 实现，保证行为一致。MCP Server 支持本地 stdio（<code>pnpm mcp</code>）与远程 Streamable HTTP（<code>/api/mcp</code>），已通过 JSON-RPC 完成 initialize / tools/list / tools/call 联调。</p>
+
+  <h2>4.6 多模态能力</h2>
+  <ul>
+    <li><b>图像：</b>浏览器端先把图片压缩到长边 ≤ 1600px，再交给视觉模型感知；感知结果以 data-perception 部件流式返回并保留在会话中，后续追问无需重复上传。</li>
+    <li><b>二维码（端侧）：</b>视觉大模型无法“扫码”，守望在浏览器内用 jsQR 解码图片中的二维码，把真实链接交给 <code>checkUrl</code> 核验——实测示例传单中的 <code>ylbt-gov-cn.top</code> 被端侧解出并判为仿冒政府网站。</li>
+    <li><b>语音：</b>按住说话（Web Speech API，中文普通话，实时显示识别文字，松开自动发送）；结论自动以 0.9 倍语速朗读，并自动去除 Markdown 符号。</li>
+  </ul>
