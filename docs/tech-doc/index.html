@@ -159,6 +159,15 @@
     <tr><td><b>社区 / 机构</b></td><td>社区网格员、银行适老化柜台、反诈志愿者</td><td>可复用的反诈能力（工具化、可接入其他 AI 系统）</td></tr>
   </table>
 
+  <h2>2.2 典型场景</h2>
+  <ol>
+    <li><b>电话场景：</b>老人刚挂断一个“上海市公安局”的电话，对方让他把钱转到“安全账户”并保密。老人按住说话，把对方的话复述给守望。</li>
+    <li><b>短信场景：</b>收到“医保卡被冻结，请点击链接认证”的短信，老人截图发给守望。</li>
+    <li><b>线下场景：</b>小区门口发“免费领鸡蛋、领养老补贴”的传单，上面有二维码。老人拍照问守望。</li>
+    <li><b>亲情场景：</b>微信上“孙子”说换了新号、出事了急需用钱，还不让告诉父母。</li>
+    <li><b>训练场景：</b>子女周末陪老人做一次“反诈演练”，让 AI 扮演骗子，老人练习拒绝。</li>
+  </ol>
+
   <h2>2.3 需求与功能映射</h2>
   <table>
     <tr><th style="width:30%">痛点 / 需求</th><th>设计对策</th><th style="width:22%">对应实现</th></tr>
@@ -234,3 +243,16 @@
   </svg>
   <figcaption>图 3-1　守望总体架构</figcaption>
   </figure>
+
+  <h2>3.2 技术栈</h2>
+  <table>
+    <tr><th style="width:18%">层次</th><th style="width:34%">选型</th><th>理由</th></tr>
+    <tr><td>前端框架</td><td>Next.js 15（App Router）· React 19 · TypeScript 严格模式</td><td>页面与 API 同仓，Route Handler 天然支持流式响应；Server Component 直接读取案例库，减少客户端数据请求</td></tr>
+    <tr><td>样式与动效</td><td>Tailwind CSS v4 · OKLCH 设计令牌 · CSS 动画</td><td>设计令牌统一管理冷调中性色、近黑主色与红/橙/绿风险信号色；Geist + 苹方字体；动画只用 transform/opacity，尊重 prefers-reduced-motion</td></tr>
+    <tr><td>AI 交互</td><td>Vercel AI SDK v6（streamText / tool / useChat / UI Message Stream）</td><td>工具调用循环、类型安全的流式协议、工具结果直接驱动生成式 UI</td></tr>
+    <tr><td>模型接入</td><td>@ai-sdk/openai-compatible</td><td>一套代码适配通义千问、DeepSeek、智谱、Claude 等；文本/视觉/向量可独立配置</td></tr>
+    <tr><td>状态管理</td><td>useChat（会话）· Zustand + persist（偏好设置）· EventSource（预警）</td><td>按状态来源分层：服务端流式状态、本地持久偏好、实时推送各司其职</td></tr>
+    <tr><td>工具协议</td><td>@modelcontextprotocol/sdk</td><td>反诈能力标准化开放，可被任意 MCP 客户端复用</td></tr>
+    <tr><td>端侧能力</td><td>Web Speech API · Canvas · jsQR（按需加载）</td><td>零成本语音交互；图片压缩与二维码解码不上传原图</td></tr>
+    <tr><td>校验与测试</td><td>zod · node:test + tsx · Playwright</td><td>工具入参与模型输出强校验；单元测试零额外依赖；真实浏览器 E2E</td></tr>
+  </table>
