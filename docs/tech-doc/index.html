@@ -407,6 +407,24 @@ writer.merge(result.toUIMessageStream({ sendStart: false }));</pre>
   </ul>
 </section>
 
+<!-- ============ 5 核心功能实现 ============ -->
+<section class="chapter">
+  <h1><span class="no">5</span>核心功能实现</h1>
+
+  <h2>5.1 长辈端：一眼看懂、看得见证据</h2>
+  <p>识破骗局的那一刻，长辈端<b>整屏变成警示红</b>（需警惕为橙、安全为绿），只用 2~4 个大字写出现在该做什么，例如“别转钱”“别扫码”；风险指数、等级文字与颜色三重编码，色弱老人也能分辨。紧接着是三个“有分量”的模块：</p>
+  <ul>
+    <li><b>骗局进度条：</b>把四步剧本摆出来，标出骗子已经走到第几步，并给出“守望预判：对方接下来很可能让您……”；</li>
+    <li><b>证据标注：</b>在老人发来的原文（或截图识别出的文字）上直接高亮 AI 的判断依据，编号与右侧理由一一对应，规则引擎命中的片段用虚线标出；</li>
+    <li><b>AI 是怎么判断的：</b>一键展开 Agent 指挥台（见 5.3）。</li>
+  </ul>
+  <figure><img src="../assets/03-report-card.jpg" style="max-height:125mm" /><figcaption>图 5-1　冒充公检法电话：整屏结论 → 骗局进行到第 4 步 → 原文证据标注</figcaption></figure>
+  <div class="two">
+    <figure><img src="../assets/02-elder-empty.jpg" /><figcaption>图 5-2　长辈端首屏：三种输入方式与示例</figcaption></figure>
+    <figure><img src="../assets/elder-thinking.jpg" /><figcaption>图 5-3　上传传单后，分析步骤逐步展开</figcaption></figure>
+  </div>
+  <p><b>关键实现：</b><code>deriveAnalysis()</code> 从一条助手消息的 parts 中派生出报告、规则命中、感知结果、工具调用与计时；证据定位先整句匹配、再按省略号与标点拆段匹配，重叠区间按“AI 依据优先”去重；流水线统一发送 <code>start</code> 事件，保证一次分析只对应一条助手消息。</p>
+
   <h2>5.2 子女端：家庭守护中心</h2>
   <p>子女端采用暗色“守护中心”：可在多位家人之间切换；四个 KPI（本周检测、拦下骗局、平均风险指数、待沟通）带周环比；<b>14 天风险趋势</b>以每日最高风险指数画线并标出 40 / 65 两条阈值，<b>骗局类型雷达</b>、<b>来源渠道环图</b>和<b>星期 × 24 小时热力图</b>帮助子女看清父母什么时候、通过什么渠道、最容易遇到哪类骗局。<b>AI 守护周报</b>由大模型根据近 7 天统计写成，并给出具体建议（例如“高风险多发生在晚上 6 点后，可以把通话放在晚饭后”）。高风险到达时通过 SSE 实时弹出提醒，附“怎么跟妈妈说”的沟通建议。图表均为手写 SVG，无第三方图表库；演示种子数据在界面上明确标注“含演示数据”。</p>
   <figure><img src="../assets/05-family.jpg" /><figcaption>图 5-4　家庭守护中心：KPI、风险趋势、守护记录与详情</figcaption></figure>
