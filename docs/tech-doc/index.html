@@ -286,6 +286,14 @@
   <figcaption>图 3-2　一次分析的数据流（“∥”表示同一轮并行工具调用）</figcaption>
   </figure>
 
+  <h2>3.4 前端架构</h2>
+  <p>组件按业务域组织（<code>components/elder | family | drill | cases | common</code>），领域类型集中在 <code>lib/core/types.ts</code>，前后端共享同一份 <code>GuardianUIMessage</code> 类型——工具名、入参、出参、自定义数据部件（data-trace / data-perception / data-rules / data-fallback）均有完整类型推断，前端渲染工具结果时编译期即可发现字段错误。</p>
+  <ul>
+    <li><b>生成式 UI：</b>研判 Agent 调用 <code>submitRiskReport</code> 工具提交结构化报告，前端直接把工具输出渲染为风险报告卡；检索、查号、核链工具的调用过程渲染为思考时间线。</li>
+    <li><b>状态分层：</b>会话状态由 useChat 管理；称呼、子女电话、字号、自动朗读等偏好由 Zustand 持久化；预警由 EventSource 订阅。</li>
+    <li><b>适老化字号系统：</b>所有尺寸使用 rem，三档字号只需改变根字号（18/20/23px），整个界面等比缩放。</li>
+  </ul>
+
 <!-- ============ 4 AI 技术方案 ============ -->
 <section class="chapter">
   <h1><span class="no">4</span>AI 技术方案</h1>
