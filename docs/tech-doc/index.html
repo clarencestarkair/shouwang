@@ -158,3 +158,15 @@
     <tr><td><b>子女</b><br/>30~50 岁</td><td>在外地工作，无法时刻陪伴；担心父母被骗但不想“监视”父母；不知道怎么劝才不伤感情</td><td>关键时刻第一时间知道；知道怎么沟通；了解父母常遇到哪类骗局</td></tr>
     <tr><td><b>社区 / 机构</b></td><td>社区网格员、银行适老化柜台、反诈志愿者</td><td>可复用的反诈能力（工具化、可接入其他 AI 系统）</td></tr>
   </table>
+
+  <h2>2.3 需求与功能映射</h2>
+  <table>
+    <tr><th style="width:30%">痛点 / 需求</th><th>设计对策</th><th style="width:22%">对应实现</th></tr>
+    <tr><td>老人打字困难</td><td>语音优先：按住说话、松开发送；结论自动朗读</td><td>Web Speech API</td></tr>
+    <tr><td>可疑内容多是图片</td><td>截图 / 拍照直接识别；二维码在本机解码</td><td>VLM 感知 Agent、jsQR</td></tr>
+    <tr><td>“专业判断”老人看不懂</td><td>风险仪表 + 一句话结论 + 原话证据 + 编号的行动清单</td><td>结构化报告 + 生成式 UI</td></tr>
+    <tr><td>担心 AI 胡说</td><td>思考过程可视化；引用案例编号；规则引擎双通道校验</td><td>AgentTrace、guardReport</td></tr>
+    <tr><td>骗子“不让告诉家人”</td><td>高风险自动通知子女，附沟通建议</td><td>SSE 推送、familyAdvice</td></tr>
+    <tr><td>隐私顾虑</td><td>身份证、银行卡、验证码在浏览器内先脱敏；家属端只见摘要</td><td>maskPII（端侧）</td></tr>
+    <tr><td>宣传单向、记不住</td><td>沉浸式演练 + AI 教练复盘</td><td>反诈演练 Agent</td></tr>
+  </table>
