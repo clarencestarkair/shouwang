@@ -22,3 +22,14 @@ const CURSOR = `
   };
   if (document.readyState !== "loading") init(); else addEventListener("DOMContentLoaded", init);
 })();`;
+
+const smoothScroll = (page, y, ms = 1800) => page.evaluate(([y, ms]) => new Promise((res) => {
+  const s = scrollY, t0 = performance.now();
+  const step = (t) => { const k = Math.min(1, (t - t0) / ms); const e = 1 - Math.pow(1 - k, 3); scrollTo(0, s + (y - s) * e); k < 1 ? requestAnimationFrame(step) : res(); };
+  requestAnimationFrame(step);
+}), [y, ms]);
+const toEl = (page, sel, ms = 1600) => page.evaluate(([sel, ms]) => { const el = document.querySelector(sel); return el ? el.getBoundingClientRect().top + scrollY - 90 : 0; }, [sel, ms]).then((y) => smoothScroll(page, y, ms));
+const elderDone = async (page) => {
+  await page.getByText("为什么说它有问题").waitFor({ timeout: 300000 });
+  await page.waitForFunction(() => !document.querySelector('[aria-label="停止"]'), null, { timeout: 300000 });
+};
