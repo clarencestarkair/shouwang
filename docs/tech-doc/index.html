@@ -581,3 +581,25 @@ server.registerTool("check_url", {
     <li><b>社会价值与商业模式：</b>个人与家庭版免费，降低使用门槛；面向社区、街道、老年大学提供反诈服务与演练课程（To G）；与银行适老化柜台、保险机构合作，以 MCP / API 输出反诈能力（To B），形成可持续运营。</li>
   </ul>
 </section>
+
+<!-- ============ 附录 ============ -->
+<section class="chapter">
+  <h1><span class="no">附</span>评审维度对照表</h1>
+  <table>
+    <tr><th style="width:17%">维度</th><th style="width:19%">考察点</th><th>守望的实现</th><th style="width:12%">章节</th></tr>
+    <tr><td rowspan="6"><b>AI 技术深度</b><br/>35%</td><td>大模型集成质量</td><td>分层 Prompt、工具 schema 约束输出、双通道校验、模型错误自动兜底、temperature 兼容</td><td>4.2 / 4.3</td></tr>
+    <tr><td>Agent / 工作流</td><td>感知 → 规则 → 研判（Tool Loop，并行检索与核验，阶段研判与预判）→ 审查；演练 Agent、复盘 Agent、周报 Agent；指挥台全链路可视化</td><td>4.2 / 5.3</td></tr>
+    <tr><td>RAG</td><td>48 案例 + 32 常识；BM25 + 向量 + RRF；检索通道可视化；Hit@3 100%</td><td>4.4 / 5.4</td></tr>
+    <tr><td>多模态</td><td>截图/照片 VLM 感知、端侧二维码解码、语音输入与朗读</td><td>4.6</td></tr>
+    <tr><td>AI 安全与可控</td><td>注入防护、危险建议过滤（含否定语义）、端侧脱敏、兜底降级、可解释证据</td><td>4.7</td></tr>
+    <tr><td>MCP / 工具集成</td><td>5 个 Function Calling 工具；MCP Server（stdio + HTTP），4 工具 + 资源</td><td>4.5 / 5.5</td></tr>
+    <tr><td rowspan="3"><b>创新性</b> 25%</td><td>选题创新</td><td>聚焦银发群体反诈 + 家庭协同，区别于通用助手与知识库</td><td>1 / 7.2</td></tr>
+    <tr><td>技术方案创新</td><td>双通道研判、注入即证据、端云协同感知、一核两出口</td><td>7.1</td></tr>
+    <tr><td>交互模式创新</td><td>整屏色场结论、原文证据标注、骗局进度条、语音优先、AI 扮演骗子演练、Agent 指挥台</td><td>7.2</td></tr>
+    <tr><td><b>前端工程质量</b> 10%</td><td>代码 / 架构 / 性能</td><td>TypeScript 严格模式、前后端共享消息类型、按域组件化、按需加载（首屏 −20%）、单元测试与 E2E</td><td>3.4 / 6</td></tr>
+    <tr><td><b>实用性</b> 10%</td><td>场景真实 / 方案有效</td><td>电话、短信、传单、亲情、演练五类真实场景；困难样本召回 100%</td><td>2 / 6.3</td></tr>
+    <tr><td><b>用户体验</b> 10%</td><td>UI / 交互 / AI 交互</td><td>长辈端亮色高对比 + 首页/子女端/指挥台暗场；统一设计令牌、手写 SVG 图表、流式过程可视化、错误兜底提示</td><td>5.1</td></tr>
+    <tr><td><b>社会价值与商业潜力</b> 10%</td><td>社会意义 / 商业模式</td><td>守护老年人财产安全、促进数字包容；To C 免费 + To G 社区服务 + To B 能力输出</td><td>8.3</td></tr>
+  </table>
+  <p style="margin-top:8mm;color:var(--ink3);font-size:9pt">声明：案例库内容依据公开宣传的诈骗类型改写，均为典型化模拟案例，网址与号码均为虚构。守望提供风险提示，不替代公安机关判断。遇到诈骗请拨打 110，反诈咨询请拨打 96110。</p>
+</section>
