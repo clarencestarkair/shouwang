@@ -4,3 +4,21 @@ const fs = require("fs");
 const BASE = "http://localhost:3311";
 const OUT = "/tmp/sw-video/clips";
 const scene = process.argv[2];
+
+const CURSOR = `
+(() => {
+  const init = () => {
+    if (document.getElementById("__cur")) return;
+    const c = document.createElement("div"); c.id = "__cur";
+    c.style.cssText = "position:fixed;z-index:99999;left:0;top:0;width:26px;height:26px;pointer-events:none;transform:translate(-4px,-3px);transition:transform .05s";
+    c.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24"><path d="M4 2l14 10-6.5 1.2L15 21l-3 1.3-3.4-7.7L4 19z" fill="#1f2a24" stroke="#fff" stroke-width="1.4"/></svg>';
+    document.body.appendChild(c);
+    addEventListener("mousemove", (e) => { c.style.left = e.clientX + "px"; c.style.top = e.clientY + "px"; }, true);
+    addEventListener("mousedown", (e) => {
+      const r = document.createElement("div");
+      r.style.cssText = "position:fixed;z-index:99998;pointer-events:none;width:44px;height:44px;border-radius:50%;border:3px solid #b8352a;left:" + (e.clientX - 22) + "px;top:" + (e.clientY - 22) + "px;transition:transform .5s ease-out,opacity .5s ease-out";
+      document.body.appendChild(r); requestAnimationFrame(() => { r.style.transform = "scale(1.8)"; r.style.opacity = "0"; }); setTimeout(() => r.remove(), 600);
+    }, true);
+  };
+  if (document.readyState !== "loading") init(); else addEventListener("DOMContentLoaded", init);
+})();`;
