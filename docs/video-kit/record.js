@@ -23,6 +23,29 @@ const CURSOR = `
   if (document.readyState !== "loading") init(); else addEventListener("DOMContentLoaded", init);
 })();`;
 
+async function newRecPage(browser, name, w, h, fontLevel = 3) {
+  const ctx = await browser.newContext({ viewport: { width: w, height: h }, recordVideo: { dir: OUT, size: { width: w, height: h } } });
+  await ctx.addInitScript(CURSOR);
+  await ctx.addInitScript((lv) => {
+    try { localStorage.setItem("shouwang-settings", JSON.stringify({ state: { elderName: "妈妈", familyPhone: "", autoSpeak: false, fontLevel: lv }, version: 0 })); } catch {}
+  }, fontLevel);
+  const page = await ctx.newPage();
+  const t0 = Date.now();
+  const marks = { name, start: 0, waits: [], end: 0 };
+  const now = () => (Date.now() - t0) / 1000;
+  return {
+    page, ctx, marks, now,
+    async click(locator) {
+      const box = await locator.boundingBox();
+      if (box) await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, { steps: 22 });
+      await page.waitForTimeout(250);
+      await locator.click();
+    },
+    async wait(fn) { const a = now(); await fn(); marks.waits.push([a, now()]); },
+    async finish() { marks.end = now(); const v = page.video(); await ctx.close(); fs.renameSync(await v.path(), `${OUT}/${name}.webm`); fs.writeFileSync(`${OUT}/${name}.json`, JSON.stringify(marks)); },
+  };
+}
+
 const smoothScroll = (page, y, ms = 1800) => page.evaluate(([y, ms]) => new Promise((res) => {
   const s = scrollY, t0 = performance.now();
   const step = (t) => { const k = Math.min(1, (t - t0) / ms); const e = 1 - Math.pow(1 - k, 3); scrollTo(0, s + (y - s) * e); k < 1 ? requestAnimationFrame(step) : res(); };
