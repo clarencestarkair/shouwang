@@ -91,3 +91,20 @@
     <div class="box amber"><b style="color:#8a5d0f">一核两出口 · MCP</b>同一份核心实现同时服务网页端 Agent 与 MCP Server</div>
   </div>
 </section>
+
+<section id="s10b">
+  <div class="kicker">MCP 接入</div>
+  <h2>反诈能力，任何 AI 应用都能用</h2>
+  <div class="row" style="grid-template-columns:0.9fr 1.1fr;margin-top:60px;gap:44px">
+<pre><span class="c">// Claude Desktop / Cursor 配置</span>
+{
+  <span class="k">"mcpServers"</span>: {
+    <span class="k">"shouwang"</span>: {
+      "command": "pnpm",
+      "args": ["mcp"]
+    }
+  }
+}
+<span class="c">// 或远程：https://&lt;域名&gt;/api/mcp</span></pre>
+<pre><span class="c">→ tools/call  check_url</span>
+  { "url": "https://yibao-gov-cn.top/renew" }
