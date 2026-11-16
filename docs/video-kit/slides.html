@@ -126,3 +126,27 @@
 <span class="c">// 或远程：https://&lt;域名&gt;/api/mcp</span></pre>
 <pre><span class="c">→ tools/call  check_url</span>
   { "url": "https://yibao-gov-cn.top/renew" }
+
+<section id="s11">
+  <div class="kicker">端到端评测（真实模型 + 工具 + 安全审查）</div>
+  <h2>换个说法，规则就失灵；Agent 依然识破</h2>
+  <div class="row" style="grid-template-columns:1fr 1fr;margin-top:60px;gap:60px">
+    <div>
+      <p style="font-size:32px;font-weight:600;margin-bottom:16px">常规评测集 · 30 例</p>
+      <table><tr><th>通道</th><th>召回率</th><th>误报率</th></tr>
+        <tr><td>规则引擎</td><td class="n">95.0%</td><td class="n">0%</td></tr>
+        <tr><td>双通道（最终）</td><td class="n g">100%</td><td class="n g">0%</td></tr></table>
+    </div>
+    <div>
+      <p style="font-size:32px;font-weight:600;margin-bottom:16px">困难评测集 · 16 例（隐蔽诈骗 + 易误报消息）</p>
+      <table><tr><th>通道</th><th>召回率</th><th>准确率</th></tr>
+        <tr><td>规则引擎</td><td class="n r">12.5%</td><td class="n">50.0%</td></tr>
+        <tr><td>双通道（最终）</td><td class="n g">100%</td><td class="n g">93.8%</td></tr></table>
+    </div>
+  </div>
+  <div class="row" style="grid-template-columns:repeat(3,1fr);margin-top:70px;gap:40px">
+    <div class="pain"><span class="n">单元测试</span><h3>23 / 23 通过</h3></div>
+    <div class="pain"><span class="n">平均工具调用</span><h3>2.9 次 / 次分析</h3></div>
+    <div class="pain"><span class="n">长辈端首屏 JS</span><h3>386 → 307 kB</h3></div>
+  </div>
+</section>
