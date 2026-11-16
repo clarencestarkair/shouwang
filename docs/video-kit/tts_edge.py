@@ -28,3 +28,5 @@ async def main():
             await one(s)
     json.dump(sc, open(SC, "w"), ensure_ascii=False, indent=1)
     print(f"总时长约 {sum(x['audio'] + 1.6 for x in sc) / 60:.1f} 分钟")
+
+asyncio.run(main())
