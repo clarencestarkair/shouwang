@@ -127,6 +127,17 @@
 <pre><span class="c">→ tools/call  check_url</span>
   { "url": "https://yibao-gov-cn.top/renew" }
 
+<span class="c">← result</span>
+  <span class="k">riskScore</span>: 75
+  <span class="k">tags</span>: [ "高风险后缀 .top",
+          "冒用官方字样：gov/yibao",
+          "多段连字符" ]
+
+<span class="c">工具：search_fraud_cases · check_phone_number</span>
+<span class="c">　　　check_url · scan_text_risk  + 案例资源</span></pre>
+  </div>
+</section>
+
 <section id="s11">
   <div class="kicker">端到端评测（真实模型 + 工具 + 安全审查）</div>
   <h2>换个说法，规则就失灵；Agent 依然识破</h2>
