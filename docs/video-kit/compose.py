@@ -4,3 +4,9 @@ W, H, FPS = 1920, 1080, 30
 LEAD, TAIL = 0.6, 1.0
 D = "/tmp/sw-video"
 sc = json.load(open(f"{D}/script.json"))
+
+def run(cmd):
+    subprocess.run(cmd, check=True)
+
+def dur(p):
+    return float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",p]).decode())
