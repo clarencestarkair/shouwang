@@ -10,3 +10,17 @@ def run(cmd):
 
 def dur(p):
     return float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",p]).decode())
+
+# ---------- 字幕切分 ----------
+def chunks(text):
+    parts = [p for p in re.split(r"(?<=[，。；：！？])", text.replace("「","").replace("」","")) if p.strip()]
+    out, buf = [], ""
+    for p in parts:
+        if len(buf) + len(p) <= 22: buf += p
+        else:
+            if buf: out.append(buf)
+            buf = p
+            while len(buf) > 26:  # 超长句硬切
+                out.append(buf[:22]); buf = buf[22:]
+    if buf: out.append(buf)
+    return [re.sub(r"[，。；：]$", "", c) for c in out]
