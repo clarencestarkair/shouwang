@@ -61,6 +61,59 @@ def clip_filter(src_label, marks, target):
     real = sum((b - a) / sp for a, b, sp in segs)
     return ";".join(f), real, ws, overall
 
+os.makedirs(f"{D}/seg", exist_ok=True)
+srt, clock, seg_files = [], 0.0, []
+for s in sc:
+    T = round(s["audio"] + LEAD + TAIL, 2)
+    out = f"{D}/seg/{s['id']}.mp4"
+    inputs, fc = [], []
+    if s["kind"] == "slide":
+        inputs = ["-loop", "1", "-t", str(T), "-i", f"{D}/slides/{s['id']}.png"]
+        fc.append(f"[0:v]scale={W}:{H},fps={FPS},trim=duration={T}[raw]")
+        info = "slide"
+    else:
+        if s["kind"] == "split":
+            me = json.load(open(f"{D}/clips/s05-elder.json")); mf = json.load(open(f"{D}/clips/s05-family.json"))
+            inputs = ["-i", f"{D}/clips/s05-elder.webm", "-i", f"{D}/clips/s05-family.webm"]
+            off = me["start"] - mf["start"]
+            fc.append(f"[1:v]trim=start={max(0,-off):.3f},setpts=PTS-STARTPTS[fam];[0:v]trim=start={max(0,off):.3f},setpts=PTS-STARTPTS[eld];[eld][fam]hstack=2,fps={FPS}[src]")
+            base = max(0, off)
+            marks = {"start": me["start"] - base, "end": me["end"] - base, "waits": [[a - base, b - base] for a, b in me["waits"]]}
+        else:
+            marks = json.load(open(f"{D}/clips/{s['id']}.json"))
+            inputs = ["-i", f"{D}/clips/{s['id']}.webm"]
+            fc.append(f"[0:v]fps={FPS}[src]")
+        f2, real, ws, ov = clip_filter("src", marks, T)
+        fc.append(f2)
+        tail = s.get("tail_slide")
+        if tail and real < T - 2:
+            # 素材不足时接一张说明图，而不是定格
+            inputs += ["-loop", "1", "-t", f"{T-real+0.5:.2f}", "-i", f"{D}/slides/{tail}.png"]
+            ti = len([x for x in inputs if x == "-i"]) - 1
+            fc.append(f"[raw]scale={W}:{H},setsar=1[rs];[{ti}:v]scale={W}:{H},fps={FPS},setsar=1,fade=t=in:st=0:d=0.4[ts];[rs][ts]concat=n=2:v=1:a=0[rawp]"); last = "rawp"
+        elif real < T: fc.append(f"[raw]tpad=stop_mode=clone:stop_duration={T-real+0.5:.2f}[rawp]"); last = "rawp"
+        else: last = "raw"
+        fc.append(f"[{last}]scale={W}:{H},trim=duration={T},setpts=PTS-STARTPTS[raw2]")
+        fc[-1] = fc[-1]  # noqa
+        info = f"clip 等待加速 {ws:.1f}x 整体 {ov:.2f}x 素材 {real:.1f}s"
+    # 统一出口标签
+    vlabel = "raw" if s["kind"] == "slide" else "raw2"
+    fc.append(f"[{vlabel}]fade=t=in:st=0:d=0.35,fade=t=out:st={T-0.35:.2f}:d=0.35,format=yuv420p[v0]")
+    # 字幕叠加
+    cur = "v0"; n_in = len([x for x in inputs if x == "-i"])
+    for i, it in enumerate(s["subs"]):
+        inputs += ["-i", it["png"]]
+        nxt = f"v{i+1}"
+        fc.append(f"[{cur}][{n_in + i}:v]overlay=0:{H-170}:enable='between(t,{it['a']:.2f},{it['b']:.2f})'[{nxt}]"); cur = nxt
+        srt.append((clock + it["a"], clock + it["b"], it["text"]))
+    inputs += ["-i", f"{D}/audio/{s['id']}.wav"]
+    ai = len([x for x in inputs if x == "-i"]) - 1
+    fc.append(f"[{ai}:a]adelay={int(LEAD*1000)}|{int(LEAD*1000)},apad,atrim=0:{T}[a]")
+    run(["ffmpeg","-y","-loglevel","error", *inputs, "-filter_complex", ";".join(fc), "-map", f"[{cur}]", "-map", "[a]",
+         "-c:v","libx264","-preset","medium","-crf","20","-r",str(FPS),"-c:a","aac","-b:a","192k","-ar","48000","-t",str(T), out])
+    print(f"{s['id']} {s['title']:<14} {T:6.1f}s  {info}")
+    seg_files.append(out); clock += T
+
 with open(f"{D}/concat.txt", "w") as f:
     for p in seg_files: f.write(f"file '{p}'\n")
 final = sys.argv[1]
