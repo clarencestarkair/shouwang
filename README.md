@@ -48,6 +48,13 @@
 
 环境要求：Node.js ≥ 20.12，pnpm ≥ 9。
 
+```bash
+pnpm install
+cp .env.example .env.local     # 填写 LLM_API_KEY 等
+pnpm rag:build                 # 可选：预计算向量索引，启用语义检索通道
+pnpm dev                       # http://localhost:3000
+```
+
 未配置 `LLM_API_KEY` 时，应用会自动进入**规则引擎兜底模式**，长辈端、子女端、案例库仍可完整演示（反诈演练需要大模型）。
 
 ### 常用命令
