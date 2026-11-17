@@ -60,3 +60,12 @@ def clip_filter(src_label, marks, target):
     f.append("".join(labels) + f"concat=n={len(segs)}:v=1:a=0[raw]")
     real = sum((b - a) / sp for a, b, sp in segs)
     return ";".join(f), real, ws, overall
+
+with open(f"{D}/concat.txt", "w") as f:
+    for p in seg_files: f.write(f"file '{p}'\n")
+final = sys.argv[1]
+run(["ffmpeg","-y","-loglevel","error","-f","concat","-safe","0","-i",f"{D}/concat.txt","-c","copy","-movflags","+faststart",final])
+def ts(x): h=int(x//3600); m=int(x%3600//60); s=x%60; return f"{h:02d}:{m:02d}:{int(s):02d},{int((s%1)*1000):03d}"
+with open(final.replace(".mp4", ".srt"), "w") as f:
+    for i, (a, b, t) in enumerate(srt, 1): f.write(f"{i}\n{ts(a)} --> {ts(b)}\n{t}\n\n")
+print(f"成片 {dur(final):.1f}s → {final}")
