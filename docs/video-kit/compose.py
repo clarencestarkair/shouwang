@@ -24,3 +24,14 @@ def chunks(text):
                 out.append(buf[:22]); buf = buf[22:]
     if buf: out.append(buf)
     return [re.sub(r"[，。；：]$", "", c) for c in out]
+
+subs_all, html_items = [], []
+for s in sc:
+    cs = chunks(s["text"]); total = sum(len(c) for c in cs); t = LEAD; items = []
+    for i, c in enumerate(cs):
+        d = s["audio"] * len(c) / total
+        items.append({"text": c, "a": t, "b": t + d, "png": f"{D}/subs/{s['id']}_{i}.png"}); t += d
+    s["subs"] = items
+    html_items += items
+json.dump([{"text": x["text"], "png": x["png"]} for x in html_items], open(f"{D}/subs.json", "w"), ensure_ascii=False)
+run(["node", "/tmp/sw-shot/scripts/subs.js"])
