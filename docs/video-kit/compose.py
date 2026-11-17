@@ -35,3 +35,28 @@ for s in sc:
     html_items += items
 json.dump([{"text": x["text"], "png": x["png"]} for x in html_items], open(f"{D}/subs.json", "w"), ensure_ascii=False)
 run(["node", "/tmp/sw-shot/scripts/subs.js"])
+
+# ---------- 每段视频 ----------
+def clip_filter(src_label, marks, target):
+    a0, end = marks["start"], marks["end"]
+    waits = [(max(a, a0), min(b, end)) for a, b in marks["waits"] if b > a0]
+    wt = sum(b - a for a, b in waits); normal = (end - a0) - wt
+    if wt > 0 and normal < target - 1:
+        ws = min(20.0, max(1.0, wt / (target - normal))); overall = 1.0
+    else:
+        ws = 12.0 if wt > 0 else 1.0
+        overall = max(1.0, (normal + wt / ws) / target)
+    # 区间序列
+    segs, t = [], a0
+    for a, b in waits:
+        if a > t: segs.append((t, a, overall))
+        segs.append((a, b, ws * overall)); t = b
+    if end > t: segs.append((t, end, overall))
+    f, labels = [], []
+    for i, (a, b, sp) in enumerate(segs):
+        f.append(f"[{src_label}]trim=start={a:.3f}:end={b:.3f},setpts=(PTS-STARTPTS)/{sp:.4f}[c{i}]"); labels.append(f"[c{i}]")
+    split = f"[{src_label}]split={len(segs)}" + "".join(f"[{src_label}{i}]" for i in range(len(segs)))
+    f = [split] + [x.replace(f"[{src_label}]", f"[{src_label}{i}]", 1) for i, x in enumerate(f)]
+    f.append("".join(labels) + f"concat=n={len(segs)}:v=1:a=0[raw]")
+    real = sum((b - a) / sp for a, b, sp in segs)
+    return ";".join(f), real, ws, overall
